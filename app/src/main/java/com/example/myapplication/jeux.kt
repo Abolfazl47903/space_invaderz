@@ -22,7 +22,9 @@ class jeux {
 
     }
     fun game_over(){
-
+        drawing = false
+        showGameOverDialog(R.string.win)
+        gameOver = true
     }
     fun restart_game(){
 
