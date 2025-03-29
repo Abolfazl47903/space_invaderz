@@ -21,7 +21,4 @@ class MainActivity : AppCompatActivity() {
 }
 
 test
-siuuugit
 
-
-jmlqsglj
