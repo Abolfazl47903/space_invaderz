@@ -15,7 +15,7 @@ class jeux {
 
     //propriétés publiques
     var record : Int = 0
-    var vie_supp : Int = 0
+    var vie_supp : Int = 1
 
     //méthodes
     fun verifier_fin_niveau(){
