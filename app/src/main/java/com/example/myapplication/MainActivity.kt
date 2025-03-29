@@ -18,6 +18,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
     }
+    override fun onPause() {
+        super.onPause()
+        canonView.pause()
+    }
 }
 
 test
