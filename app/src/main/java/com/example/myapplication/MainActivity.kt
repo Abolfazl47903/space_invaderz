@@ -24,5 +24,5 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-test pour le git pull
+test pour le git pul
 // test kevin
