@@ -23,6 +23,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     var dessin = false
     var gameover = false
     val activite = context as FragmentActivity
+    lateinit var thread :Thread
 
     //méthodes
     fun verifier_fin_niveau(){
@@ -31,7 +32,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     fun game_over(){
         dessin = false //Sert à montrer comment est l'écran. Si false alors on le voit pas si true on le voit
         prestation(R.string.win) //Méthode pour savoir si on a gagné ou perdu
-        gameOver = true //Si true alors on a perdu
+        gameover = true //Si true alors on a perdu
     }
     fun prestation(messageId : Int) { //Méthode servant à voir les réultats de la partie
         class Resultat : DialogFragment() { //Les fragmetns servent à manier différentes interfaces et donc différents xml, voir l'avant dernier cours
@@ -46,18 +47,27 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
         }
         activite.runOnUiThread( //Des trucs avec le fragment, voir l'avant dernier cours sur l'UV
             Runnable {
-                val ft = activite.supportFragmentManager.beginTransaction()
-                val prev =
+                val feet = activite.supportFragmentManager.beginTransaction()
+                val precedent =
                     activite.supportFragmentManager.findFragmentByTag("dialog")
-                if (prev != null) {
-                    ft.remove(prev)
+                if (precedent != null) {
+                    feet.remove(precedent)
                 }
-                ft.addToBackStack(null)
+                feet.addToBackStack(null)
                 val resultat = Resultat()
                 resultat.setCancelable(false)
-                resultat.show(ft,"dialog")
+                resultat.show(feet,"dialog")
             }
         )
+    }
+    fun pause() { //Si on veut faire une pause en quittant l'appli
+        dessin = false
+        thread.join() //Les thread servent quand on ouvre plusieurs application (voir cours)
+    }
+    fun reprendre() { //Si on veut reprendre le jeu
+        dessin = true
+        thread = Thread(this)
+        thread.start()
     }
 
 

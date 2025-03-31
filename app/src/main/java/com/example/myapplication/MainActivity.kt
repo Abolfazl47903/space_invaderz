@@ -21,13 +21,13 @@ class MainActivity : AppCompatActivity() {
             insets
         }
     }
-    override fun onPause() {
-        super.onPause()
+    override fun Pause() {
+        super.Pause()
         Jeux.pause()
     }
-    override fun OnResume() {
-        super.onResume()
-        Jeux.resume()
+    override fun Reprendre() {
+        super.Reprendre()
+        Jeux.reprendre()
     }
 
 }
