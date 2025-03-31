@@ -8,6 +8,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var Jeux : jeux
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -20,11 +23,11 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onPause() {
         super.onPause()
-        jeux.pause()
+        Jeux.pause()
     }
-    overridefun OnResume() {
+    override fun OnResume() {
         super.onResume()
-        jeux.resume()
+        Jeux.resume()
     }
 
 }
