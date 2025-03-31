@@ -18,7 +18,16 @@ class MainActivity : AppCompatActivity() {
             insets
         }
     }
+    override fun onPause() {
+        super.onPause()
+        jeux.pause()
+    }
+    overridefun OnResume() {
+        super.onResume()
+        jeux.resume()
+    }
+
 }
 
-test
+test pour le git pull
 
