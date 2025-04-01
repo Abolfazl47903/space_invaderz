@@ -1,0 +1,17 @@
+<!-- pour l'instant j'ai ajouté qu'un seul niveau car je me suis dis qu'on peut
+garder le même type de vagues pour ne pas devoir la changer à chaque fois. MAIS ÉVIDEMMENT
+si on veut, on peut en ajouter -->
+
+<vagues>
+    <vague level = "1">
+        <monstre x= , y= , type="calmar"/>. <!-- ici il faut encore ajouter les positions
+                                                 de chaque monstre en x et en y -->
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="poulpe"/>
+    </vague>
+
+
+
+</vagues>

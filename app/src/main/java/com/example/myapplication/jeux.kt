@@ -26,6 +26,9 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     lateinit var thread :Thread
 
     //méthodes
+    fun start_game(){
+
+    }
     fun verifier_fin_niveau(){
 
     }
