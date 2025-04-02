@@ -6,9 +6,57 @@ si on veut, on peut en ajouter -->
     <vague level = "1">
         <monstre x= , y= , type="calmar"/>. <!-- ici il faut encore ajouter les positions
                                                  de chaque monstre en x et en y -->
+
         <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+        <monstre x= , y= , type="calmar"/>
+
         <monstre x= , y= , type="crabe" />
         <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+        <monstre x= , y= , type="crabe" />
+
+        <monstre x= , y= , type="poulpe"/>
+        <monstre x= , y= , type="poulpe"/>
+        <monstre x= , y= , type="poulpe"/>
+        <monstre x= , y= , type="poulpe"/>
+        <monstre x= , y= , type="poulpe"/>
+        <monstre x= , y= , type="poulpe"/>
+        <monstre x= , y= , type="poulpe"/>
+        <monstre x= , y= , type="poulpe"/>
+        <monstre x= , y= , type="poulpe"/>
         <monstre x= , y= , type="poulpe"/>
     </vague>
 

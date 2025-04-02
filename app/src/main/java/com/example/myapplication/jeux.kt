@@ -9,6 +9,7 @@ import android.app.Dialog
 import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
+import org.xmlpull.v1.XmlPullParser
 
 class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
 
@@ -27,6 +28,31 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
 
     //méthodes
     fun start_game(){
+        dessin = false
+        val monstres = mutableListOf<Aliens>() // créer une liste modifiable dans la classe Aliens pour y stocker les positions et type de monstres.
+        val parcourir = activite.resources.getXml(R.xml.levels) // prends les données qui sont dans le fichier levels.xml et les stock dans parcourir.
+        var x = 0  //j'initialise les positions en x et y et le type de monstre
+        var y = 0
+        var type = ""
+        var etape = parcourir.eventType
+        while (etape != XmlPullParser.END_DOCUMENT) {
+
+
+            when (etape){
+                XmlPullParser.START_TAG -> {
+                    x = parcourir.getAttributeIntValue(null, "x",0)
+                    y = parcourir.getAttributeIntValue(null, "y",0)
+                    type = parcourir.getAttributeValue(null, "type")
+                }
+                XmlPullParser.END_TAG -> {
+                    monstres.add(Aliens(x, y, type))
+                }
+            }
+            if (monstres.size == 50) {
+                break
+            }
+            etape = parcourir.next()
+        }
 
     }
     fun verifier_fin_niveau(){
