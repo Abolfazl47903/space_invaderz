@@ -1,11 +1,14 @@
 package com.example.myapplication
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.app.Dialog
+import android.app.DialogFragment
+import android.content.DialogInterface
 import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
@@ -35,20 +38,32 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
         var y = 0
         var type = ""
         var etape = parcourir.eventType
-        while (etape != XmlPullParser.END_DOCUMENT) {
+        /* on crée une variable etape qui nous permettera de savoir ou est-ce qu'on se situe
+        dans parcourir et SURTOUT IL NOUS PERMET DE CONNAITRE C'EST QUOI LE TYPE DE L'ENDROIT
+        OU ON SE SITUE. par exemple etape peut nous dire qu'on est au début ou à la fin d'un document.
+        Il peut aussi nous dire "ok la on ouvre une balise" ou bien "la on ferme une balise" , etc.
+        var etape = parcourir.eventType  initialise etape à "on est au début du document".
+         */
+        while (etape != XmlPullParser.END_DOCUMENT) {// on fait un while jusqu'à la fin du document avec toute les positions
 
 
             when (etape){
-                XmlPullParser.START_TAG -> {
+                XmlPullParser.START_TAG -> { // quand etape nous indique qu'on ouvre une balise, d'où le START_TAG
+                    //On stock toutes les informations qu'on a besoin
                     x = parcourir.getAttributeIntValue(null, "x",0)
                     y = parcourir.getAttributeIntValue(null, "y",0)
                     type = parcourir.getAttributeValue(null, "type")
                 }
-                XmlPullParser.END_TAG -> {
-                    monstres.add(Aliens(x, y, type))
+                XmlPullParser.END_TAG -> { // quand etape nous indique qu'on ferme une balise, d'où le END_TAG
+                    monstres.add(Aliens(x, y, type))// on ajoute les infos dans la classe Aliens dans une liste monstres, qu'on avait créer un début de la fonction
                 }
             }
             if (monstres.size == 50) {
+                /* vu qu'on commence au niveau 1 on veut que cette fonction prennent en compte que les
+                monstres du niveau 1, logique on va pas afficher les autres niveau aussi. Ducoup on fait
+                un if avec le nombre de monstre == 50 car quand il y a 50 monstres stocké dans la liste
+                alors on break le while (il y a 50 monstres au niveau 1)
+                 */
                 break
             }
             etape = parcourir.next()
@@ -70,7 +85,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
                 le_builder.setTitle(resources.getString(messageId))
                 le_builder.setMessage("Nombre de vies : 0" + "GAME OVER") //C'est la petit truc qui s'affichera
                 le_builder.setPositiveButton("Recommncer le jeu", //C'est le petit truc qui s'affichera et qui nous dira si on veut recommencer
-                    DialogInterface.OnClickListener {_, _->restart_game()}) //Appelle la méthode restart_game au touché
+                    DialogInterface.OnClickListener { _, _->restart_game()}) //Appelle la méthode restart_game au touché
                 return le_builder.create()
             }
         }
