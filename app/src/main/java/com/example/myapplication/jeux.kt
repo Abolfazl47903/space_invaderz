@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import org.xmlpull.v1.XmlPullParser
+import android.content.Context
 
 class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
 
