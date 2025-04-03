@@ -1,0 +1,13 @@
+Index: app/src/main/java/com/example/myapplication/aliens.kt
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/aliens.kt b/app/src/main/java/com/example/myapplication/aliens.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/example/myapplication/aliens.kt	(revision 759f8c609840a6288fd74fd2bdad5f6a9072dd34)
++++ /dev/null	(revision 759f8c609840a6288fd74fd2bdad5f6a9072dd34)
+@@ -1,5 +0,0 @@
+-package com.example.myapplication
+-
+-class aliens {
+-
+-}
+\ No newline at end of file
