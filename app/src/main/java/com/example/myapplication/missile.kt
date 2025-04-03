@@ -17,8 +17,17 @@ class missile (var vue : jeux, val alien : Aliens){
     init{
         missilePaint.color = Color.WHITE
     }
-    fun lancer(amplitude : Double){
+    fun lancer(amplitude : Double){ //Lancement du missile
         missile.x = vue.screenWidth/2f
         missile.y = missileTaille
+        missileVitesseX =(missileVitesse*Math.sin(amplitude)).toFloat()
+        missileVitesseY =(missileVitesse*Math.cos(amplitude)).toFloat()
+        missileOnScreen = true
+    }
+    fun dessin(canvas : Canvas){ //Dessin du missile
+        canvas.drawLine(missile.x, missile.y, missileTaille, missilePaint)
+    }
+    fun resetMissile(){ //Fait disparître le missile pour faire réapparaître un autre
+        missileOnScreen = false
     }
 }

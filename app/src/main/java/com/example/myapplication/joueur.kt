@@ -16,7 +16,7 @@ class joueur (var fuseeLongueur : Float, var fuseeHauteur : Float, val vue : jeu
     fun finfusee(hauteur: Float){ //Méthode servant à initialiser la fin de la fusée
         finFusee.set(fuseeLongueur, hauteur)
     }
-    fun alignement(amplitude : Double){ //Au click pour diriger les missiles
+    fun alignement(amplitude : Double){ //Sert à placer le rectangle sur l'écran
         finFusee.x = (fuseeLongueur*Math.sin(amplitude)).toFloat()
         finFusee.y = (-fuseeLongueur*Math.cos(amplitude) + vue.screenHeight/4).toFloat()
     }
