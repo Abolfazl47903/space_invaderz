@@ -1,0 +1,304 @@
+Index: app/src/main/java/com/example/myapplication/joueur.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication\r\n\r\nimport android.graphics.Paint\r\nimport android.graphics.Canvas\r\nimport android.graphics.PointF\r\n\r\nclass joueur {\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/joueur.kt b/app/src/main/java/com/example/myapplication/joueur.kt
+--- a/app/src/main/java/com/example/myapplication/joueur.kt	(revision 759f8c609840a6288fd74fd2bdad5f6a9072dd34)
++++ b/app/src/main/java/com/example/myapplication/joueur.kt	(date 1743683335367)
+@@ -4,5 +4,7 @@
+ import android.graphics.Canvas
+ import android.graphics.PointF
+ 
+-class joueur {
++class joueur (var rayonCercle : Float, val view : jeux ){
++    val fusée = Paint()
++    var fin
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/myapplication/jeux.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication\r\n\r\nimport android.os.Bundle\r\nimport androidx.activity.enableEdgeToEdge\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.view.ViewCompat\r\nimport androidx.core.view.WindowInsetsCompat\r\nimport android.app.Dialog\r\nimport androidx.fragment.app.DialogFragment\r\nimport androidx.appcompat.app.AlertDialog\r\nimport androidx.fragment.app.FragmentActivity\r\n\r\nclass jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{\r\n\r\n    // attributs\r\n    private var score : Int = 0\r\n    private var vie : Int = 3\r\n    private var niveau_actuel : Int = 1\r\n\r\n    //propriétés publiques\r\n    var record : Int = 0\r\n    var vie_supp : Int = 1\r\n    var dessin = false\r\n    var gameover = false\r\n    val activite = context as FragmentActivity\r\n    lateinit var thread :Thread\r\n\r\n    //méthodes\r\n    fun verifier_fin_niveau(){\r\n\r\n    }\r\n    fun game_over(){\r\n        dessin = false //Sert à montrer comment est l'écran. Si false alors on le voit pas si true on le voit\r\n        prestation(R.string.win) //Méthode pour savoir si on a gagné ou perdu\r\n        gameover = true //Si true alors on a perdu\r\n    }\r\n    fun prestation(messageId : Int) { //Méthode servant à voir les réultats de la partie\r\n        class Resultat : DialogFragment() { //Les fragmetns servent à manier différentes interfaces et donc différents xml, voir l'avant dernier cours\r\n            override fun onCreateDialog(bundle: Bundle?): Dialog { //Des trucs utilisant des builder\r\n                val le_builder= AlertDialog.Builder(requireActivity()) //Des trucs d'import\r\n                le_builder.setTitle(resources.getString(messageId))\r\n                le_builder.setMessage(\"Nombre de vies : 0\" + \"GAME OVER\") //C'est la petit truc qui s'affichera\r\n                le_builder.setPositiveButton(\"Recommncer le jeu\", //C'est le petit truc qui s'affichera et qui nous dira si on veut recommencer\r\n                    DialogInterface.OnClickListener {_, _->restart_game()}) //Appelle la méthode restart_game au touché\r\n                return le_builder.create()\r\n            }\r\n        }\r\n        activite.runOnUiThread( //Des trucs avec le fragment, voir l'avant dernier cours sur l'UV\r\n            Runnable {\r\n                val feet = activite.supportFragmentManager.beginTransaction()\r\n                val precedent =\r\n                    activite.supportFragmentManager.findFragmentByTag(\"dialog\")\r\n                if (precedent != null) {\r\n                    feet.remove(precedent)\r\n                }\r\n                feet.addToBackStack(null)\r\n                val resultat = Resultat()\r\n                resultat.setCancelable(false)\r\n                resultat.show(feet,\"dialog\")\r\n            }\r\n        )\r\n    }\r\n    fun pause() { //Si on veut faire une pause en quittant l'appli\r\n        dessin = false\r\n        thread.join() //Les thread servent quand on ouvre plusieurs application (voir cours)\r\n    }\r\n    fun reprendre() { //Si on veut reprendre le jeu\r\n        dessin = true\r\n        thread = Thread(this)\r\n        thread.start()\r\n    }\r\n\r\n\r\n    fun restart_game(){\r\n\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/jeux.kt b/app/src/main/java/com/example/myapplication/jeux.kt
+--- a/app/src/main/java/com/example/myapplication/jeux.kt	(revision 759f8c609840a6288fd74fd2bdad5f6a9072dd34)
++++ b/app/src/main/java/com/example/myapplication/jeux.kt	(date 1743683600767)
+@@ -9,6 +9,7 @@
+ import androidx.fragment.app.DialogFragment
+ import androidx.appcompat.app.AlertDialog
+ import androidx.fragment.app.FragmentActivity
++import org.xmlpull.v1.XmlPullParser
+ 
+ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
+ 
+@@ -26,6 +27,46 @@
+     lateinit var thread :Thread
+ 
+     //méthodes
++    fun start_game(){
++        dessin = false
++        val monstres = mutableListOf<Aliens>() // créer une liste modifiable dans la classe Aliens pour y stocker les positions et type de monstres.
++        val parcourir = activite.resources.getXml(R.xml.levels) // prends les données qui sont dans le fichier levels.xml et les stock dans parcourir.
++        var x = 0  //j'initialise les positions en x et y et le type de monstre
++        var y = 0
++        var type = ""
++        var etape = parcourir.eventType
++        /* on crée une variable etape qui nous permettera de savoir ou est-ce qu'on se situe
++        dans parcourir et SURTOUT IL NOUS PERMET DE CONNAITRE C'EST QUOI LE TYPE DE L'ENDROIT
++        OU ON SE SITUE. par exemple etape peut nous dire qu'on est au début ou à la fin d'un document.
++        Il peut aussi nous dire "ok la on ouvre une balise" ou bien "la on ferme une balise" , etc.
++        var etape = parcourir.eventType  initialise etape à "on est au début du document".
++         */
++        while (etape != XmlPullParser.END_DOCUMENT) {// on fait un while jusqu'à la fin du document avec toute les positions
++
++
++            when (etape){
++                XmlPullParser.START_TAG -> { // quand etape nous indique qu'on ouvre une balise, d'où le START_TAG
++                    //On stock toutes les informations qu'on a besoin
++                    x = parcourir.getAttributeIntValue(null, "x",0)
++                    y = parcourir.getAttributeIntValue(null, "y",0)
++                    type = parcourir.getAttributeValue(null, "type")
++                }
++                XmlPullParser.END_TAG -> { // quand etape nous indique qu'on ferme une balise, d'où le END_TAG
++                    monstres.add(Aliens(x, y, type))// on ajoute les infos dans la classe Aliens dans une liste monstres, qu'on avait créer un début de la fonction
++                }
++            }
++            if (monstres.size == 50) {
++                /* vu qu'on commence au niveau 1 on veut que cette fonction prennent en compte que les
++                monstres du niveau 1, logique on va pas afficher les autres niveau aussi. Ducoup on fait
++                un if avec le nombre de monstre == 50 car quand il y a 50 monstres stocké dans la liste
++                alors on break le while (il y a 50 monstres au niveau 1)
++                 */
++                break
++            }
++            etape = parcourir.next()
++        }
++
++    }
+     fun verifier_fin_niveau(){
+ 
+     }
+Index: app/src/main/java/com/example/myapplication/aliens.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/aliens.kt b/app/src/main/java/com/example/myapplication/aliens.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/example/myapplication/aliens.kt	(revision 759f8c609840a6288fd74fd2bdad5f6a9072dd34)
++++ /dev/null	(revision 759f8c609840a6288fd74fd2bdad5f6a9072dd34)
+@@ -1,5 +0,0 @@
+-package com.example.myapplication
+-
+-class aliens {
+-
+-}
+\ No newline at end of file
+Index: app/src/main/java/com/example/myapplication/Aliens.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/Aliens.kt b/app/src/main/java/com/example/myapplication/Aliens.kt
+new file mode 100644
+--- /dev/null	(date 1743683600766)
++++ b/app/src/main/java/com/example/myapplication/Aliens.kt	(date 1743683600766)
+@@ -0,0 +1,5 @@
++package com.example.myapplication
++
++class Aliens(val x: Int , val y : Int , val type : String) {
++
++}
+\ No newline at end of file
+Index: .idea/migrations.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/migrations.xml b/.idea/migrations.xml
+new file mode 100644
+--- /dev/null	(date 1743683600763)
++++ b/.idea/migrations.xml	(date 1743683600763)
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectMigrations">
++    <option name="MigrateToGradleLocalJavaHome">
++      <set>
++        <option value="$PROJECT_DIR$" />
++      </set>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+new file mode 100644
+--- /dev/null	(date 1743683600758)
++++ b/.idea/compiler.xml	(date 1743683600758)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <bytecodeTargetLevel target="21" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/deploymentTargetSelector.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetSelector.xml b/.idea/deploymentTargetSelector.xml
+new file mode 100644
+--- /dev/null	(date 1743683600759)
++++ b/.idea/deploymentTargetSelector.xml	(date 1743683600759)
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="deploymentTargetSelector">
++    <selectionStates>
++      <SelectionState runConfigName="app">
++        <option name="selectionMode" value="DROPDOWN" />
++      </SelectionState>
++    </selectionStates>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/AndroidProjectSystem.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/AndroidProjectSystem.xml b/.idea/AndroidProjectSystem.xml
+new file mode 100644
+--- /dev/null	(date 1743683600756)
++++ b/.idea/AndroidProjectSystem.xml	(date 1743683600756)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="AndroidProjectSystem">
++    <option name="providerId" value="com.android.tools.idea.GradleProjectSystem" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"CHOOSE_PER_TEST\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"jbr-21\" />\r\n        <option name=\"resolveExternalAnnotations\" value=\"false\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision 759f8c609840a6288fd74fd2bdad5f6a9072dd34)
++++ b/.idea/gradle.xml	(date 1743683660234)
+@@ -6,7 +6,6 @@
+       <GradleProjectSettings>
+         <option name="testRunner" value="CHOOSE_PER_TEST" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+-        <option name="gradleJvm" value="jbr-21" />
+         <option name="resolveExternalAnnotations" value="false" />
+       </GradleProjectSettings>
+     </option>
+Index: .idea/kotlinc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/kotlinc.xml b/.idea/kotlinc.xml
+new file mode 100644
+--- /dev/null	(date 1743683600762)
++++ b/.idea/kotlinc.xml	(date 1743683600762)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="KotlinJpsPluginSettings">
++    <option name="version" value="2.0.21" />
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/res/xml/levels.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/xml/levels.xml b/app/src/main/res/xml/levels.xml
+new file mode 100644
+--- /dev/null	(date 1743683600770)
++++ b/app/src/main/res/xml/levels.xml	(date 1743683600770)
+@@ -0,0 +1,65 @@
++<!-- pour l'instant j'ai ajouté qu'un seul niveau car je me suis dis qu'on peut
++garder le même type de vagues pour ne pas devoir la changer à chaque fois. MAIS ÉVIDEMMENT
++si on veut, on peut en ajouter -->
++
++<vagues>
++    <vague level = "1">
++        <monstre x= , y= , type="calmar"/>. <!-- ici il faut encore ajouter les positions
++                                                 de chaque monstre en x et en y -->
++
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++        <monstre x= , y= , type="calmar"/>
++
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++        <monstre x= , y= , type="crabe" />
++
++        <monstre x= , y= , type="poulpe"/>
++        <monstre x= , y= , type="poulpe"/>
++        <monstre x= , y= , type="poulpe"/>
++        <monstre x= , y= , type="poulpe"/>
++        <monstre x= , y= , type="poulpe"/>
++        <monstre x= , y= , type="poulpe"/>
++        <monstre x= , y= , type="poulpe"/>
++        <monstre x= , y= , type="poulpe"/>
++        <monstre x= , y= , type="poulpe"/>
++        <monstre x= , y= , type="poulpe"/>
++    </vague>
++
++
++
++</vagues>
+\ No newline at end of file
