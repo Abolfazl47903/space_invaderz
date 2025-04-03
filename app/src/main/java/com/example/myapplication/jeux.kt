@@ -1,13 +1,11 @@
 package com.example.myapplication
 
-import android.app.AlertDialog
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.app.Dialog
-import android.app.DialogFragment
 import android.content.DialogInterface
 import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog

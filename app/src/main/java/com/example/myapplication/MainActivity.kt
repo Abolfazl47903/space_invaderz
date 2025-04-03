@@ -32,6 +32,4 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-test pour le git pull
-// test kevin
-// test De Vinci 
+
