@@ -1,0 +1,114 @@
+Index: app/src/main/java/com/example/myapplication/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\npackage com.example.myapplication\r\n\r\nimport android.os.Bundle\r\nimport androidx.activity.enableEdgeToEdge\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.view.ViewCompat\r\nimport androidx.core.view.WindowInsetsCompat\r\n\r\nclass MainActivity : AppCompatActivity() {\r\n\r\n    lateinit var Jeux : jeux\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        enableEdgeToEdge()\r\n        setContentView(R.layout.activity_main)\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->\r\n            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)\r\n            insets\r\n        }\r\n    }\r\n    override fun Pause() {\r\n        super.Pause()\r\n        Jeux.pause()\r\n    }\r\n    override fun Reprendre() {\r\n        super.Reprendre()\r\n        Jeux.reprendre()\r\n    }\r\n\r\n}\r\n\r\ntest pour le git pull\r\n// test kevin\r\n// test De Vinci \r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/MainActivity.kt b/app/src/main/java/com/example/myapplication/MainActivity.kt
+--- a/app/src/main/java/com/example/myapplication/MainActivity.kt	(revision 1feffbeeec2bcf8939d0024e52a1f4dc37a4ec59)
++++ b/app/src/main/java/com/example/myapplication/MainActivity.kt	(date 1743686708612)
+@@ -32,6 +32,4 @@
+ 
+ }
+ 
+-test pour le git pull
+-// test kevin
+-// test De Vinci 
++
+Index: app/src/main/java/com/example/myapplication/jeux.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication\r\n\r\nimport android.os.Bundle\r\nimport androidx.activity.enableEdgeToEdge\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.view.ViewCompat\r\nimport androidx.core.view.WindowInsetsCompat\r\nimport android.app.Dialog\r\nimport androidx.fragment.app.DialogFragment\r\nimport androidx.appcompat.app.AlertDialog\r\nimport androidx.fragment.app.FragmentActivity\r\nimport org.xmlpull.v1.XmlPullParser\r\nimport android.content.Context\r\n\r\nclass jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{\r\n\r\n    // attributs\r\n    private var score : Int = 0\r\n    private var vie : Int = 3\r\n    private var niveau_actuel : Int = 1\r\n\r\n    //propriétés publiques\r\n    var record : Int = 0\r\n    var vie_supp : Int = 1\r\n    var dessin = false\r\n    var gameover = false\r\n    val activite = context as FragmentActivity\r\n    lateinit var thread :Thread\r\n\r\n    //méthodes\r\n    fun start_game(){\r\n        dessin = false\r\n        val monstres = mutableListOf<Aliens>() // créer une liste modifiable dans la classe Aliens pour y stocker les positions et type de monstres.\r\n        val parcourir = activite.resources.getXml(R.xml.levels) // prends les données qui sont dans le fichier levels.xml et les stock dans parcourir.\r\n        var x = 0  //j'initialise les positions en x et y et le type de monstre\r\n        var y = 0\r\n        var type = \"\"\r\n        var etape = parcourir.eventType\r\n        /* on crée une variable etape qui nous permettera de savoir ou est-ce qu'on se situe\r\n        dans parcourir et SURTOUT IL NOUS PERMET DE CONNAITRE C'EST QUOI LE TYPE DE L'ENDROIT\r\n        OU ON SE SITUE. par exemple etape peut nous dire qu'on est au début ou à la fin d'un document.\r\n        Il peut aussi nous dire \"ok la on ouvre une balise\" ou bien \"la on ferme une balise\" , etc.\r\n        var etape = parcourir.eventType  initialise etape à \"on est au début du document\".\r\n         */\r\n        while (etape != XmlPullParser.END_DOCUMENT) {// on fait un while jusqu'à la fin du document avec toute les positions\r\n\r\n\r\n            when (etape){\r\n                XmlPullParser.START_TAG -> { // quand etape nous indique qu'on ouvre une balise, d'où le START_TAG\r\n                    //On stock toutes les informations qu'on a besoin\r\n                    x = parcourir.getAttributeIntValue(null, \"x\",0)\r\n                    y = parcourir.getAttributeIntValue(null, \"y\",0)\r\n                    type = parcourir.getAttributeValue(null, \"type\")\r\n                }\r\n                XmlPullParser.END_TAG -> { // quand etape nous indique qu'on ferme une balise, d'où le END_TAG\r\n                    monstres.add(Aliens(x, y, type))// on ajoute les infos dans la classe Aliens dans une liste monstres, qu'on avait créer un début de la fonction\r\n                }\r\n            }\r\n            if (monstres.size == 50) {\r\n                /* vu qu'on commence au niveau 1 on veut que cette fonction prennent en compte que les\r\n                monstres du niveau 1, logique on va pas afficher les autres niveau aussi. Ducoup on fait\r\n                un if avec le nombre de monstre == 50 car quand il y a 50 monstres stocké dans la liste\r\n                alors on break le while (il y a 50 monstres au niveau 1)\r\n                 */\r\n                break\r\n            }\r\n            etape = parcourir.next()\r\n        }\r\n\r\n    }\r\n    fun verifier_fin_niveau(){\r\n\r\n    }\r\n    fun game_over(){\r\n        dessin = false //Sert à montrer comment est l'écran. Si false alors on le voit pas si true on le voit\r\n        prestation(R.string.win) //Méthode pour savoir si on a gagné ou perdu\r\n        gameover = true //Si true alors on a perdu\r\n    }\r\n    fun prestation(messageId : Int) { //Méthode servant à voir les réultats de la partie\r\n        class Resultat : DialogFragment() { //Les fragmetns servent à manier différentes interfaces et donc différents xml, voir l'avant dernier cours\r\n            override fun onCreateDialog(bundle: Bundle?): Dialog { //Des trucs utilisant des builder\r\n                val le_builder= AlertDialog.Builder(requireActivity()) //Des trucs d'import\r\n                le_builder.setTitle(resources.getString(messageId))\r\n                le_builder.setMessage(\"Nombre de vies : 0\" + \"GAME OVER\") //C'est la petit truc qui s'affichera\r\n                le_builder.setPositiveButton(\"Recommncer le jeu\", //C'est le petit truc qui s'affichera et qui nous dira si on veut recommencer\r\n                    DialogInterface.OnClickListener {_, _->restart_game()}) //Appelle la méthode restart_game au touché\r\n                return le_builder.create()\r\n            }\r\n        }\r\n        activite.runOnUiThread( //Des trucs avec le fragment, voir l'avant dernier cours sur l'UV\r\n            Runnable {\r\n                val feet = activite.supportFragmentManager.beginTransaction()\r\n                val precedent =\r\n                    activite.supportFragmentManager.findFragmentByTag(\"dialog\")\r\n                if (precedent != null) {\r\n                    feet.remove(precedent)\r\n                }\r\n                feet.addToBackStack(null)\r\n                val resultat = Resultat()\r\n                resultat.setCancelable(false)\r\n                resultat.show(feet,\"dialog\")\r\n            }\r\n        )\r\n    }\r\n    fun pause() { //Si on veut faire une pause en quittant l'appli\r\n        dessin = false\r\n        thread.join() //Les thread servent quand on ouvre plusieurs application (voir cours)\r\n    }\r\n    fun reprendre() { //Si on veut reprendre le jeu\r\n        dessin = true\r\n        thread = Thread(this)\r\n        thread.start()\r\n    }\r\n\r\n\r\n    fun restart_game(){\r\n\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/jeux.kt b/app/src/main/java/com/example/myapplication/jeux.kt
+--- a/app/src/main/java/com/example/myapplication/jeux.kt	(revision 1feffbeeec2bcf8939d0024e52a1f4dc37a4ec59)
++++ b/app/src/main/java/com/example/myapplication/jeux.kt	(date 1743686708614)
+@@ -6,6 +6,7 @@
+ import androidx.core.view.ViewCompat
+ import androidx.core.view.WindowInsetsCompat
+ import android.app.Dialog
++import android.content.DialogInterface
+ import androidx.fragment.app.DialogFragment
+ import androidx.appcompat.app.AlertDialog
+ import androidx.fragment.app.FragmentActivity
+@@ -83,7 +84,7 @@
+                 le_builder.setTitle(resources.getString(messageId))
+                 le_builder.setMessage("Nombre de vies : 0" + "GAME OVER") //C'est la petit truc qui s'affichera
+                 le_builder.setPositiveButton("Recommncer le jeu", //C'est le petit truc qui s'affichera et qui nous dira si on veut recommencer
+-                    DialogInterface.OnClickListener {_, _->restart_game()}) //Appelle la méthode restart_game au touché
++                    DialogInterface.OnClickListener { _, _->restart_game()}) //Appelle la méthode restart_game au touché
+                 return le_builder.create()
+             }
+         }
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n    alias(libs.plugins.kotlin.android)\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.myapplication\"\r\n    compileSdk = 35\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.myapplication\"\r\n        minSdk = 24\r\n        targetSdk = 35\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_11\r\n        targetCompatibility = JavaVersion.VERSION_11\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = \"11\"\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.androidx.activity)\r\n    implementation(libs.androidx.constraintlayout)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 1feffbeeec2bcf8939d0024e52a1f4dc37a4ec59)
++++ b/app/build.gradle.kts	(date 1743686708609)
+@@ -42,6 +42,7 @@
+     implementation(libs.material)
+     implementation(libs.androidx.activity)
+     implementation(libs.androidx.constraintlayout)
++    implementation(libs.androidx.fragment.ktx)
+     testImplementation(libs.junit)
+     androidTestImplementation(libs.androidx.junit)
+     androidTestImplementation(libs.androidx.espresso.core)
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"VcsDirectoryMappings\">\r\n    <mapping directory=\"\" vcs=\"Git\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+--- a/.idea/vcs.xml	(revision 1feffbeeec2bcf8939d0024e52a1f4dc37a4ec59)
++++ b/.idea/vcs.xml	(date 1743686708607)
+@@ -2,5 +2,6 @@
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+     <mapping directory="" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/space_invaderz" vcs="Git" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: gradle/libs.versions.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[versions]\r\nagp = \"8.9.0\"\r\nkotlin = \"2.0.21\"\r\ncoreKtx = \"1.10.1\"\r\njunit = \"4.13.2\"\r\njunitVersion = \"1.1.5\"\r\nespressoCore = \"3.5.1\"\r\nappcompat = \"1.6.1\"\r\nmaterial = \"1.10.0\"\r\nactivity = \"1.8.0\"\r\nconstraintlayout = \"2.1.4\"\r\n\r\n[libraries]\r\nandroidx-core-ktx = { group = \"androidx.core\", name = \"core-ktx\", version.ref = \"coreKtx\" }\r\njunit = { group = \"junit\", name = \"junit\", version.ref = \"junit\" }\r\nandroidx-junit = { group = \"androidx.test.ext\", name = \"junit\", version.ref = \"junitVersion\" }\r\nandroidx-espresso-core = { group = \"androidx.test.espresso\", name = \"espresso-core\", version.ref = \"espressoCore\" }\r\nandroidx-appcompat = { group = \"androidx.appcompat\", name = \"appcompat\", version.ref = \"appcompat\" }\r\nmaterial = { group = \"com.google.android.material\", name = \"material\", version.ref = \"material\" }\r\nandroidx-activity = { group = \"androidx.activity\", name = \"activity\", version.ref = \"activity\" }\r\nandroidx-constraintlayout = { group = \"androidx.constraintlayout\", name = \"constraintlayout\", version.ref = \"constraintlayout\" }\r\n\r\n[plugins]\r\nandroid-application = { id = \"com.android.application\", version.ref = \"agp\" }\r\nkotlin-android = { id = \"org.jetbrains.kotlin.android\", version.ref = \"kotlin\" }\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+--- a/gradle/libs.versions.toml	(revision 1feffbeeec2bcf8939d0024e52a1f4dc37a4ec59)
++++ b/gradle/libs.versions.toml	(date 1743686708616)
+@@ -1,5 +1,5 @@
+ [versions]
+-agp = "8.9.0"
++agp = "8.8.1"
+ kotlin = "2.0.21"
+ coreKtx = "1.10.1"
+ junit = "4.13.2"
+@@ -9,6 +9,7 @@
+ material = "1.10.0"
+ activity = "1.8.0"
+ constraintlayout = "2.1.4"
++fragmentKtx = "1.8.6"
+ 
+ [libraries]
+ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+@@ -19,6 +20,7 @@
+ material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+ androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
++androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
+ 
+ [plugins]
+ android-application = { id = "com.android.application", version.ref = "agp" }
