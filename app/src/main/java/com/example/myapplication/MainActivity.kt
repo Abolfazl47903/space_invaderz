@@ -20,8 +20,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val AlienView=AlienView(this)
+        setContentView(AlienView)
     }
-    override fun Pause() {
+    /*override fun Pause() {
         super.Pause()
         Jeux.pause()
     }
@@ -30,8 +32,10 @@ class MainActivity : AppCompatActivity() {
         Jeux.reprendre()
     }
 
+     */
+
 }
 
-test pour le git pull
+//test pour le git pull
 // test kevin
 // test De Vinci 
