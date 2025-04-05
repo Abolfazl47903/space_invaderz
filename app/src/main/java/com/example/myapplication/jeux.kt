@@ -26,6 +26,8 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     var gameover = false
     val activite = context as FragmentActivity
     lateinit var thread :Thread
+    var screenWidth = 0f
+    var screenHeight = 0f
 
     //méthodes
     fun start_game(){
