@@ -43,10 +43,7 @@ class MainActivity : AppCompatActivity() {
 
 
         start.setOnClickListener{
-            left.visibility = View.VISIBLE
-            right.visibility = View.VISIBLE
-            up.visibility = View.VISIBLE
-            down.visibility = View.VISIBLE
+
             setContentView(AlienView)
             vaisseau.dessin(this)
             Jeux.start_game()
