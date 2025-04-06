@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var right : Button
     lateinit var up : Button
     lateinit var down : Button
+    lateinit var fire : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,16 +29,17 @@ class MainActivity : AppCompatActivity() {
         val Jeux = jeux()
         start = findViewById(R.id.button_start)
         left = findViewById(R.id.button_left)
-        left.visibility = View.GONE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
+        left.visibility = View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
         right = findViewById(R.id.button_right)
-        right.visibility = View.GONE
+        right.visibility = View.INVISIBLE
         up = findViewById(R.id.button_up)
-        up.visibility = View.GONE
+        up.visibility = View.INVISIBLE
         down = findViewById(R.id.button_down)
-        up.visibility = View.GONE
+        up.visibility = View.INVISIBLE
+        fire = findViewById(R.id.button_fire)
         val AlienView=AlienView(this)
         val vaisseau = joueur()
-        val deplacement = positions()
+
 
 
         start.setOnClickListener{
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             down.visibility = View.VISIBLE
             setContentView(AlienView)
             vaisseau.dessin(this)
-
+            Jeux.start_game()
         }
     }
     /*override fun Pause() {

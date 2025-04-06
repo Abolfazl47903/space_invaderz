@@ -14,7 +14,7 @@ import android.content.Context
 import android.widget.Button
 
 
-class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
+class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0, val left : Button, val right : Button, val up : Button , val down : Button, val fire : Button): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
 
     // attributs
     private var score : Int = 0
@@ -30,25 +30,35 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     lateinit var thread :Thread
     var screenWidth = 0f
     var screenHeight = 0f
-    lateinit var gauche : Button(R.in.gauche)
-    lateinit var droite : Button(R.in.droite)
+
 
 
     //méthodes
     fun start_game(){
-        val starjoueur = joueur(
-            fuseeLongueur = 1f,// ici je ne sais pas c'est quoi les différentez valeur je l'es juste mise par la hate pour réparer les erreures
-            fuseeHauteur = 2f,
-            vue =3
-        )
-        val resultat=starjoueur.dessin(
-            canvas =
+        val vaisseau = joueur()
+        left.setOnClickListener {
+            vaisseau.deplacement()
+        }
+        right.setOnClickListener {
+            vaisseau.deplacement()
+        }
+        up.setOnClickListener {
+            vaisseau.deplacement()
+        }
+        down.setOnClickListener {
+            vaisseau.deplacement()
+        }
+        fire.setOnClickListener {
+            vaisseau.shot()
+        }
+        //faire appel a la fonction qui permet de faire bouger les aliens
 
-        )
 
     }
     fun verifier_fin_niveau(){
+        if (score % 90 == 0){
 
+        }
     }
     fun game_over(){
         interfacee = false //Sert à montrer comment est l'écran. Si false alors on le voit pas si true on le voit
