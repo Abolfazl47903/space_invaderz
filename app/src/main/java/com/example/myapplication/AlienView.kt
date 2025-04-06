@@ -7,7 +7,7 @@ import android.graphics.Canvas
 import android.view.View
 
 class AlienView(context: Context) : View(context) {
-    private val crabeBitmap = BitmapFactory.decodeResource(resources, R.drawable.crabe)
+    private val crabeBitmap = BitmapFactory.decodeResource(resources, R.drawable.calmar)
     private val poulpeBitmap = BitmapFactory.decodeResource(resources, R.drawable.poulpe)
     private val calmarBitmap = BitmapFactory.decodeResource(resources, R.drawable.calmar)
 
