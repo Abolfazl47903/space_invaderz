@@ -45,17 +45,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
             canvas =
 
         )
-        //joueur.dessin(this)
-        val AlienView=AlienView(this)
-        setContentView(AlienView)
-        gauche = findViewById(R.id.gauche)
-        droite = findViewById(R.id.droite)
-        gauche.setOnClickListener{
-            joueur.deplacement()
-        }
-        droite.setOnClickListener{
-            joueur.deplacement()
-        }
+
     }
     fun verifier_fin_niveau(){
 

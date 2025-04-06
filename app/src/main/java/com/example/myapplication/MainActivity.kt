@@ -9,10 +9,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
-    lateinit var start : Button(R.id.Start)
-    lateinit var gauche : Button(R.in.gauche)
-    lateinit var droite : Button(R.in.droite)
-    lateinit var Jeux : jeux
+    lateinit var start : Button
+    lateinit var left : Button
+    lateinit var right : Button
+    lateinit var up : Button
+    lateinit var down : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         val Jeux = jeux()
-        start = findViewById(R.id.start)
+        start = findViewById(R.id.button_start)
+        left = findViewById(R.id.button_left)
+        right = findViewById(R.id.button_right)
+        up = findViewById(R.id.button_up)
+        down = findViewById(R.id.button_down)
         val AlienView=AlienView(this)
         setContentView(AlienView)
 
