@@ -41,6 +41,10 @@ class MainActivity : AppCompatActivity() {
 
 
         start.setOnClickListener{
+            left.visibility = View.VISIBLE
+            right.visibility = View.VISIBLE
+            up.visibility = View.VISIBLE
+            down.visibility = View.VISIBLE
             Jeux.start_game()
         }
     }
