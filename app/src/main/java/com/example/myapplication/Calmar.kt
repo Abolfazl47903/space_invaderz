@@ -12,9 +12,7 @@ class Calmar(vitesseX:Int,
     override fun update() {
     }
 
-    override fun changeDirection() {
-    }
-
-    override fun donnerPoint() {
+    override fun donnerPoint() :Int{
+        return 1
     }
 }

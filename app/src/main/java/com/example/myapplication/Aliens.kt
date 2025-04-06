@@ -29,10 +29,12 @@ abstract class Aliens(
     }
     abstract fun shot()  // qui seront rédéfinit dans les sous classes crabes , poulpes et calmar
     abstract fun update()
-    abstract fun changeDirection()
+    fun changeDirection() {
+
+    }
     fun FinDujeu(){ // mais la function findujeux n'est pas obligé dêtre abstract
 
     }
-    abstract  fun donnerPoint()
+    abstract  fun donnerPoint(): Int
 
 }

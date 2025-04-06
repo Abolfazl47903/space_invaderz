@@ -13,10 +13,9 @@ class crabes(
     override fun update() {
     }
 
-    override fun changeDirection() {
-    }
+    override fun donnerPoint(): Int{
+        return 2  // qui est le nombre de point que la destruction d'un crabe accorde
 
-    override fun donnerPoint() {
     }
 
 }

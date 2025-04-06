@@ -36,8 +36,16 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
 
     //méthodes
     fun start_game(){
-        val joueur = joueur()
-        joueur.dessin(this)
+        val starjoueur = joueur(
+            fuseeLongueur = 1f,// ici je ne sais pas c'est quoi les différentez valeur je l'es juste mise par la hate pour réparer les erreures
+            fuseeHauteur = 2f,
+            vue =3
+        )
+        val resultat=starjoueur.dessin(
+            canvas =
+
+        )
+        //joueur.dessin(this)
         val AlienView=AlienView(this)
         setContentView(AlienView)
         gauche = findViewById(R.id.gauche)
