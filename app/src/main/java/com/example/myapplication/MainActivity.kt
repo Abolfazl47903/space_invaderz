@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
         down = findViewById(R.id.button_down)
         up.visibility = View.GONE
         val AlienView=AlienView(this)
-        setContentView(AlienView)
-
+        val vaisseau = joueur()
+        val deplacement = positions()
 
 
         start.setOnClickListener{
@@ -45,7 +45,9 @@ class MainActivity : AppCompatActivity() {
             right.visibility = View.VISIBLE
             up.visibility = View.VISIBLE
             down.visibility = View.VISIBLE
-            Jeux.start_game()
+            setContentView(AlienView)
+            vaisseau.dessin(this)
+
         }
     }
     /*override fun Pause() {
