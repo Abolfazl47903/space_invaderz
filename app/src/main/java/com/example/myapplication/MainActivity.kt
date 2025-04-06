@@ -2,6 +2,7 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -27,9 +28,13 @@ class MainActivity : AppCompatActivity() {
         val Jeux = jeux()
         start = findViewById(R.id.button_start)
         left = findViewById(R.id.button_left)
+        left.visibility = View.GONE
         right = findViewById(R.id.button_right)
+        right.visibility = View.GONE
         up = findViewById(R.id.button_up)
+        up.visibility = View.GONE
         down = findViewById(R.id.button_down)
+        up.visibility = View.GONE
         val AlienView=AlienView(this)
         setContentView(AlienView)
 
