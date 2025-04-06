@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         val Jeux = jeux()
         start = findViewById(R.id.button_start)
         left = findViewById(R.id.button_left)
-        left.visibility = View.GONE
+        left.visibility = View.GONE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
         right = findViewById(R.id.button_right)
         right.visibility = View.GONE
         up = findViewById(R.id.button_up)
