@@ -105,6 +105,11 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     fun restart_game(){
 
     }
+    override fun onSizeChanged(w:Int, h:Int, oldw: Int, oldh: Int){
+        super.onSizeChanged(w,h,oldw,oldh)
+        screenWidth =w.toFloat()
+        screenHeight = h.toFloat()
+    }
 
 
 }
