@@ -37,12 +37,6 @@ class MainActivity : AppCompatActivity() {
         right.visibility = View.INVISIBLE
         val alienView=AlienView(this)
         val joueurView=JoueurView(this)
-        val AlienView=AlienView(this)
-        val vaisseau = joueur()
-        val AlienView = AlienView(this)
-        val vaisseau = joueur
-
-
         start.setOnClickListener{
 
             setContentView(alienView)
