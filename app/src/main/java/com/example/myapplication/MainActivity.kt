@@ -50,9 +50,6 @@ class MainActivity : AppCompatActivity() {
             Jeux.start_game()
         }
     }
-    override fun Pause() {
-        super.Pause()
-        Jeux.pause()
     override fun onPause() {
         super.onPause()
         alienView.pause()
