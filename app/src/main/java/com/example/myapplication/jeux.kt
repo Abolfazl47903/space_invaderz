@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import org.xmlpull.v1.XmlPullParser
 import android.content.Context
+import android.content.DialogInterface
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -76,7 +77,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
                 le_builder.setTitle(resources.getString(messageId))
                 le_builder.setMessage("Nombre de vies : 0" + "GAME OVER") //C'est la petit truc qui s'affichera
                 le_builder.setPositiveButton("Recommncer le jeu", //C'est le petit truc qui s'affichera et qui nous dira si on veut recommencer
-                    DialogInterface.OnClickListener {_, _->start_game()}) //Appelle la méthode restart_game au touché
+                    DialogInterface.OnClickListener { _, _->start_game()}) //Appelle la méthode restart_game au touché
                 return le_builder.create()
             }
         }
