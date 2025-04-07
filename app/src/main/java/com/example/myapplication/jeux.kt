@@ -11,11 +11,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import org.xmlpull.v1.XmlPullParser
 import android.content.Context
+import android.util.AttributeSet
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 import android.view.View
 import android.widget.Button
 
 
-class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0, val left : Button, val right : Button, val up : Button , val down : Button, val fire : Button): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
+class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0, val left : Button, val right : Button, val up : Button, val down : Button, val fire : Button): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
 
     // attributs
     private var score : Int = 0
@@ -36,10 +39,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
 
     //méthodes
     fun start_game(){
-        left.visibility = View.VISIBLE
-        right.visibility = View.VISIBLE
-        up.visibility = View.VISIBLE
-        down.visibility = View.VISIBLE
+        
         val vaisseau = joueur()
         left.setOnClickListener {
             vaisseau.deplacement()
@@ -47,22 +47,16 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
         right.setOnClickListener {
             vaisseau.deplacement()
         }
-        up.setOnClickListener {
-            vaisseau.deplacement()
-        }
-        down.setOnClickListener {
-            vaisseau.deplacement()
-        }
-        fire.setOnClickListener {
-            vaisseau.shot()
-        }
         //faire appel a la fonction qui permet de faire bouger les aliens
 
 
     }
     fun verifier_fin_niveau(){
+        val generer = AlienView(
+            context = this
+        )
         if (score % 90 == 0){
-
+            setContentView(AlienView)
         }
     }
     fun game_over(){
@@ -105,7 +99,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
         interfacee = false
         thread.join() //Les thread servent quand on ouvre plusieurs application (voir cours)
     }
-    fun reprendre() { //Si on veut reprendre le jeu
+    fun resume() { //Si on veut reprendre le jeu
         interfacee = true
         thread = Thread(this)
         thread.start()
