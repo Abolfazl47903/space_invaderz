@@ -11,11 +11,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import org.xmlpull.v1.XmlPullParser
 import android.content.Context
+import android.util.AttributeSet
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 import android.view.View
 import android.widget.Button
 
 
-class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0, val left : Button, val right : Button, val up : Button , val down : Button, val fire : Button): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
+class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0, val left : Button, val right : Button, val up : Button, val down : Button, val fire : Button): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
 
     // attributs
     private var score : Int = 0
@@ -43,15 +46,6 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
         }
         right.setOnClickListener {
             vaisseau.deplacement()
-        }
-        up.setOnClickListener {
-            vaisseau.deplacement()
-        }
-        down.setOnClickListener {
-            vaisseau.deplacement()
-        }
-        fire.setOnClickListener {
-            vaisseau.shot()
         }
         //faire appel a la fonction qui permet de faire bouger les aliens
 

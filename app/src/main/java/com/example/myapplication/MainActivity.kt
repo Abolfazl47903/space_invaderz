@@ -14,10 +14,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var left : Button
     lateinit var right : Button
 
-
-
     lateinit var alienView : Aliens
 
+    lateinit var AlienView : AlienView
+    lateinit var vaisseau : joueur
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +36,8 @@ class MainActivity : AppCompatActivity() {
         right = findViewById(R.id.button_right)
         right.visibility = View.INVISIBLE
 
-
         val AlienView=AlienView(this)
         val vaisseau = joueur()
-
-        val AlienView = AlienView(this)
-        val vaisseau = joueur
 
 
 
@@ -52,19 +48,16 @@ class MainActivity : AppCompatActivity() {
             vaisseau.dessin(this)
             Jeux.start_game()
         }
-
-
+    }
     override fun Pause() {
         super.Pause()
         Jeux.pause()
-    }
     override fun onPause() {
         super.onPause()
         alienView.pause()
-
     }
     override fun onResume() {
         super.onResume()
         alienView.resume()
     }
-
+}
