@@ -1,32 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Zone pour afficher les aliens -->
-
-    <!-- Groupe des boutons directionnels -->
     <com.example.myapplication.AlienView
         android:id="@+id/alien_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/direction_buttons_group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/direction_buttons_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+    <!-- Bouton gauche -->
 
+<<<<<<< HEAD
 
 
 
@@ -34,6 +25,26 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+=======
+    <!-- Bouton droite -->
+    <Button
+        android:id="@+id/button_left"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="612dp"
+        android:text="←"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_left" />
+
+    <Button
+        android:id="@+id/button_right"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="→"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_right" />
+>>>>>>> bc7a80dd8883e0e40fc17fe6fdd37833e6235024
 
 
     <!-- Bouton pour start le jeu-->
@@ -48,6 +59,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/alien_view" />
 
+<<<<<<< HEAD
     <Button
         android:id="@+id/button_right"
         android:layout_width="210dp"
@@ -68,3 +80,6 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+=======
+</androidx.constraintlayout.widget.ConstraintLayout>
+>>>>>>> bc7a80dd8883e0e40fc17fe6fdd37833e6235024
