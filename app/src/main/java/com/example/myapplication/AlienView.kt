@@ -5,8 +5,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.view.View
+import android.widget.FrameLayout
 
-class AlienView(context: Context) : View(context) {
+class AlienView(context: Context) : FrameLayout(context) {
     private val crabeBitmap = BitmapFactory.decodeResource(resources, R.drawable.calmar)
     private val poulpeBitmap = BitmapFactory.decodeResource(resources, R.drawable.poulpe)
     private val calmarBitmap = BitmapFactory.decodeResource(resources, R.drawable.calmar)

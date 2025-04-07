@@ -23,5 +23,8 @@ class joueur (var fuseeLongueur : Float, var fuseeHauteur : Float, var largeur :
         finFusee.x = (fuseeLongueur*Math.sin(amplitude)).toFloat()
         finFusee.y = (-fuseeLongueur*Math.cos(amplitude) + vue.screenHeight/4).toFloat()
     }
+    fun deplacement(){
+
+    }
 
 }
