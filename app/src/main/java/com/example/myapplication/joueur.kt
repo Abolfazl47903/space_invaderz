@@ -19,5 +19,8 @@ class joueur (var vaisseauLongueur : Float, var vaisseauHauteur : Float, var lar
         finVaisseau.x = (vaisseauLongueur*Math.sin(amplitude)).toFloat()
         finVaisseau.y = (-vaisseauLongueur*Math.cos(amplitude) + vue.screenHeight/4).toFloat()
     }
+    fun deplacement(){
+
+    }
 
 }
