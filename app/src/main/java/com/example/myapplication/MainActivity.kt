@@ -14,6 +14,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var left : Button
     lateinit var right : Button
 
+    lateinit var alienView : Aliens
+
+    lateinit var AlienView : AlienView
+    lateinit var vaisseau : joueur
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -23,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        alienView = findViewById(R.id.alien_view)
         val Jeux = jeux()
         start = findViewById(R.id.button_start)
         left = findViewById(R.id.button_left)
@@ -31,6 +37,12 @@ class MainActivity : AppCompatActivity() {
         right.visibility = View.INVISIBLE
         val alienView=AlienView(this)
         val joueurView=JoueurView(this)
+        val AlienView=AlienView(this)
+        val vaisseau = joueur()
+        val AlienView = AlienView(this)
+        val vaisseau = joueur
+
+
         start.setOnClickListener{
 
             setContentView(alienView)
@@ -43,19 +55,12 @@ class MainActivity : AppCompatActivity() {
             Jeux.start_game()
         }
     }
-    /*override fun Pause() {
-        super.Pause()
-        Jeux.pause()
+    override fun onPause() {
+        super.onPause()
+        alienView.pause()
     }
-    override fun Reprendre() {
-        super.Reprendre()
-        Jeux.reprendre()
+    override fun onResume() {
+        super.onResume()
+        alienView.resume()
     }
-
-     */
-
 }
-
-//test pour le git pull
-// test kevin
-// test De Vinci 
