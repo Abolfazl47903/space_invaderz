@@ -9,43 +9,13 @@
         android:id="@+id/alien_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="323dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_right"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
-
-    <!-- Bouton gauche -->
-
-<<<<<<< HEAD
-
-
-
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-=======
-    <!-- Bouton droite -->
-    <Button
-        android:id="@+id/button_left"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="612dp"
-        android:text="←"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_left" />
-
-    <Button
-        android:id="@+id/button_right"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:text="→"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_right" />
->>>>>>> bc7a80dd8883e0e40fc17fe6fdd37833e6235024
-
 
     <!-- Bouton pour start le jeu-->
     <Button
@@ -59,27 +29,25 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/alien_view" />
 
-<<<<<<< HEAD
     <Button
         android:id="@+id/button_right"
-        android:layout_width="210dp"
-        android:layout_height="415dp"
-        android:layout_marginBottom="4dp"
+        android:layout_width="186dp"
+        android:layout_height="417dp"
+        android:layout_marginEnd="16dp"
         android:text="right"
-        app:layout_constraintBottom_toBottomOf="@+id/direction_buttons_group"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alien_view" />
 
     <Button
         android:id="@+id/button_left"
         android:layout_width="203dp"
         android:layout_height="415dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="4dp"
         android:text="left"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/alien_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-=======
-</androidx.constraintlayout.widget.ConstraintLayout>
->>>>>>> bc7a80dd8883e0e40fc17fe6fdd37833e6235024
