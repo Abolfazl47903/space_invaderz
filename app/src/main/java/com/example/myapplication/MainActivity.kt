@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var left : Button
     lateinit var right : Button
     lateinit var alienView : Aliens
+    lateinit var AlienView : AlienView
+    lateinit var vaisseau : joueur
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
