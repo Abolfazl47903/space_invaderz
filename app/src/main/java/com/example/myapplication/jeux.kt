@@ -36,10 +36,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
 
     //méthodes
     fun start_game(){
-        left.visibility = View.VISIBLE
-        right.visibility = View.VISIBLE
-        up.visibility = View.VISIBLE
-        down.visibility = View.VISIBLE
+        
         val vaisseau = joueur()
         left.setOnClickListener {
             vaisseau.deplacement()
@@ -61,8 +58,11 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
 
     }
     fun verifier_fin_niveau(){
+        val generer = AlienView(
+            context = this
+        )
         if (score % 90 == 0){
-
+            setContentView(AlienView)
         }
     }
     fun game_over(){
