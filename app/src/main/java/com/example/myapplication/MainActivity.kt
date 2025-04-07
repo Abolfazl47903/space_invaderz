@@ -29,21 +29,17 @@ class MainActivity : AppCompatActivity() {
         left.visibility = View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
         right = findViewById(R.id.button_right)
         right.visibility = View.INVISIBLE
-        up = findViewById(R.id.button_up)
-        up.visibility = View.INVISIBLE
-        down = findViewById(R.id.button_down)
-        up.visibility = View.INVISIBLE
         val alienView=AlienView(this)
         val joueurView=JoueurView(this)
-        val vaisseau = joueur()
-
-
-
         start.setOnClickListener{
 
             setContentView(alienView)
             //ajoute JoueurView dans le Layout de AlienView pour afficher a la fois les aliens et le joueur
-            vaisseau.dessin(this)
+            alienView.addView(joueurView)
+            //configure les boutons pour interagit avec JoueurView
+            left.setOnClickListener { joueurView.deplacement("LEFT") }
+            right.setOnClickListener { joueurView.deplacement("RIGHT") }
+
             Jeux.start_game()
         }
     }
