@@ -40,7 +40,9 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     //méthodes
     fun start_game(){
         
-        val vaisseau = joueur()
+        val vaisseau = JoueurView(
+            context = TODO()
+        )
         left.setOnClickListener {
             vaisseau.deplacement()
         }
@@ -66,10 +68,10 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
         gameover = true //Si true alors on a perdu
     }
     fun prestation(messageId : Int) { //Méthode servant à voir les réultats de la partie
-        left.visibility = View.GONE
-        right.visibility = View.GONE
-        up.visibility = View.GONE
-        down.visibility = View.GONE
+        left.visibility = GONE
+        right.visibility = GONE
+        up.visibility = GONE
+        down.visibility = GONE
         class Resultat : DialogFragment() { //Les fragmetns servent à manier différentes interfaces et donc différents xml, voir l'avant dernier cours
             override fun onCreateDialog(bundle: Bundle?): Dialog { //Des trucs utilisant des builder
                 val le_builder= AlertDialog.Builder(requireActivity()) //Des trucs d'import
