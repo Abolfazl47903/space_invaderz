@@ -118,6 +118,12 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
         screenWidth =w.toFloat()
         screenHeight = h.toFloat()
     }
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int,
+                                width: Int, height: Int) {}
+
+    override fun surfaceCreated(holder: SurfaceHolder) {}
+
+    override fun surfaceDestroyed(holder: SurfaceHolder) {}
 
 
 }
