@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         val AlienView=AlienView(this)
         val vaisseau = joueur()
-
+        val AlienView = AlienView(this)
+        val vaisseau = joueur
 
 
 
