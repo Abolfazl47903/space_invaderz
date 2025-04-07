@@ -1,12 +1,11 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Zone pour afficher les aliens -->
-
-    <!-- Groupe des boutons directionnels -->
     <com.example.myapplication.AlienView
         android:id="@+id/alien_view"
         android:layout_width="0dp"
@@ -18,55 +17,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/direction_buttons_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- Bouton gauche -->
+    <Button
+        android:id="@+id/button_left"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="←"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_up" />
+
+    <!-- Bouton droite -->
+    <Button
+        android:id="@+id/button_right"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="→"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/button_up" />
 
-        <!-- Bouton haut -->
-        <Button
-            android:id="@+id/button_up"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="↑"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Bouton gauche -->
-        <Button
-            android:id="@+id/button_left"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="←"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_up" />
 
-        <!-- Bouton droite -->
-        <Button
-            android:id="@+id/button_right"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="→"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_up" />
-
-        <!-- Bouton bas -->
-        <Button
-            android:id="@+id/button_down"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="↓"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_left" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Bouton pour tirer -->
     <!-- Bouton pour start le jeu-->
     <Button
         android:id="@+id/button_start"
@@ -78,6 +48,5 @@
         app:layout_constraintEnd_toEndOf="@+id/alien_view"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/alien_view" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

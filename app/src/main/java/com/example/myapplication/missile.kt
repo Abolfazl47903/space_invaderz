@@ -17,7 +17,7 @@ class missile (var vue : jeux, val alien : Aliens){
     init{
         missilePaint.color = Color.CYAN
     }
-    fun lancer(amplitude : Double){ //Lancement du missile
+    fun missile(amplitude : Double){ //Lancement du missile
         missile.x = vue.screenWidth/2f
         missile.y = 1410f
         missileVitesseX =(-missileVitesse*Math.sin(amplitude)).toFloat()
