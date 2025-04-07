@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.alien_view)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         up.visibility = View.INVISIBLE
         down = findViewById(R.id.button_down)
         up.visibility = View.INVISIBLE
-        fire = findViewById(R.id.button_fire)
         val AlienView=AlienView(this)
         val vaisseau = joueur()
 

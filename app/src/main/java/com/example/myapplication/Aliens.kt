@@ -37,4 +37,6 @@ abstract class Aliens(
     }
     abstract  fun donnerPoint(): Int
 
+    fun
+
 }

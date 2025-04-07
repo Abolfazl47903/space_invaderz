@@ -34,11 +34,11 @@ class missile (var vue : jeux, val alien : Aliens){
         missile.x += (interval * missileVitesseX).toFloat()
         missile.y += (interval * missileVitesseY).toFloat()
 
-        if (missile.x + missileTaille > view.screenWidth
+        if (missile.x + missileTaille > vue.screenWidth
             || missile.x - missileTaille < 0) {
             missileOnScreen = false
         }
-        else if (missile.y + missileTaille > view.screenHeight
+        else if (missile.y + missileTaille > vue.screenHeight
             || missile.y - missileTaille < 0) {
             missileOnScreen = false
         }

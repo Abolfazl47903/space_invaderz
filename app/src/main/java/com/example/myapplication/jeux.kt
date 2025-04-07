@@ -125,4 +125,3 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {}
 }
-

@@ -11,7 +11,8 @@ class joueur (var fuseeLongueur : Float, var fuseeHauteur : Float, var largeur :
     private var vie : Int = 3
     private val vitesse : Int = 0
     private val vitesseDeTir : Int = 0 // j'ai mis les attributs qui sont sur le diagramme
-    fun dessin(canvas : Canvas) { //Dessin du rectangle
+
+    fun dessin(canvas : Canvas) { //Dessin du cercle
         fuseePaint.strokeWidth = largeur * 1.5f
         canvas.drawLine(0f,vue.screenHeight/4,finFusee.x,finFusee.y,fuseePaint)
     }
