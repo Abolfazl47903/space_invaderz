@@ -105,7 +105,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
         interfacee = false
         thread.join() //Les thread servent quand on ouvre plusieurs application (voir cours)
     }
-    fun reprendre() { //Si on veut reprendre le jeu
+    fun resume() { //Si on veut reprendre le jeu
         interfacee = true
         thread = Thread(this)
         thread.start()
