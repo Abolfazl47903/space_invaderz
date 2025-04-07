@@ -42,10 +42,10 @@ class missile (var vue : jeux, val alien : Aliens){
             || missile.y - missileTaille < 0) {
             missileOnScreen = false
         }
-        else if (missile.x + missileTaille > cible.cible.left
-            && missile.y + missileTaille > cible.cible.top
-            && missile.y - missileTaille < cible.cible.bottom) {
-            cible.detectChoc(this)
+        else if (missile.x + missileTaille > alien.alien.left
+            && missile.y + missileTaille > alien.alien.top
+            && missile.y - missileTaille < alien.alien.bottom) {
+            alien.detectChoc(this)
         }
     }
     }
