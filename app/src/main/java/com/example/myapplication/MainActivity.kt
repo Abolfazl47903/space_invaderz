@@ -13,16 +13,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var start : Button
     lateinit var left : Button
     lateinit var right : Button
-<<<<<<< HEAD
 
-=======
     lateinit var alienView : Aliens
-<<<<<<< HEAD
+
     lateinit var AlienView : AlienView
     lateinit var vaisseau : joueur
-=======
->>>>>>> bc7a80dd8883e0e40fc17fe6fdd37833e6235024
->>>>>>> f912d84af06974eaa208a2f494d0fe74112662e6
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +35,11 @@ class MainActivity : AppCompatActivity() {
         left.visibility = View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
         right = findViewById(R.id.button_right)
         right.visibility = View.INVISIBLE
-<<<<<<< HEAD
 
         val AlienView=AlienView(this)
         val vaisseau = joueur()
-=======
         val AlienView = AlienView(this)
         val vaisseau = joueur
->>>>>>> bc7a80dd8883e0e40fc17fe6fdd37833e6235024
 
 
 
@@ -58,24 +50,15 @@ class MainActivity : AppCompatActivity() {
             Jeux.start_game()
         }
     }
-<<<<<<< HEAD
     override fun Pause() {
         super.Pause()
         Jeux.pause()
-=======
     override fun onPause() {
         super.onPause()
         alienView.pause()
->>>>>>> bc7a80dd8883e0e40fc17fe6fdd37833e6235024
     }
     override fun onResume() {
         super.onResume()
         alienView.resume()
     }
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> bc7a80dd8883e0e40fc17fe6fdd37833e6235024
 }

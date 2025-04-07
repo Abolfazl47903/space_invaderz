@@ -12,10 +12,6 @@ class joueur (var vaisseauLongueur : Float, var vaisseauHauteur : Float, var lar
     private val vitesse : Int = 0
     private val vitesseDeTir : Int = 0 // j'ai mis les attributs qui sont sur le diagramme
 
-    fun dessin(canvas : Canvas) { //Dessin du cercle
-        vaisseauPaint.strokeWidth = largeur * 1.5f
-        canvas.drawLine(0f,vue.screenHeight/4,finVaisseau.x,finVaisseau.y,vaisseauPaint)
-    }
     fun finvaisseau(hauteur: Float){ //Méthode servant à initialiser la fin de la fusée
         finVaisseau.set(vaisseauLongueur, hauteur)
     }
