@@ -38,7 +38,6 @@ abstract class Aliens(
     abstract  fun donnerPoint(): Int
 
     fun collision(missile : missile){
-        val section = ((missile.missile.y
     }
 
 }
