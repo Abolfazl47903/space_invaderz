@@ -13,9 +13,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var start : Button
     lateinit var left : Button
     lateinit var right : Button
-    lateinit var up : Button
-    lateinit var down : Button
-    lateinit var fire : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
