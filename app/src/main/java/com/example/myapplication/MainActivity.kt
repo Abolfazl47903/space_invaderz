@@ -33,14 +33,16 @@ class MainActivity : AppCompatActivity() {
         up.visibility = View.INVISIBLE
         down = findViewById(R.id.button_down)
         up.visibility = View.INVISIBLE
-        val AlienView=AlienView(this)
+        val alienView=AlienView(this)
+        val joueurView=JoueurView(this)
         val vaisseau = joueur()
 
 
 
         start.setOnClickListener{
 
-            setContentView(AlienView)
+            setContentView(alienView)
+            //ajoute JoueurView dans le Layout de AlienView pour afficher a la fois les aliens et le joueur
             vaisseau.dessin(this)
             Jeux.start_game()
         }
