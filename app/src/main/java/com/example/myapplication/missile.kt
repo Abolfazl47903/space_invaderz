@@ -15,19 +15,38 @@ class missile (var vue : jeux, val alien : Aliens){
     var missilePaint = Paint()
 
     init{
-        missilePaint.color = Color.WHITE
+        missilePaint.color = Color.CYAN
     }
     fun lancer(amplitude : Double){ //Lancement du missile
         missile.x = vue.screenWidth/2f
-        missile.y = missileTaille
-        missileVitesseX =(missileVitesse*Math.sin(amplitude)).toFloat()
-        missileVitesseY =(missileVitesse*Math.cos(amplitude)).toFloat()
+        missile.y = 1410f
+        missileVitesseX =(-missileVitesse*Math.sin(amplitude)).toFloat()
+        missileVitesseY =(-missileVitesse*Math.cos(amplitude)).toFloat()
         missileOnScreen = true
     }
     fun dessin(canvas : Canvas){ //Dessin du missile
-        canvas.drawLine(missile.x, missile.y, missileTaille, missilePaint)
+        canvas.drawCircle(missile.x, missile.y, 10f, missilePaint)
     }
     fun resetMissile(){ //Fait disparître le missile pour faire réapparaître un autre
         missileOnScreen = false
+    }
+    fun MAJ(interval : Double){if (missileOnScreen) {
+        missile.x += (interval * missileVitesseX).toFloat()
+        missile.y += (interval * missileVitesseY).toFloat()
+
+        if (missile.x + missileTaille > view.screenWidth
+            || missile.x - missileTaille < 0) {
+            missileOnScreen = false
+        }
+        else if (missile.y + missileTaille > view.screenHeight
+            || missile.y - missileTaille < 0) {
+            missileOnScreen = false
+        }
+        else if (missile.x + missileTaille > cible.cible.left
+            && missile.y + missileTaille > cible.cible.top
+            && missile.y - missileTaille < cible.cible.bottom) {
+            cible.detectChoc(this)
+        }
+    }
     }
 }
