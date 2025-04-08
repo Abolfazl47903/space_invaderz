@@ -10,13 +10,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity(),GameListener {
-    lateinit var start : Button
-    lateinit var left : Button
-    lateinit var right : Button
+    lateinit var start: Button
+    lateinit var left: Button
+    lateinit var right: Button
 
-    lateinit var alienView : Aliens
-    private lateinit var Jeux : jeux
-    lateinit var AlienView : AlienView
+    lateinit var alienView: Aliens
+    private lateinit var Jeux: jeux
+    lateinit var AlienView: AlienView
+
+    lateinit var Joueur: joueur
+    val maxTranslationX = 500f
+    val minTranslationX = -500f
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,27 +36,19 @@ class MainActivity : AppCompatActivity(),GameListener {
 
         start = findViewById(R.id.button_start)
         left = findViewById(R.id.button_left)
-        left.visibility = View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
+        left.visibility =
+            View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
         right = findViewById(R.id.button_right)
         right.visibility = View.INVISIBLE
 
-<<<<<<< HEAD
-        val alienView=AlienView(this)
-        val joueurView=JoueurView(this )
-        start.setOnClickListener{
+        Joueur = findViewById(R.id.imageView)
+        right = findViewById(R.id.button_right)
+        left = findViewById(R.id.button_left)
 
-            setContentView(alienView)
-            //ajoute joueurView au Layout principal (AlienView dans ce cas )
-            alienView.addView(joueurView)
-            //activer les boutons  de deplacement apres le clic  sur start
-            left.visibility = View.VISIBLE
-            right.visibility = View.VISIBLE
-            // configurer les boutons
-            left.setOnClickListener { joueurView.deplacement("LEFT") }
-            right.setOnClickListener { joueurView.deplacement("RIGHT") }
-=======
-        val AlienView=AlienView(this)
-        val JoueurView = JoueurView(this)
+        val alienView = AlienView(this)
+        val joueurView = JoueurView(this)
+        start.setOnClickListener {
+        }
         Jeux = jeux(
             context = this,
             attributes = null,
@@ -64,39 +60,42 @@ class MainActivity : AppCompatActivity(),GameListener {
 
 
 
-        start.setOnClickListener{
+        start.setOnClickListener {
 
             setContentView(AlienView)
             setContentView(JoueurView)
->>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
             Jeux.start_game()
             Jeux.resume()
         }
-    }
-<<<<<<< HEAD
-    /*override fun Pause() {
-        super.Pause()
-        Jeux.pause()
-=======
 
-    override fun NoAliens(){
+        right.setOnClickListener {
+            val newTranslationX = Joueur.translationX + 10f
+            if (newTranslationX <= maxTranslationX){
+                Joueur.translationX = newTranslationX
+            }
+        }
+        left.setOnClickListener {
+            val newTranslationX = Joueur.translationX - 10f
+            if (newTranslationX >= minTranslationX){
+                Joueur.translationX = newTranslationX
+            }
+        }
+    }
+
+    override fun NoAliens() {
         setContentView(AlienView)
     }
 
-
-
-
->>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
     override fun onPause() {
         super.onPause()
         Jeux.pause()
     }
+
     override fun onResume() {
         super.onResume()
-<<<<<<< HEAD
-        alienView.resume()*/
-=======
+        alienView.resume()
         Jeux.resume()
->>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
     }
+
+}
 
