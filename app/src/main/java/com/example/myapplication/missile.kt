@@ -30,7 +30,7 @@ class missile (var vue : jeux, val alien : Aliens){
     fun resetMissile(){ //Fait disparître le missile pour faire réapparaître un autre
         missileOnScreen = false
     }
-    fun MAJ(interval : Double){if (missileOnScreen) {
+    fun update(interval : Double){if (missileOnScreen) {
         missile.x += (interval * missileVitesseX).toFloat()
         missile.y += (interval * missileVitesseY).toFloat()
 
