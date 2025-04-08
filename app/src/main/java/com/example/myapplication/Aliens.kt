@@ -40,7 +40,7 @@ abstract class Aliens(
     }
     abstract  fun donnerPoint(): Int
 
-    fun collision(missile : missile){
+    fun detectchoc(missile : missile){
     }
 
 }
