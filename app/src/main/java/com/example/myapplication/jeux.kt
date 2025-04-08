@@ -36,6 +36,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     var screenWidth = 0f
     var screenHeight = 0f
     val vaisseau = JoueurView(context)
+    lateinit var AlienView : AlienView
 
 
 
@@ -46,7 +47,8 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
             val currentTime = System.currentTimeMillis()
             var elapsedTimeMS:Double=(currentTime-previousFrameTime).toDouble()
             verifier_fin_niveau()
-            // rajouter la méthode qui fait bouger les aliens
+            val AlienView = AlienView(context)
+            AlienView.startMouvement()
             previousFrameTime = currentTime
             Thread.sleep(16)
         }
@@ -60,7 +62,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
         right.setOnClickListener {
             vaisseau.deplacement("RIGHT")
         }
-        //faire appel a la fonction qui permet de faire bouger les aliens
+
 
 
     }
