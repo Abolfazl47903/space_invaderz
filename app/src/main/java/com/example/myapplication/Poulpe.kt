@@ -4,7 +4,7 @@ class Poulpe(vitesseX:Int,
              vitesseY:Int,
              vitesseTir:Int,
              taille:Int,
-             private val couleur :String):Aliens(vitesseX,vitesseY,vitesseTir,taille) {
+             ):Aliens(vitesseX,vitesseY,vitesseTir,taille) {
     override fun shot() {
 
     }
