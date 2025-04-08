@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.graphics.Canvas
 import android.graphics.PointF
@@ -7,6 +9,8 @@ import android.graphics.Color
 import android.widget.ImageView
 
 abstract class missile (var vue : jeux, val alien : Aliens){
+    var explosionBitmap: Bitmap? = null
+    var explosionPosition: PointF? = null
     var missile = PointF()
     var missileVitesse =0f
     var missileVitesseX =0f
@@ -14,9 +18,10 @@ abstract class missile (var vue : jeux, val alien : Aliens){
     var missileOnScreen =true
     var missileTaille =0f
     var missilePaint = Paint()
-
+    var state: UpdateState? = null
     init{
         missilePaint.color = Color.CYAN
+        explosionBitmap = BitmapFactory.decodeResource(vue.resources, R.drawable.explosion)
     }
     fun Missile(amplitude : Double, imageView: ImageView){ //Lancement du missile
         val imageLocation = IntArray(2)
@@ -31,6 +36,7 @@ abstract class missile (var vue : jeux, val alien : Aliens){
     }
     fun dessin(canvas : Canvas){ //Dessin du missile
         canvas.drawCircle(missile.x, missile.y, 10f, missilePaint)
+        drawExplosion(canvas)
     }
     fun resetMissile(){ //Fait disparître le missile pour faire réapparaître un autre
         missileOnScreen = false
@@ -51,8 +57,24 @@ abstract class missile (var vue : jeux, val alien : Aliens){
             && missile.x + missileTaille > alien.alien.right
             && missile.y - missileTaille < alien.alien.bottom) {
             alien.detectchoc(this)
+            state = MissileCollision(this)
+            state?.update()
         }
     }
+    }
+    fun drawExplosion(canvas: Canvas) {
+        // Si on a une position ET une image d’explosion
+        explosionPosition?.let { pos ->
+            explosionBitmap?.let { bmp ->
+                // On dessine l'image centrée sur la position
+                canvas.drawBitmap(
+                    bmp,
+                    pos.x - bmp.width / 2,
+                    pos.y - bmp.height / 2,
+                    null
+                )
+            }
+        }
     }
     fun degat(){
 

@@ -1,10 +1,16 @@
 package com.example.myapplication
 
-class missileCollision : updateState {
-    override fun update(collision: Boolean) {
-        if (collision == true) {
-            println("Le missile entre en collision et explose.")
+import android.graphics.PointF
+import android.os.Handler
+import android.os.Looper
 
-        }
+class MissileCollision(val missile: missile) : UpdateState {
+    override fun update() {
+        missile.explosionPosition = PointF(missile.missile.x, missile.missile.y)
+        missile.missileOnScreen = false
+        Handler(Looper.getMainLooper()).postDelayed({
+            missile.explosionBitmap = null // Supprimer l'explosion après un délai
+        }, 500)
     }
 }
+

@@ -1,9 +1,8 @@
 package com.example.myapplication
 
-class alienMort : updateState {
+class alienMort : UpdateState {
     override fun update(collision: Boolean) {
-        if (collision == true) {
-            println("L'Alien est mort et disparaît.")
+        if (collision) {
 
         }
     }
