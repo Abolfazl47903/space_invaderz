@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),GameListener {
     lateinit var start : Button
     lateinit var left : Button
     lateinit var right : Button
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var alienView : Aliens
 
     lateinit var AlienView : AlienView
-    lateinit var vaisseau : joueur
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         alienView = findViewById(R.id.alien_view)
-        val Jeux = jeux()
+
         start = findViewById(R.id.button_start)
         left = findViewById(R.id.button_left)
         left.visibility = View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
@@ -37,19 +37,35 @@ class MainActivity : AppCompatActivity() {
         right.visibility = View.INVISIBLE
 
         val AlienView=AlienView(this)
-        val vaisseau = joueur()
-        val AlienView = AlienView(this)
-        val vaisseau = joueur
+        val JoueurView = JoueurView(this)
+        val Jeux = jeux(
+            context = this,
+            attributes = ,
+            defStyleAttr = ,
+            left = left,
+            right = right,
+            GameListener = this
+        )
 
 
 
         start.setOnClickListener{
 
             setContentView(AlienView)
-            vaisseau.dessin(this)
+            setContentView(JoueurView)
             Jeux.start_game()
         }
     }
+
+    override fun NoAliens(){
+        setContentView(AlienView)
+    }
+
+    override fun Pause() {
+        super.Pause()
+        Jeux.pause()
+    }
+
     override fun onPause() {
         super.onPause()
         alienView.pause()
