@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity(),GameListener {
     lateinit var right : Button
 
     lateinit var alienView : Aliens
-
+    private lateinit var Jeux : jeux
     lateinit var AlienView : AlienView
 
 
@@ -38,10 +38,10 @@ class MainActivity : AppCompatActivity(),GameListener {
 
         val AlienView=AlienView(this)
         val JoueurView = JoueurView(this)
-        val Jeux = jeux(
+        Jeux = jeux(
             context = this,
-            attributes = ,
-            defStyleAttr = ,
+            attributes = null,
+            defStyleAttr = 0,
             left = left,
             right = right,
             GameListener = this
@@ -62,17 +62,15 @@ class MainActivity : AppCompatActivity(),GameListener {
         setContentView(AlienView)
     }
 
-    override fun Pause() {
-        super.Pause()
-        Jeux.pause()
-    }
+
+
 
     override fun onPause() {
         super.onPause()
-        alienView.pause()
+        Jeux.pause()
     }
     override fun onResume() {
         super.onResume()
-        alienView.resume()
+        Jeux.resume()
     }
 }
