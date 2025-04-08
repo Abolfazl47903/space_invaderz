@@ -1,9 +1,9 @@
 package com.example.myapplication
 
-class alienMort : UpdateState {
-    override fun update(collision: Boolean) {
-        if (collision) {
-
-        }
+class AlienMort (var aliens: Aliens) : UpdateState {
+    override fun update(){
+        aliens.alien.set(-100f, -100f, -100f, -100f)
     }
 }
+
+

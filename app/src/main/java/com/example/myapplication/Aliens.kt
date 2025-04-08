@@ -8,7 +8,8 @@ abstract class Aliens(
     var vitesseY:Int,
     var vitesseTir:Int,
     var taille:Int,
-    var alienDistance: Float, var alienDebut: Float, var alienFin: Float, var alienVitesseInitiale: Float, var width: Float, var view: jeux
+    var alienDistance: Float, var alienDebut: Float, var alienFin: Float, var alienVitesseInitiale: Float, var width: Float, var view: jeux,
+    var state: UpdateState? = null
 ){
     @SuppressLint("NotConstructor")// juste pour dire que ceci n'est pas un constructeur
     fun actionAliens() :String{
@@ -31,7 +32,7 @@ abstract class Aliens(
         return taille
     }
     abstract fun shot()  // qui seront rédéfinit dans les sous classes crabes , poulpes et calmar
-    abstract fun update()
+    //abstract fun update()
     fun changeDirection() {
 
     }
@@ -41,6 +42,16 @@ abstract class Aliens(
     abstract  fun donnerPoint(): Int
 
     fun detectchoc(missile : missile){
+        if (missile.missile.x + missile.missileTaille > alien.left &&
+            missile.missile.x - missile.missileTaille < alien.right &&
+            missile.missile.y + missile.missileTaille > alien.top &&
+            missile.missile.y - missile.missileTaille < alien.bottom) {
+            state = AlienMort(this)
+            state?.update()
+        }
+    }
+    fun donnerPoints(){
+
     }
 
 }
