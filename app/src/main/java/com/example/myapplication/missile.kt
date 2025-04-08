@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.Color
 
-class missile (var vue : jeux, val alien : Aliens){
+abstract class missile (var vue : jeux, val alien : Aliens){
     var missile = PointF()
     var missileVitesse =0f
     var missileVitesseX =0f
