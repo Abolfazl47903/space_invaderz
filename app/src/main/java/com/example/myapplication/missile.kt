@@ -49,5 +49,7 @@ class missile (var vue : jeux, val alien : Aliens){
         }
     }
     }
-    fun degat
+    fun degat(){
+
+    }
 }

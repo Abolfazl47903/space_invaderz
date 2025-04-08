@@ -16,9 +16,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var alienView : Aliens
 
-    lateinit var AlienView : AlienView
-    lateinit var vaisseau : joueur
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -36,21 +33,23 @@ class MainActivity : AppCompatActivity() {
         right = findViewById(R.id.button_right)
         right.visibility = View.INVISIBLE
 
-        val AlienView=AlienView(this)
-        val vaisseau = joueur()
-        val AlienView = AlienView(this)
-        val vaisseau = joueur
-
-
-
+        val alienView=AlienView(this)
+        val joueurView=JoueurView(this )
         start.setOnClickListener{
 
-            setContentView(AlienView)
-            vaisseau.dessin(this)
+            setContentView(alienView)
+            //ajoute joueurView au Layout principal (AlienView dans ce cas )
+            alienView.addView(joueurView)
+            //activer les boutons  de deplacement apres le clic  sur start
+            left.visibility = View.VISIBLE
+            right.visibility = View.VISIBLE
+            // configurer les boutons
+            left.setOnClickListener { joueurView.deplacement("LEFT") }
+            right.setOnClickListener { joueurView.deplacement("RIGHT") }
             Jeux.start_game()
         }
     }
-    override fun Pause() {
+    /*override fun Pause() {
         super.Pause()
         Jeux.pause()
     override fun onPause() {
@@ -59,6 +58,6 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-        alienView.resume()
+        alienView.resume()*/
     }
-}
+
