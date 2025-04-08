@@ -23,34 +23,37 @@ class AlienView(context: Context) : FrameLayout(context) {
             val largeurEcran = width.toFloat()
             val colonnesAliens = 10
             val espaceEntreAliens = largeurEcran * 0.02f
-            val tailleAlien = ((largeurEcran - (colonnesAliens + 1) * espaceEntreAliens) / colonnesAliens).toInt()
+            val tailleAlien =
+                ((largeurEcran - (colonnesAliens + 1) * espaceEntreAliens) / colonnesAliens).toInt()
 
             aliens.add(Bitmap.createScaledBitmap(crabeBitmap, tailleAlien, tailleAlien, false))
             aliens.add(Bitmap.createScaledBitmap(poulpeBitmap, tailleAlien, tailleAlien, false))
             aliens.add(Bitmap.createScaledBitmap(calmarBitmap, tailleAlien, tailleAlien, false))
-
+            startMovement()
             invalidate() // Redessiner les aliens après redimensionnement
         }
+    }
 
         // Ajout du mouvement horizontal et vertical
-        val handler = android.os.Handler()
-        val runnable = object : Runnable {
-            override fun run() {
-                val largeurEcran = width.toFloat()
+        fun startMovement() {
+            val runnable = object : Runnable {
+                override fun run() {
+                    val largeurEcran = width.toFloat()
 
-                // Mise à jour du décalage horizontal
-                offsetX += direction * 10
-                if (offsetX >= largeurEcran * 0.1 || offsetX <= -largeurEcran * 0.1) {
-                    direction *= -1 // Inverser la direction horizontale
-                    offsetY += descente // Descendre les aliens lorsqu'ils changent de direction
+                    // Mettre à jour le décalage horizontal
+                    offsetX += direction * 10
+                    if (offsetX >= largeurEcran * 0.1 || offsetX <= -largeurEcran * 0.1) {
+                        direction *= -1 // Inverser la direction
+                        offsetY += descente // Descendre les aliens verticalement
+                    }
+
+                    invalidate() // Redessiner avec les nouvelles positions
+                    handler.postDelayed(this, 50) // Intervalle de 50ms
                 }
-
-                invalidate() // Redessiner avec les nouvelles positions
-                handler.postDelayed(this, 50) // Intervalle de 50ms
             }
+            handler.post(runnable)
         }
-        handler.post(runnable)
-    }
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
