@@ -40,6 +40,17 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
 
 
     //méthodes
+    override fun run(){
+        var previousFrameTime = System.currentTimeMillis()
+        while (interfacee){
+            val currentTime = System.currentTimeMillis()
+            var elapsedTimeMS:Double=(currentTime-previousFrameTime).toDouble()
+            verifier_fin_niveau()
+            // rajouter la méthode qui fait bouger les aliens
+            previousFrameTime = currentTime
+            Thread.sleep(16)
+        }
+    }
     fun start_game(){
         
 

@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity(),GameListener {
             setContentView(AlienView)
             setContentView(JoueurView)
             Jeux.start_game()
+            Jeux.resume()
         }
     }
 
