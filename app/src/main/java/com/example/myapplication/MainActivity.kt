@@ -15,12 +15,9 @@ class MainActivity : AppCompatActivity(),GameListener {
     lateinit var right : Button
 
     lateinit var alienView : Aliens
-<<<<<<< HEAD
-=======
     private lateinit var Jeux : jeux
     lateinit var AlienView : AlienView
 
->>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
