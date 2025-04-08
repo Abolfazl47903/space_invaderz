@@ -19,7 +19,7 @@ import android.view.View
 import android.widget.Button
 
 
-class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0, val left : Button, val right : Button, val up : Button, val down : Button, val fire : Button): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
+class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0, val left : Button, val right : Button, val GameListener: GameListener ): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
 
     // attributs
     private var score : Int = 0
@@ -35,31 +35,39 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     lateinit var thread :Thread
     var screenWidth = 0f
     var screenHeight = 0f
+    val vaisseau = JoueurView(context)
 
 
 
     //méthodes
+    override fun run(){
+        var previousFrameTime = System.currentTimeMillis()
+        while (interfacee){
+            val currentTime = System.currentTimeMillis()
+            var elapsedTimeMS:Double=(currentTime-previousFrameTime).toDouble()
+            verifier_fin_niveau()
+            // rajouter la méthode qui fait bouger les aliens
+            previousFrameTime = currentTime
+            Thread.sleep(16)
+        }
+    }
     fun start_game(){
         
-        val vaisseau = JoueurView(
-            context = TODO()
-        )
+
         left.setOnClickListener {
-            vaisseau.deplacement()
+            vaisseau.deplacement("LEFT")
         }
         right.setOnClickListener {
-            vaisseau.deplacement()
+            vaisseau.deplacement("RIGHT")
         }
         //faire appel a la fonction qui permet de faire bouger les aliens
 
 
     }
     fun verifier_fin_niveau(){
-        val generer = AlienView(
-            context = this
-        )
+
         if (score % 90 == 0){
-            setContentView(AlienView)
+            GameListener.NoAliens()
         }
     }
     fun game_over(){
@@ -71,8 +79,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
     fun prestation(messageId : Int) { //Méthode servant à voir les réultats de la partie
         left.visibility = GONE
         right.visibility = GONE
-        up.visibility = GONE
-        down.visibility = GONE
+
         class Resultat : DialogFragment() { //Les fragmetns servent à manier différentes interfaces et donc différents xml, voir l'avant dernier cours
             override fun onCreateDialog(bundle: Bundle?): Dialog { //Des trucs utilisant des builder
                 val le_builder= AlertDialog.Builder(requireActivity()) //Des trucs d'import

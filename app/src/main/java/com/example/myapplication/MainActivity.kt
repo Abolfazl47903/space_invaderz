@@ -9,12 +9,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),GameListener {
     lateinit var start : Button
     lateinit var left : Button
     lateinit var right : Button
 
     lateinit var alienView : Aliens
+<<<<<<< HEAD
+=======
+    private lateinit var Jeux : jeux
+    lateinit var AlienView : AlienView
+
+>>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +32,14 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         alienView = findViewById(R.id.alien_view)
-        val Jeux = jeux()
+
         start = findViewById(R.id.button_start)
         left = findViewById(R.id.button_left)
         left.visibility = View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
         right = findViewById(R.id.button_right)
         right.visibility = View.INVISIBLE
 
+<<<<<<< HEAD
         val alienView=AlienView(this)
         val joueurView=JoueurView(this )
         start.setOnClickListener{
@@ -46,18 +53,53 @@ class MainActivity : AppCompatActivity() {
             // configurer les boutons
             left.setOnClickListener { joueurView.deplacement("LEFT") }
             right.setOnClickListener { joueurView.deplacement("RIGHT") }
+=======
+        val AlienView=AlienView(this)
+        val JoueurView = JoueurView(this)
+        Jeux = jeux(
+            context = this,
+            attributes = null,
+            defStyleAttr = 0,
+            left = left,
+            right = right,
+            GameListener = this
+        )
+
+
+
+        start.setOnClickListener{
+
+            setContentView(AlienView)
+            setContentView(JoueurView)
+>>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
             Jeux.start_game()
+            Jeux.resume()
         }
     }
+<<<<<<< HEAD
     /*override fun Pause() {
         super.Pause()
         Jeux.pause()
+=======
+
+    override fun NoAliens(){
+        setContentView(AlienView)
+    }
+
+
+
+
+>>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
     override fun onPause() {
         super.onPause()
-        alienView.pause()
+        Jeux.pause()
     }
     override fun onResume() {
         super.onResume()
+<<<<<<< HEAD
         alienView.resume()*/
+=======
+        Jeux.resume()
+>>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
     }
 
