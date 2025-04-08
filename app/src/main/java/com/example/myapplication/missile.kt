@@ -4,6 +4,7 @@ import android.graphics.Paint
 import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.Color
+import android.widget.ImageView
 
 abstract class missile (var vue : jeux, val alien : Aliens){
     var missile = PointF()
@@ -17,9 +18,13 @@ abstract class missile (var vue : jeux, val alien : Aliens){
     init{
         missilePaint.color = Color.CYAN
     }
-    fun missile(amplitude : Double){ //Lancement du missile
-        missile.x = vue.screenWidth/2f
-        missile.y = 1410f
+    fun Missile(amplitude : Double, imageView: ImageView){ //Lancement du missile
+        val imageLocation = IntArray(2)
+        imageView.getLocationOnScreen(imageLocation)
+
+        missile.x = imageLocation[0] + imageView.width / 2f
+        missile.y = imageLocation[1] - 160f
+
         missileVitesseX =(-missileVitesse*Math.sin(amplitude)).toFloat()
         missileVitesseY =(-missileVitesse*Math.cos(amplitude)).toFloat()
         missileOnScreen = true
@@ -30,7 +35,7 @@ abstract class missile (var vue : jeux, val alien : Aliens){
     fun resetMissile(){ //Fait disparître le missile pour faire réapparaître un autre
         missileOnScreen = false
     }
-    fun update(interval : Double){if (missileOnScreen) {
+    fun collision(interval : Double){if (missileOnScreen) {
         missile.x += (interval * missileVitesseX).toFloat()
         missile.y += (interval * missileVitesseY).toFloat()
 
@@ -45,7 +50,7 @@ abstract class missile (var vue : jeux, val alien : Aliens){
         else if (missile.x + missileTaille > alien.alien.left
             && missile.x + missileTaille > alien.alien.right
             && missile.y - missileTaille < alien.alien.bottom) {
-            alien.collision(this)
+            alien.detectchoc(this)
         }
     }
     }
