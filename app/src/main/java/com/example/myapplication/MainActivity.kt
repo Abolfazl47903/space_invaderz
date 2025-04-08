@@ -15,9 +15,12 @@ class MainActivity : AppCompatActivity(),GameListener {
     lateinit var right : Button
 
     lateinit var alienView : Aliens
+<<<<<<< HEAD
+=======
     private lateinit var Jeux : jeux
     lateinit var AlienView : AlienView
 
+>>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +39,21 @@ class MainActivity : AppCompatActivity(),GameListener {
         right = findViewById(R.id.button_right)
         right.visibility = View.INVISIBLE
 
+<<<<<<< HEAD
+        val alienView=AlienView(this)
+        val joueurView=JoueurView(this )
+        start.setOnClickListener{
+
+            setContentView(alienView)
+            //ajoute joueurView au Layout principal (AlienView dans ce cas )
+            alienView.addView(joueurView)
+            //activer les boutons  de deplacement apres le clic  sur start
+            left.visibility = View.VISIBLE
+            right.visibility = View.VISIBLE
+            // configurer les boutons
+            left.setOnClickListener { joueurView.deplacement("LEFT") }
+            right.setOnClickListener { joueurView.deplacement("RIGHT") }
+=======
         val AlienView=AlienView(this)
         val JoueurView = JoueurView(this)
         Jeux = jeux(
@@ -53,10 +71,16 @@ class MainActivity : AppCompatActivity(),GameListener {
 
             setContentView(AlienView)
             setContentView(JoueurView)
+>>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
             Jeux.start_game()
             Jeux.resume()
         }
     }
+<<<<<<< HEAD
+    /*override fun Pause() {
+        super.Pause()
+        Jeux.pause()
+=======
 
     override fun NoAliens(){
         setContentView(AlienView)
@@ -65,12 +89,17 @@ class MainActivity : AppCompatActivity(),GameListener {
 
 
 
+>>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
     override fun onPause() {
         super.onPause()
         Jeux.pause()
     }
     override fun onResume() {
         super.onResume()
+<<<<<<< HEAD
+        alienView.resume()*/
+=======
         Jeux.resume()
+>>>>>>> 449a49c36fd2996c9681b31853f2b40ab134ad98
     }
-}
+
