@@ -8,7 +8,7 @@ import android.graphics.PointF
 import android.graphics.Color
 import android.widget.ImageView
 
-abstract class missile (var vue : jeux, val alien : Aliens) {
+abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) {
     var explosionBitmap: Bitmap? = null
     var explosionPosition: PointF? = null
     var missile = PointF()
@@ -71,6 +71,31 @@ abstract class missile (var vue : jeux, val alien : Aliens) {
         }
     }
 
+    fun collisionJoueur(interval: Double) {
+        if (missileOnScreen) {
+            missile.x += (interval * missileVitesseX).toFloat()
+            missile.y += (interval * missileVitesseY).toFloat()
+
+            // Vérification des limites d'écran
+            if (missile.x + missileTaille > vue.screenWidth
+                || missile.x - missileTaille < 0
+                || missile.y + missileTaille > vue.screenHeight
+                || missile.y - missileTaille < 0
+            ) {
+                missileOnScreen = false
+            } else if (missile.x + missileTaille > joueur.joueur.left
+                && missile.x - missileTaille < joueur.joueur.right
+                && missile.y + missileTaille > joueur.joueur.top
+                && missile.y - missileTaille < joueur.joueur.bottom
+            ) {
+                // Si collision détectée
+                alien.detectchoc(this)
+                state = MissileCollision(this)
+                state?.update()
+            }
+        }
+    }
+
     // Dessin de l'explosion
     fun drawExplosion(canvas: Canvas) {
         explosionPosition?.let { pos ->
@@ -84,7 +109,6 @@ abstract class missile (var vue : jeux, val alien : Aliens) {
             }
         }
     }
-    fun collisionJoueur() {}
-    fun degat() {
-    }
+
+    fun degat() {}
 }
