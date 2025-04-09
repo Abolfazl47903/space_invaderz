@@ -4,6 +4,7 @@ package com.example.myapplication
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity(),GameListener {
     private lateinit var Jeux: jeux
     lateinit var AlienView: AlienView
 
-    lateinit var Joueur: joueur
+    lateinit var Joueur: ImageView
     val maxTranslationX = 500f
     val minTranslationX = -500f
 
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity(),GameListener {
             }
         }
         left.setOnClickListener {
-            val newTranslationX = Joueur.translationX - 10f
+            val newTranslationX = (Joueur).translationX - 10f
             if (newTranslationX >= minTranslationX){
                 Joueur.translationX = newTranslationX
             }
