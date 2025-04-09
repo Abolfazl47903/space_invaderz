@@ -4,8 +4,14 @@ class crabes(
     vitesseX:Int,
     vitesseY:Int,
     vitesseTir:Int,
-    taille:Int
-    ):Aliens(vitesseX,vitesseY,vitesseTir,taille){
+    taille:Int,
+    alienDistance: Float,
+    alienDebut: Float,
+    alienFin: Float,
+    alienVitesseInitiale: Float,
+    width: Float,
+    view: jeux
+    ):Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view){
     override fun shot() {
 
     }
