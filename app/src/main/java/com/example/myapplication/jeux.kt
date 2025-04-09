@@ -28,10 +28,6 @@ class jeux @JvmOverloads constructor (context: Context,
 
     // attributs
     private var score : Int = 0
-<<<<<<< HEAD
-=======
-    var vie : Int = 3
->>>>>>> 72a4e3d469d58a2b13efe3435e9e1c34fe472213
     private var niveau_actuel : Int = 1
 
     //propriétés publiques
