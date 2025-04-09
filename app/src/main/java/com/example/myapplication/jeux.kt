@@ -48,7 +48,7 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
             var elapsedTimeMS:Double=(currentTime-previousFrameTime).toDouble()
             verifier_fin_niveau()
             val AlienView = AlienView(context)
-            AlienView.startMouvement()
+            AlienView.startMovement()
             previousFrameTime = currentTime
             Thread.sleep(16)
         }
