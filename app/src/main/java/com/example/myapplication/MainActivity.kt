@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(),GameListener {
     lateinit var alienView: Aliens
     private lateinit var Jeux: jeux
     lateinit var AlienView: AlienView
-
+    lateinit var JoueurView : JoueurView
     lateinit var Joueur: ImageView
     val maxTranslationX = 500f
     val minTranslationX = -500f
