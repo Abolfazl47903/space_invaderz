@@ -23,10 +23,10 @@ class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet
 
     // attributs
     private var score : Int = 0
-    private var vie : Int = 3
     private var niveau_actuel : Int = 1
 
     //propriétés publiques
+    var vie : Int = 10
     var record : Int = 0
     var vie_supp : Int = 1
     var interfacee = false
