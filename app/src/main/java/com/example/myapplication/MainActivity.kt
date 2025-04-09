@@ -18,9 +18,8 @@ class MainActivity : AppCompatActivity(),GameListener {
     lateinit var alienView: Aliens
     private lateinit var Jeux: jeux
     lateinit var AlienView: AlienView
-
-    lateinit var Joueur: ImageView
     lateinit var JoueurView : JoueurView
+    lateinit var Joueur: ImageView
     val maxTranslationX = 500f
     val minTranslationX = -500f
 
@@ -77,7 +76,7 @@ class MainActivity : AppCompatActivity(),GameListener {
             }
         }
         left.setOnClickListener {
-            val newTranslationX = Joueur.translationX - 10f
+            val newTranslationX = (Joueur).translationX - 10f
             if (newTranslationX >= minTranslationX){
                 Joueur.translationX = newTranslationX
             }
