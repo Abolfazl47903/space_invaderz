@@ -19,10 +19,19 @@ import android.view.View
 import android.widget.Button
 
 
-class jeux @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0, val left : Button, val right : Button, val GameListener: GameListener ): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
+class jeux @JvmOverloads constructor (context: Context,
+                                      attributes: AttributeSet? = null,
+                                      defStyleAttr: Int = 0,
+                                      val left : Button,
+                                      val right : Button,
+                                      val GameListener: GameListener ): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
 
     // attributs
     private var score : Int = 0
+<<<<<<< HEAD
+=======
+    var vie : Int = 3
+>>>>>>> 72a4e3d469d58a2b13efe3435e9e1c34fe472213
     private var niveau_actuel : Int = 1
 
     //propriétés publiques
