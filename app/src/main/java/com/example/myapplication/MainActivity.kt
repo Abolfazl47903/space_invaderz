@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity(),GameListener {
 
     override fun onResume() {
         super.onResume()
-        alienView.resume()
+
         Jeux.resume()
     }
 
