@@ -15,8 +15,6 @@ class Poulpe(vitesseX:Int,
 
     }
 
-
-
     override fun donnerPoint() :Int{
         return 3
     }
