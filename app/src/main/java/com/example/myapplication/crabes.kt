@@ -4,7 +4,7 @@ class crabes(
     vitesseX:Int,
     vitesseY:Int,
     vitesseTir:Int,
-    taille:Int,
+    taille:Int
     ):Aliens(vitesseX,vitesseY,vitesseTir,taille){
     override fun shot() {
 
