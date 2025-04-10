@@ -24,7 +24,8 @@ class jeux @JvmOverloads constructor (context: Context,
                                       defStyleAttr: Int = 0,
                                       val left : Button,
                                       val right : Button,
-                                      val GameListener: GameListener ): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
+                                      val GameListener: GameListener,
+                                      val mainactivity: MainActivity): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
 
     // attributs
     private var score : Int = 0
@@ -59,7 +60,7 @@ class jeux @JvmOverloads constructor (context: Context,
         }
     }
     fun start_game(){
-        
+
 
         left.setOnClickListener {
             vaisseau.deplacement("LEFT")
@@ -136,7 +137,10 @@ class jeux @JvmOverloads constructor (context: Context,
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {}
 
-    fun ajouterScore(alien: Aliens) {
-        score += alien.donnerPoint() // Ajoute les points donnés par l'alien détruit
+    fun ajouterScore(points: Int, alien: pointGagnant) {
+        score += alien.donnerPoint()
+        mainactivity.runOnUiThread {
+            mainactivity.updateScore()
+        }
     }
 }

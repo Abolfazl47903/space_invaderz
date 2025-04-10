@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity(),GameListener {
 
     lateinit var alienView: Aliens
     private lateinit var Jeux: jeux
+    lateinit var score: TextView
     lateinit var AlienView: AlienView
     lateinit var JoueurView : JoueurView
     lateinit var Joueur: ImageView
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity(),GameListener {
             insets
         }
         alienView = findViewById(R.id.alien_view)
+        score = findViewById(R.id.score)
 
         start = findViewById(R.id.button_start)
         left = findViewById(R.id.button_left)
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity(),GameListener {
             View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
         right = findViewById(R.id.button_right)
         right.visibility = View.INVISIBLE
-
+        score.visibility = View.INVISIBLE
         Joueur = findViewById(R.id.imageView)
         right = findViewById(R.id.button_right)
         left = findViewById(R.id.button_left)
@@ -56,13 +59,16 @@ class MainActivity : AppCompatActivity(),GameListener {
             defStyleAttr = 0,
             left = left,
             right = right,
-            GameListener = this
+            GameListener = this  ,
+            mainactivity = this
         )
 
-
+        fun updateScore() {
+            score.text = "Score: $score"
+        }
 
         start.setOnClickListener {
-
+            score.visibility = View.VISIBLE
             setContentView(AlienView)
             setContentView(JoueurView)
             Jeux.start_game()
