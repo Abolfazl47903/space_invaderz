@@ -6,6 +6,7 @@ import android.graphics.PointF
 import android.graphics.Color
 
 class joueur (var vaisseauLongueur : Float, var vaisseauHauteur : Float, var largeur : Float, val vue : jeux){ //Pour l'instant la fusée est un rectangle
+
     val vaisseauPaint =Paint()
     var finVaisseau =PointF(vaisseauLongueur, vaisseauHauteur) //La fin de la fusée sert à où va sortir le tir
     private var vie : Int = 3
