@@ -136,5 +136,7 @@ class jeux @JvmOverloads constructor (context: Context,
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {}
 
-
+    fun ajouterScore(alien: Aliens) {
+        score += alien.donnerPoint() // Ajoute les points donnés par l'alien détruit
+    }
 }
