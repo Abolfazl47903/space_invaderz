@@ -1,13 +1,8 @@
 package com.example.myapplication
 
-<<<<<<< HEAD
-class missileCrabe(private val Jeux: jeux) : missile() {
-    fun degats(){
-        Jeux.vie -= 2
-=======
 
 
->>>>>>> 669cb90bc9e7bf8e33b71d5f52ab65353ddbbac8
+
 
 class missileCrabe(private val Jeux: jeux,
                    alien: Aliens,
@@ -25,7 +20,4 @@ class missileCrabe(private val Jeux: jeux,
         }
     }
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 669cb90bc9e7bf8e33b71d5f52ab65353ddbbac8
