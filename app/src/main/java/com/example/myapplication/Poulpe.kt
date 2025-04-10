@@ -10,7 +10,7 @@ class Poulpe(vitesseX:Int,
              alienVitesseInitiale: Float,
              width: Float,
              view: jeux
-             ): Aliens(vitesseX,
+             ): pointGagnant, Aliens(vitesseX,
     vitesseY,
     vitesseTir,
     taille,

@@ -88,7 +88,9 @@ class MainActivity : AppCompatActivity(),GameListener {
             }
         }
     }
-
+    override fun updateScore() {
+        score.text = "Score: $score"
+    }
     override fun NoAliens() {
         setContentView(AlienView)
     }
