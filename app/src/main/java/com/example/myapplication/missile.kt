@@ -92,7 +92,7 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
                 && missile.y - missileTaille < joueur.joueur.bottom
             ) {
                 // Si collision détectée
-                alien.detectchoc(this)
+                //alien.detectchoc(this)
                 state = MissileCollision(this)
                 state?.update()
                 return true
