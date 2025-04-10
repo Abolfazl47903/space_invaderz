@@ -1,11 +1,7 @@
 package com.example.myapplication
 
 
-class missileCrabe : missile() {
-    fun degats(){
 
-    }
-}
 
 class missileCrabe(private val Jeux: jeux) : missile() {
 
