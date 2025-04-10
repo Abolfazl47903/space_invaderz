@@ -1,18 +1,24 @@
 package com.example.myapplication
 
-class missileCalmar (private val Jeux: jeux,
-                     alien: Aliens,
-                     joueur: joueur) : missile(Jeux, alien, joueur) {
-    override fun degats(){
+class Calmar(
+    vitesseX:Int,
+    vitesseY:Int,
+    vitesseTir:Int,
+    taille:Int,
+    alienDistance: Float,
+    alienDebut: Float,
+    alienFin: Float,
+    alienVitesseInitiale: Float,
+    width: Float,
+    view: jeux
+):Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view){
+    override fun shot() {
 
-        if (collisionJoueur(1.2)){
-            Jeux.vie -= 3
-
-            if (Jeux.vie <= 0) {
-                Jeux.game_over()
-            }
-        }
     }
 
+
+    override fun donnerPoint() :Int{
+        return 1
+    }
 }
 
