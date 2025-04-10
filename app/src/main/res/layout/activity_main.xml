@@ -64,4 +64,7 @@
         app:srcCompat="@drawable/joueur" />
 
 
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

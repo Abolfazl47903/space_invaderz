@@ -115,5 +115,7 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
         }
     }
 
-    fun degat() {}
+    open fun degats() {
+
+    }
 }
