@@ -42,10 +42,7 @@ abstract class Aliens(
     abstract  fun donnerPoint(): Int
 
     fun detectchoc(missile : missile){
-        if (missile.missile.x + missile.missileTaille > alien.left &&
-            missile.missile.x - missile.missileTaille < alien.right &&
-            missile.missile.y + missile.missileTaille > alien.top &&
-            missile.missile.y - missile.missileTaille < alien.bottom) {
+        if (missile.collision(1.2)) {
             state = AlienMort(this)
             state?.update()
         }

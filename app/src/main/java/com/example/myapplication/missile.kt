@@ -46,7 +46,7 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
         missileOnScreen = false
     }
 
-    fun collision(interval: Double) {
+    fun collision(interval: Double): Boolean {
         if (missileOnScreen) {
             missile.x += (interval * missileVitesseX).toFloat()
             missile.y += (interval * missileVitesseY).toFloat()
@@ -58,20 +58,22 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
                 || missile.y - missileTaille < 0
             ) {
                 missileOnScreen = false
+                return false
             } else if (missile.x + missileTaille > alien.alien.left
                 && missile.x - missileTaille < alien.alien.right
                 && missile.y + missileTaille > alien.alien.top
                 && missile.y - missileTaille < alien.alien.bottom
             ) {
                 // Si collision détectée
-                alien.detectchoc(this)
                 state = MissileCollision(this)
                 state?.update()
+                return true
             }
         }
+        return false
     }
 
-    fun collisionJoueur(interval: Double) {
+    fun collisionJoueur(interval: Double): Boolean {
         if (missileOnScreen) {
             missile.x += (interval * missileVitesseX).toFloat()
             missile.y += (interval * missileVitesseY).toFloat()
@@ -83,6 +85,7 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
                 || missile.y - missileTaille < 0
             ) {
                 missileOnScreen = false
+                return false
             } else if (missile.x + missileTaille > joueur.joueur.left
                 && missile.x - missileTaille < joueur.joueur.right
                 && missile.y + missileTaille > joueur.joueur.top
@@ -92,8 +95,10 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
                 alien.detectchoc(this)
                 state = MissileCollision(this)
                 state?.update()
+                return true
             }
         }
+        return false
     }
 
     // Dessin de l'explosion
