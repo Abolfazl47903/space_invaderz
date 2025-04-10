@@ -19,6 +19,7 @@ class AlienView(context: Context) : FrameLayout(context) {
     private val descente = 30f // Décalage vertical à chaque changement de direction permet aussi d'ajuster la vitesse de descente
 
     init {
+        setWillNotDraw(false)  // ca force le dessin
         post {
             val largeurEcran = width.toFloat()
             val colonnesAliens = 10

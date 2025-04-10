@@ -1,8 +1,6 @@
 package com.example.myapplication
 
 class missileCrabe(private val Jeux: jeux) : missile() {
-
-
     fun degats(){
         Jeux.vie -= 2
 
