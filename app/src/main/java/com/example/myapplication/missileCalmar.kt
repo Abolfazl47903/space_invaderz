@@ -1,6 +1,6 @@
 package com.example.myapplication
 
-class crabes(
+class Calmar(
     vitesseX:Int,
     vitesseY:Int,
     vitesseTir:Int,
@@ -11,15 +11,14 @@ class crabes(
     alienVitesseInitiale: Float,
     width: Float,
     view: jeux
-    ): pointGagnant, Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view){
+):Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view){
     override fun shot() {
 
     }
 
 
-    override fun donnerPoint(): Int{
-        return 2  // qui est le nombre de point que la destruction d'un crabe accorde
-
+    override fun donnerPoint() :Int{
+        return 1
     }
-
 }
+

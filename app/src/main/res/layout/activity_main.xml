@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
-    tools:context=".MainActivity">
+    android:background="@android:color/black"> <!-- Fond noir -->
 
-    <!-- Vue des aliens -->
     <com.example.myapplication.AlienView
         android:id="@+id/alien_view"
         android:layout_width="0dp"
@@ -21,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <!-- Bouton pour start le jeu -->
+    <!-- Bouton pour start le jeu-->
     <Button
         android:id="@+id/button_start"
         android:layout_width="wrap_content"
@@ -35,7 +32,6 @@
         app:layout_constraintStart_toStartOf="@+id/alien_view"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Bouton droit (inchangé) -->
     <Button
         android:id="@+id/button_right"
         android:layout_width="186dp"
@@ -46,7 +42,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alien_view" />
 
-    <!-- Bouton gauche (inchangé) -->
     <Button
         android:id="@+id/button_left"
         android:layout_width="203dp"
@@ -57,14 +52,28 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/alien_view" />
 
-    <!-- Image du joueur -->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.500"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_start"
         app:srcCompat="@drawable/joueur" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="284dp"
+        android:text="@string/score_0"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_left"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
