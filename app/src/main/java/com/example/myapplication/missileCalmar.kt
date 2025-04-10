@@ -1,8 +1,8 @@
 package com.example.myapplication
 
-class missilePoulpe(private val Jeux: jeux,
-                    alien: Aliens,
-                    joueur: joueur) : missile(Jeux, alien, joueur) {
+class missileCalmar (private val Jeux: jeux,
+                     alien: Aliens,
+                     joueur: joueur) : missile(Jeux, alien, joueur) {
     override fun degats(){
 
         if (collisionJoueur(1.2)){
@@ -13,4 +13,6 @@ class missilePoulpe(private val Jeux: jeux,
             }
         }
     }
+
 }
+

@@ -47,8 +47,6 @@ abstract class Aliens(
             state?.update()
         }
     }
-    fun donnerPoints(){
 
-    }
 
 }
