@@ -1,0 +1,387 @@
+Index: .idea/shelf/Changes/shelved.patch
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/shelf/Changes/shelved.patch b/.idea/shelf/Changes/shelved.patch
+new file mode 100644
+--- /dev/null	(date 1744351398900)
++++ b/.idea/shelf/Changes/shelved.patch	(date 1744351398900)
+@@ -0,0 +1,362 @@
++Index: app/src/main/java/com/example/myapplication/MainActivity.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>\r\npackage com.example.myapplication\r\n\r\nimport android.os.Bundle\r\nimport android.view.View\r\nimport android.widget.Button\r\nimport android.widget.ImageView\r\nimport androidx.activity.enableEdgeToEdge\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.view.ViewCompat\r\nimport androidx.core.view.WindowInsetsCompat\r\n\r\nclass MainActivity : AppCompatActivity(),GameListener {\r\n    lateinit var start: Button\r\n    lateinit var left: Button\r\n    lateinit var right: Button\r\n\r\n    lateinit var alienView: Aliens\r\n    private lateinit var Jeux: jeux\r\n    lateinit var AlienView: AlienView\r\n    lateinit var JoueurView : JoueurView\r\n    lateinit var Joueur: ImageView\r\n    val maxTranslationX = 500f\r\n    val minTranslationX = -500f\r\n\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        enableEdgeToEdge()\r\n        setContentView(R.layout.activity_main)\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.alien_view)) { v, insets ->\r\n            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)\r\n            insets\r\n        }\r\n        alienView = findViewById(R.id.alien_view)\r\n\r\n        start = findViewById(R.id.button_start)\r\n        left = findViewById(R.id.button_left)\r\n        left.visibility =\r\n            View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start\r\n        right = findViewById(R.id.button_right)\r\n        right.visibility = View.INVISIBLE\r\n\r\n        Joueur = findViewById(R.id.imageView)\r\n        right = findViewById(R.id.button_right)\r\n        left = findViewById(R.id.button_left)\r\n\r\n        val alienView = AlienView(this)\r\n        val joueurView = JoueurView(this)\r\n        start.setOnClickListener {\r\n        }\r\n        Jeux = jeux(\r\n            context = this,\r\n            attributes = null,\r\n            defStyleAttr = 0,\r\n            left = left,\r\n            right = right,\r\n            GameListener = this\r\n        )\r\n\r\n\r\n\r\n        start.setOnClickListener {\r\n\r\n            setContentView(AlienView)\r\n            setContentView(JoueurView)\r\n            Jeux.start_game()\r\n            Jeux.resume()\r\n        }\r\n\r\n        right.setOnClickListener {\r\n            val newTranslationX = Joueur.translationX + 10f\r\n            if (newTranslationX <= maxTranslationX){\r\n                Joueur.translationX = newTranslationX\r\n            }\r\n        }\r\n        left.setOnClickListener {\r\n            val newTranslationX = (Joueur).translationX - 10f\r\n            if (newTranslationX >= minTranslationX){\r\n                Joueur.translationX = newTranslationX\r\n            }\r\n        }\r\n    }\r\n\r\n    override fun NoAliens() {\r\n        setContentView(AlienView)\r\n    }\r\n\r\n    override fun onPause() {\r\n        super.onPause()\r\n        Jeux.pause()\r\n    }\r\n\r\n    override fun onResume() {\r\n        super.onResume()\r\n\r\n        Jeux.resume()\r\n    }\r\n\r\n}\r\n\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/MainActivity.kt b/app/src/main/java/com/example/myapplication/MainActivity.kt
++--- a/app/src/main/java/com/example/myapplication/MainActivity.kt	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/java/com/example/myapplication/MainActivity.kt	(date 1744351126894)
++@@ -5,6 +5,7 @@
++ import android.view.View
++ import android.widget.Button
++ import android.widget.ImageView
+++import android.widget.TextView
++ import androidx.activity.enableEdgeToEdge
++ import androidx.appcompat.app.AppCompatActivity
++ import androidx.core.view.ViewCompat
++@@ -17,6 +18,7 @@
++ 
++     lateinit var alienView: Aliens
++     private lateinit var Jeux: jeux
+++    lateinit var score: TextView
++     lateinit var AlienView: AlienView
++     lateinit var JoueurView : JoueurView
++     lateinit var Joueur: ImageView
++@@ -34,6 +36,7 @@
++             insets
++         }
++         alienView = findViewById(R.id.alien_view)
+++        score = findViewById(R.id.score)
++ 
++         start = findViewById(R.id.button_start)
++         left = findViewById(R.id.button_left)
++@@ -41,7 +44,7 @@
++             View.INVISIBLE // on désactive a chaque fois les 4 boutons de déplacement car on ne veut pas les voirent quand le jeu se lance, il faut les activer uniquement quand on clique sur le bouton start
++         right = findViewById(R.id.button_right)
++         right.visibility = View.INVISIBLE
++-
+++        score.visibility = View.INVISIBLE
++         Joueur = findViewById(R.id.imageView)
++         right = findViewById(R.id.button_right)
++         left = findViewById(R.id.button_left)
++@@ -56,13 +59,16 @@
++             defStyleAttr = 0,
++             left = left,
++             right = right,
++-            GameListener = this
+++            GameListener = this  ,
+++            mainactivity = this
++         )
++ 
++-
+++        fun updateScore() {
+++            score.text = "Score: $score"
+++        }
++ 
++         start.setOnClickListener {
++-
+++            score.visibility = View.VISIBLE
++             setContentView(AlienView)
++             setContentView(JoueurView)
++             Jeux.start_game()
++@@ -82,7 +88,9 @@
++             }
++         }
++     }
++-
+++    override fun updateScore() {
+++        score.text = "Score: $score"
+++    }
++     override fun NoAliens() {
++         setContentView(AlienView)
++     }
++Index: app/src/main/java/com/example/myapplication/AlienView.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.myapplication\r\n\r\nimport android.content.Context\r\nimport android.graphics.Bitmap\r\nimport android.graphics.BitmapFactory\r\nimport android.graphics.Canvas\r\nimport android.view.View\r\nimport android.widget.FrameLayout\r\n\r\nclass AlienView(context: Context) : FrameLayout(context) {\r\n    private val crabeBitmap = BitmapFactory.decodeResource(resources, R.drawable.calmar)\r\n    private val poulpeBitmap = BitmapFactory.decodeResource(resources, R.drawable.poulpe)\r\n    private val calmarBitmap = BitmapFactory.decodeResource(resources, R.drawable.calmar)\r\n\r\n    private val aliens = mutableListOf<Bitmap>()\r\n    private var offsetX = 0f\r\n    private var offsetY = 0f\r\n    private var direction = 1 // 1 pour aller à droite, -1 pour aller à gauche\r\n    private val descente = 30f // Décalage vertical à chaque changement de direction permet aussi d'ajuster la vitesse de descente\r\n\r\n    init {\r\n        post {\r\n            val largeurEcran = width.toFloat()\r\n            val colonnesAliens = 10\r\n            val espaceEntreAliens = largeurEcran * 0.02f\r\n            val tailleAlien =\r\n                ((largeurEcran - (colonnesAliens + 1) * espaceEntreAliens) / colonnesAliens).toInt()\r\n\r\n            aliens.add(Bitmap.createScaledBitmap(crabeBitmap, tailleAlien, tailleAlien, false))\r\n            aliens.add(Bitmap.createScaledBitmap(poulpeBitmap, tailleAlien, tailleAlien, false))\r\n            aliens.add(Bitmap.createScaledBitmap(calmarBitmap, tailleAlien, tailleAlien, false))\r\n            startMovement()\r\n            invalidate() // Redessiner les aliens après redimensionnement\r\n        }\r\n    }\r\n\r\n        // Ajout du mouvement horizontal et vertical\r\n        fun startMovement() {\r\n            val runnable = object : Runnable {\r\n                override fun run() {\r\n                    val largeurEcran = width.toFloat()\r\n\r\n                    // Mettre à jour le décalage horizontal\r\n                    offsetX += direction * 10\r\n                    if (offsetX >= largeurEcran * 0.1 || offsetX <= -largeurEcran * 0.1) {\r\n                        direction *= -1 // Inverser la direction\r\n                        offsetY += descente // Descendre les aliens verticalement\r\n                    }\r\n\r\n                    invalidate() // Redessiner avec les nouvelles positions\r\n                    handler.postDelayed(this, 50) // Intervalle de 50ms\r\n                }\r\n            }\r\n            handler.post(runnable)\r\n        }\r\n\r\n\r\n    override fun onDraw(canvas: Canvas) {\r\n        super.onDraw(canvas)\r\n\r\n        if (aliens.isEmpty()) return // Attendre que les bitmaps soient prêts\r\n\r\n        val lignesAliens = 5\r\n        val colonnesAliens = 10\r\n        val largeurEcran = width.toFloat()\r\n        val espaceEntreAliens = largeurEcran * 0.02f\r\n        val tailleAlien = aliens[0].width.toFloat() // Taille déjà redimensionnée\r\n\r\n        for (ligne in 0 until lignesAliens) {\r\n            val alienBitmap = aliens[ligne % aliens.size] // Choisir l'image en fonction de la ligne\r\n            for (colonne in 0 until colonnesAliens) {\r\n                val x = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX\r\n                val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY\r\n                canvas.drawBitmap(alienBitmap, x, y, null)\r\n            }\r\n        }\r\n    }\r\n\r\n}
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/AlienView.kt b/app/src/main/java/com/example/myapplication/AlienView.kt
++--- a/app/src/main/java/com/example/myapplication/AlienView.kt	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/java/com/example/myapplication/AlienView.kt	(date 1744351126889)
++@@ -19,6 +19,7 @@
++     private val descente = 30f // Décalage vertical à chaque changement de direction permet aussi d'ajuster la vitesse de descente
++ 
++     init {
+++        setWillNotDraw(false)  // ca force le dessin
++         post {
++             val largeurEcran = width.toFloat()
++             val colonnesAliens = 10
++Index: app/src/main/java/com/example/myapplication/missileCrabe.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.myapplication\r\n\r\n\r\n\r\n\r\nclass missileCrabe(private val Jeux: jeux,\r\n                   alien: Aliens,\r\n                   joueur: joueur) : missile(Jeux, alien, joueur) {\r\n\r\n\r\n    override fun degats(){\r\n\r\n        if (collisionJoueur(1.2)){\r\n            Jeux.vie -= 2\r\n\r\n            if (Jeux.vie <= 0) {\r\n                Jeux.game_over()\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/missileCrabe.kt b/app/src/main/java/com/example/myapplication/missileCrabe.kt
++--- a/app/src/main/java/com/example/myapplication/missileCrabe.kt	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/java/com/example/myapplication/missileCrabe.kt	(date 1744351126900)
++@@ -3,6 +3,7 @@
++ 
++ 
++ 
+++
++ class missileCrabe(private val Jeux: jeux,
++                    alien: Aliens,
++                    joueur: joueur) : missile(Jeux, alien, joueur) {
++Index: app/src/main/java/com/example/myapplication/Calmar.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.myapplication\r\n\r\nclass Calmar(vitesseX: Int, vitesseY: Int, vitesseTir: Int, taille: Int,\r\n             alienDistance: Float, alienDebut: Float, alienFin: Float, alienVitesseInitiale: Float, width: Float, view: jeux)\r\n    : Aliens(vitesseX, vitesseY, vitesseTir, taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view) {\r\n    override fun shot() {\r\n        TODO(\"Not yet implemented\")\r\n    }\r\n\r\n\r\n    override fun donnerPoint() :Int{\r\n        return 1\r\n    }\r\n}
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/Calmar.kt b/app/src/main/java/com/example/myapplication/Calmar.kt
++--- a/app/src/main/java/com/example/myapplication/Calmar.kt	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/java/com/example/myapplication/Calmar.kt	(date 1744351133339)
++@@ -1,10 +1,20 @@
++ package com.example.myapplication
++ 
++-class Calmar(vitesseX: Int, vitesseY: Int, vitesseTir: Int, taille: Int,
++-             alienDistance: Float, alienDebut: Float, alienFin: Float, alienVitesseInitiale: Float, width: Float, view: jeux)
++-    : Aliens(vitesseX, vitesseY, vitesseTir, taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view) {
+++
+++class Calmar(
+++    vitesseX:Int,
+++    vitesseY:Int,
+++    vitesseTir:Int,
+++    taille:Int,
+++    alienDistance: Float,
+++    alienDebut: Float,
+++    alienFin: Float,
+++    alienVitesseInitiale: Float,
+++    width: Float,
+++    view: jeux
+++): pointGagnant, Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view){
++     override fun shot() {
++-        TODO("Not yet implemented")
+++
++     }
++ 
++ 
++Index: app/src/main/java/com/example/myapplication/pointGagnant.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/pointGagnant.kt b/app/src/main/java/com/example/myapplication/pointGagnant.kt
++new file mode 100644
++--- /dev/null	(date 1744351126901)
+++++ b/app/src/main/java/com/example/myapplication/pointGagnant.kt	(date 1744351126901)
++@@ -0,0 +1,5 @@
+++package com.example.myapplication
+++
+++interface pointGagnant {
+++    fun donnerPoint() : Int
+++}
++\ No newline at end of file
++Index: app/src/main/java/com/example/myapplication/crabes.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.myapplication\r\n\r\nclass crabes(\r\n    vitesseX:Int,\r\n    vitesseY:Int,\r\n    vitesseTir:Int,\r\n    taille:Int,\r\n    alienDistance: Float,\r\n    alienDebut: Float,\r\n    alienFin: Float,\r\n    alienVitesseInitiale: Float,\r\n    width: Float,\r\n    view: jeux\r\n    ):Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view){\r\n    override fun shot() {\r\n\r\n    }\r\n\r\n\r\n    override fun donnerPoint(): Int{\r\n        return 2  // qui est le nombre de point que la destruction d'un crabe accorde\r\n\r\n    }\r\n\r\n}
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/crabes.kt b/app/src/main/java/com/example/myapplication/crabes.kt
++--- a/app/src/main/java/com/example/myapplication/crabes.kt	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/java/com/example/myapplication/crabes.kt	(date 1744351126896)
++@@ -11,7 +11,7 @@
++     alienVitesseInitiale: Float,
++     width: Float,
++     view: jeux
++-    ):Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view){
+++    ): pointGagnant, Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view){
++     override fun shot() {
++ 
++     }
++Index: app/src/main/java/com/example/myapplication/jeux.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.myapplication\r\n\r\nimport android.os.Bundle\r\nimport androidx.activity.enableEdgeToEdge\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.view.ViewCompat\r\nimport androidx.core.view.WindowInsetsCompat\r\nimport android.app.Dialog\r\nimport androidx.fragment.app.DialogFragment\r\nimport androidx.appcompat.app.AlertDialog\r\nimport androidx.fragment.app.FragmentActivity\r\nimport org.xmlpull.v1.XmlPullParser\r\nimport android.content.Context\r\nimport android.content.DialogInterface\r\nimport android.util.AttributeSet\r\nimport android.view.SurfaceHolder\r\nimport android.view.SurfaceView\r\nimport android.view.View\r\nimport android.widget.Button\r\n\r\n\r\nclass jeux @JvmOverloads constructor (context: Context,\r\n                                      attributes: AttributeSet? = null,\r\n                                      defStyleAttr: Int = 0,\r\n                                      val left : Button,\r\n                                      val right : Button,\r\n                                      val GameListener: GameListener ): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{\r\n\r\n    // attributs\r\n    private var score : Int = 0\r\n    private var niveau_actuel : Int = 1\r\n\r\n    //propriétés publiques\r\n    var vie : Int = 10\r\n    var record : Int = 0\r\n    var vie_supp : Int = 1\r\n    var interfacee = false\r\n    var gameover = false\r\n    val activite = context as FragmentActivity\r\n    lateinit var thread :Thread\r\n    var screenWidth = 0f\r\n    var screenHeight = 0f\r\n    val vaisseau = JoueurView(context)\r\n    lateinit var AlienView : AlienView\r\n\r\n\r\n\r\n    //méthodes\r\n    override fun run(){\r\n        var previousFrameTime = System.currentTimeMillis()\r\n        while (interfacee){\r\n            val currentTime = System.currentTimeMillis()\r\n            var elapsedTimeMS:Double=(currentTime-previousFrameTime).toDouble()\r\n            verifier_fin_niveau()\r\n            val AlienView = AlienView(context)\r\n            AlienView.startMovement()\r\n            previousFrameTime = currentTime\r\n            Thread.sleep(16)\r\n        }\r\n    }\r\n    fun start_game(){\r\n        \r\n\r\n        left.setOnClickListener {\r\n            vaisseau.deplacement(\"LEFT\")\r\n        }\r\n        right.setOnClickListener {\r\n            vaisseau.deplacement(\"RIGHT\")\r\n        }\r\n\r\n\r\n\r\n    }\r\n    fun verifier_fin_niveau(){\r\n\r\n        if (score % 90 == 0){\r\n            GameListener.NoAliens()\r\n        }\r\n    }\r\n    fun game_over(){\r\n        interfacee = false //Sert à montrer comment est l'écran. Si false alors on le voit pas si true on le voit\r\n\r\n        prestation(R.string.win) //Méthode pour savoir si on a gagné ou perdu\r\n        gameover = true //Si true alors on a perdu\r\n    }\r\n    fun prestation(messageId : Int) { //Méthode servant à voir les réultats de la partie\r\n        left.visibility = GONE\r\n        right.visibility = GONE\r\n\r\n        class Resultat : DialogFragment() { //Les fragmetns servent à manier différentes interfaces et donc différents xml, voir l'avant dernier cours\r\n            override fun onCreateDialog(bundle: Bundle?): Dialog { //Des trucs utilisant des builder\r\n                val le_builder= AlertDialog.Builder(requireActivity()) //Des trucs d'import\r\n                le_builder.setTitle(resources.getString(messageId))\r\n                le_builder.setMessage(\"Nombre de vies : 0\" + \"GAME OVER\") //C'est la petit truc qui s'affichera\r\n                le_builder.setPositiveButton(\"Recommncer le jeu\", //C'est le petit truc qui s'affichera et qui nous dira si on veut recommencer\r\n                    DialogInterface.OnClickListener { _, _->start_game()}) //Appelle la méthode restart_game au touché\r\n                return le_builder.create()\r\n            }\r\n        }\r\n        activite.runOnUiThread( //Des trucs avec le fragment, voir l'avant dernier cours sur l'UV\r\n            Runnable {\r\n                val feet = activite.supportFragmentManager.beginTransaction()\r\n                val precedent =\r\n                    activite.supportFragmentManager.findFragmentByTag(\"dialog\")\r\n                if (precedent != null) {\r\n                    feet.remove(precedent)\r\n                }\r\n                feet.addToBackStack(null)\r\n                val resultat = Resultat()\r\n                resultat.setCancelable(false)\r\n                resultat.show(feet,\"dialog\")\r\n            }\r\n        )   \r\n    }\r\n    fun pause() { //Si on veut faire une pause en quittant l'appli\r\n        interfacee = false\r\n        thread.join() //Les thread servent quand on ouvre plusieurs application (voir cours)\r\n    }\r\n    fun resume() { //Si on veut reprendre le jeu\r\n        interfacee = true\r\n        thread = Thread(this)\r\n        thread.start()\r\n    }\r\n\r\n\r\n\r\n    override fun onSizeChanged(w:Int, h:Int, oldw: Int, oldh: Int){\r\n        super.onSizeChanged(w,h,oldw,oldh)\r\n        screenWidth =w.toFloat()\r\n        screenHeight = h.toFloat()\r\n    }\r\n    override fun surfaceChanged(holder: SurfaceHolder, format: Int,\r\n                                width: Int, height: Int) {}\r\n\r\n    override fun surfaceCreated(holder: SurfaceHolder) {}\r\n\r\n    override fun surfaceDestroyed(holder: SurfaceHolder) {}\r\n\r\n    fun ajouterScore(alien: Aliens) {\r\n        score += alien.donnerPoint() // Ajoute les points donnés par l'alien détruit\r\n    }\r\n}
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/jeux.kt b/app/src/main/java/com/example/myapplication/jeux.kt
++--- a/app/src/main/java/com/example/myapplication/jeux.kt	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/java/com/example/myapplication/jeux.kt	(date 1744351126897)
++@@ -24,7 +24,8 @@
++                                       defStyleAttr: Int = 0,
++                                       val left : Button,
++                                       val right : Button,
++-                                      val GameListener: GameListener ): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
+++                                      val GameListener: GameListener,
+++                                      val mainactivity: MainActivity): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
++ 
++     // attributs
++     private var score : Int = 0
++@@ -59,7 +60,7 @@
++         }
++     }
++     fun start_game(){
++-        
+++
++ 
++         left.setOnClickListener {
++             vaisseau.deplacement("LEFT")
++@@ -136,7 +137,10 @@
++ 
++     override fun surfaceDestroyed(holder: SurfaceHolder) {}
++ 
++-    fun ajouterScore(alien: Aliens) {
++-        score += alien.donnerPoint() // Ajoute les points donnés par l'alien détruit
+++    fun ajouterScore( alien: pointGagnant) {
+++        score += alien.donnerPoint()
+++        mainactivity.runOnUiThread {
+++            mainactivity.updateScore()
+++        }
++     }
++ }
++\ No newline at end of file
++Index: app/src/main/java/com/example/myapplication/Poulpe.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.myapplication\r\n\r\nclass Poulpe(vitesseX:Int,\r\n             vitesseY:Int,\r\n             vitesseTir:Int,\r\n             taille:Int,\r\n             alienDistance: Float,\r\n             alienDebut: Float,\r\n             alienFin: Float,\r\n             alienVitesseInitiale: Float,\r\n             width: Float,\r\n             view: jeux\r\n             ):Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view) {\r\n    override fun shot() {\r\n\r\n    }\r\n\r\n    override fun donnerPoint() :Int{\r\n        return 3\r\n    }\r\n}
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/Poulpe.kt b/app/src/main/java/com/example/myapplication/Poulpe.kt
++--- a/app/src/main/java/com/example/myapplication/Poulpe.kt	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/java/com/example/myapplication/Poulpe.kt	(date 1744351126894)
++@@ -10,7 +10,16 @@
++              alienVitesseInitiale: Float,
++              width: Float,
++              view: jeux
++-             ):Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view) {
+++             ): pointGagnant, Aliens(vitesseX,
+++    vitesseY,
+++    vitesseTir,
+++    taille,
+++    alienDistance,
+++    alienDebut,
+++    alienFin,
+++    alienVitesseInitiale,
+++    width,
+++    view) {
++     override fun shot() {
++ 
++     }
++Index: app/src/main/java/com/example/myapplication/GameListener.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.myapplication\r\n\r\ninterface GameListener {\r\n    fun NoAliens()\r\n}
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/GameListener.kt b/app/src/main/java/com/example/myapplication/GameListener.kt
++--- a/app/src/main/java/com/example/myapplication/GameListener.kt	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/java/com/example/myapplication/GameListener.kt	(date 1744351126892)
++@@ -2,4 +2,6 @@
++ 
++ interface GameListener {
++     fun NoAliens()
+++    fun updateScore()
+++
++ }
++\ No newline at end of file
++Index: app/src/main/res/values/strings.xml
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+><resources>\r\n    <string name=\"app_name\">My Application</string>\r\n    <string name=\"lose\">lose</string>\r\n    <string name=\"win\" />\r\n</resources>
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
++--- a/app/src/main/res/values/strings.xml	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/res/values/strings.xml	(date 1744351126904)
++@@ -2,4 +2,5 @@
++     <string name="app_name">My Application</string>
++     <string name="lose">lose</string>
++     <string name="win" />
+++    <string name="score_0">Score: 0</string>
++ </resources>
++\ No newline at end of file
++Index: app/src/main/res/layout/activity_main.xml
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@android:color/black\"> <!-- Fond noir -->\r\n\r\n    <com.example.myapplication.AlienView\r\n        android:id=\"@+id/alien_view\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"0dp\"\r\n        android:layout_marginBottom=\"323dp\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/button_right\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.0\" />\r\n\r\n    <!-- Bouton pour start le jeu-->\r\n    <Button\r\n        android:id=\"@+id/button_start\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"275dp\"\r\n        android:layout_marginBottom=\"345dp\"\r\n        android:text=\"Start\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/imageView\"\r\n        app:layout_constraintEnd_toEndOf=\"@+id/alien_view\"\r\n        app:layout_constraintHorizontal_bias=\"0.498\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/alien_view\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/button_right\"\r\n        android:layout_width=\"186dp\"\r\n        android:layout_height=\"417dp\"\r\n        android:layout_marginEnd=\"16dp\"\r\n        android:text=\"right\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/alien_view\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/button_left\"\r\n        android:layout_width=\"203dp\"\r\n        android:layout_height=\"415dp\"\r\n        android:layout_marginStart=\"16dp\"\r\n        android:layout_marginBottom=\"4dp\"\r\n        android:text=\"left\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/alien_view\" />\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imageView\"\r\n        android:layout_width=\"70dp\"\r\n        android:layout_height=\"0dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.500\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/button_start\"\r\n        app:srcCompat=\"@drawable/joueur\" />\r\n\r\n\r\n\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
++--- a/app/src/main/res/layout/activity_main.xml	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/res/layout/activity_main.xml	(date 1744351126903)
++@@ -63,8 +63,17 @@
++         app:layout_constraintTop_toBottomOf="@+id/button_start"
++         app:srcCompat="@drawable/joueur" />
++ 
++-
++-
+++    <TextView
+++        android:id="@+id/score"
+++        android:layout_width="wrap_content"
+++        android:layout_height="wrap_content"
+++        android:layout_marginStart="4dp"
+++        android:layout_marginBottom="284dp"
+++        android:text="@string/score_0"
+++        android:textColor="#FFFFFF"
+++        android:textSize="20sp"
+++        app:layout_constraintBottom_toTopOf="@+id/button_left"
+++        app:layout_constraintStart_toStartOf="parent" />
++ 
++ 
++ </androidx.constraintlayout.widget.ConstraintLayout>
++Index: app/src/main/java/com/example/myapplication/missileCalmar.kt
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.myapplication\r\n\r\nclass missileCalmar (private val Jeux: jeux,\r\n                     alien: Aliens,\r\n                     joueur: joueur) : missile(Jeux, alien, joueur) {\r\n    override fun degats(){\r\n\r\n        if (collisionJoueur(1.2)){\r\n            Jeux.vie -= 3\r\n\r\n            if (Jeux.vie <= 0) {\r\n                Jeux.game_over()\r\n            }\r\n        }\r\n    }\r\n\r\n}\r\n\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/app/src/main/java/com/example/myapplication/missileCalmar.kt b/app/src/main/java/com/example/myapplication/missileCalmar.kt
++--- a/app/src/main/java/com/example/myapplication/missileCalmar.kt	(revision 2b43c8a0d0e2b5d040c4857ecd2a01f8364cf7b9)
+++++ b/app/src/main/java/com/example/myapplication/missileCalmar.kt	(date 1744351126899)
++@@ -1,18 +1,24 @@
++ package com.example.myapplication
++ 
++-class missileCalmar (private val Jeux: jeux,
++-                     alien: Aliens,
++-                     joueur: joueur) : missile(Jeux, alien, joueur) {
++-    override fun degats(){
+++class Calmar(
+++    vitesseX:Int,
+++    vitesseY:Int,
+++    vitesseTir:Int,
+++    taille:Int,
+++    alienDistance: Float,
+++    alienDebut: Float,
+++    alienFin: Float,
+++    alienVitesseInitiale: Float,
+++    width: Float,
+++    view: jeux
+++):Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view){
+++    override fun shot() {
+++
+++    }
++ 
++-        if (collisionJoueur(1.2)){
++-            Jeux.vie -= 3
++ 
++-            if (Jeux.vie <= 0) {
++-                Jeux.game_over()
++-            }
++-        }
+++    override fun donnerPoint() :Int{
+++        return 1
++     }
++-
++ }
++ 
+Index: .idea/shelf/Changes.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/shelf/Changes.xml b/.idea/shelf/Changes.xml
+new file mode 100644
+--- /dev/null	(date 1744351422806)
++++ b/.idea/shelf/Changes.xml	(date 1744351422806)
+@@ -0,0 +1,4 @@
++<changelist name="Changes" date="1744351398942" recycled="false">
++  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Changes/shelved.patch" />
++  <option name="DESCRIPTION" value="Changes" />
++</changelist>
+\ No newline at end of file
