@@ -8,21 +8,22 @@ import android.graphics.PointF
 import android.graphics.Color
 import android.widget.ImageView
 
-abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) {
+abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur: joueur) {
     var explosionBitmap: Bitmap? = null
     var explosionPosition: PointF? = null
     var missile = PointF()
-    var missileVitesse = 0f
-    var missileVitesseX = 0f
-    var missileVitesseY = 0f
+    var missileVitesse = 5f
+    var missileVitesseX = 5f
+    var missileVitesseY = 5f
     var missileOnScreen = true
-    var missileTaille = 0f
+    var missileTaille = 5f
     var missilePaint = Paint()
     var state: UpdateState? = null
 
     init {
         missilePaint.color = Color.CYAN
-        explosionBitmap = BitmapFactory.decodeResource(vue.resources, R.drawable.explosion)
+        // Utiliser les ressources d'AlienView au lieu de jeux
+        explosionBitmap = BitmapFactory.decodeResource(alienView.resources, R.drawable.explosion)
     }
 
     fun Missile(amplitude: Double, imageView: ImageView) { //Lancement du missile
@@ -34,6 +35,7 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
 
         missileVitesseX = (-missileVitesse * Math.sin(amplitude)).toFloat()
         missileVitesseY = (-missileVitesse * Math.cos(amplitude)).toFloat()
+
         missileOnScreen = true
     }
 
@@ -51,10 +53,10 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
             missile.x += (interval * missileVitesseX).toFloat()
             missile.y += (interval * missileVitesseY).toFloat()
 
-            // Vérification des limites d'écran
-            if (missile.x + missileTaille > vue.screenWidth
+            // Utiliser les propriétés de l'AlienView pour les limites d'écran
+            if (missile.x + missileTaille > alienView.screenWidth
                 || missile.x - missileTaille < 0
-                || missile.y + missileTaille > vue.screenHeight
+                || missile.y + missileTaille > alienView.screenHeight
                 || missile.y - missileTaille < 0
             ) {
                 missileOnScreen = false
@@ -78,10 +80,10 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
             missile.x += (interval * missileVitesseX).toFloat()
             missile.y += (interval * missileVitesseY).toFloat()
 
-            // Vérification des limites d'écran
-            if (missile.x + missileTaille > vue.screenWidth
+            // Utiliser les propriétés de l'AlienView pour les limites d'écran
+            if (missile.x + missileTaille > alienView.screenWidth
                 || missile.x - missileTaille < 0
-                || missile.y + missileTaille > vue.screenHeight
+                || missile.y + missileTaille > alienView.screenHeight
                 || missile.y - missileTaille < 0
             ) {
                 missileOnScreen = false
@@ -92,7 +94,6 @@ abstract class missile (var vue : jeux, val alien : Aliens, val joueur: joueur) 
                 && missile.y - missileTaille < joueur.joueur.bottom
             ) {
                 // Si collision détectée
-                //alien.detectchoc(this)
                 state = MissileCollision(this)
                 state?.update()
                 return true
