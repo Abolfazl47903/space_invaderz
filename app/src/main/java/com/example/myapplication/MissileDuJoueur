@@ -1,0 +1,9 @@
+package com.example.myapplication
+
+class MissileDuJoueur(
+    alienView: AlienView,
+    alien: Aliens,
+    joueur: joueur
+) : missile(alienView, alien, joueur) {
+    // Contenu spécifique à MissileAlien
+}
