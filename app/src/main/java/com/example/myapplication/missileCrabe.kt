@@ -1,22 +1,19 @@
 package com.example.myapplication
 
+class missileCrabe(
+    private val jeux: jeux,  // Garder cette référence
+    alienView: AlienView,
+    alien: Aliens,
+    joueur: joueur
+) : missile(alienView, alien, joueur) {  // Appel au constructeur parent modifié
 
+    override fun degats() {
+        if (collisionJoueur(1.2)) {
+            jeux.vie -= 2
 
-
-class missileCrabe(private val Jeux: jeux,
-                   alien: Aliens,
-                   joueur: joueur) : missile(Jeux, alien, joueur) {
-
-
-    override fun degats(){
-
-        if (collisionJoueur(1.2)){
-            Jeux.vie -= 2
-
-            if (Jeux.vie <= 0) {
-                Jeux.game_over()
+            if (jeux.vie <= 0) {
+                jeux.game_over()
             }
         }
     }
 }
-
