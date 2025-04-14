@@ -1,0 +1,30 @@
+package com.example.myapplication
+
+class Aliensimple(
+    view: AlienView, vitesseX: Int,
+    vitesseY: Int,
+    vitesseTir: Int,
+    taille: Int,
+    alienDistance: Float,
+    alienDebut: Float,
+    alienFin: Float,
+    alienVitesseInitiale: Float,
+    width: Float,
+    vaisseauHauteur: Float,
+    vaisseauLongueur: Float,
+    largeur: Float,
+    vue: jeux
+): Aliens(vitesseX ,vitesseY,
+    vitesseTir,
+    taille,
+    alienDistance,alienDebut, alienFin, alienVitesseInitiale, width, view,
+    state = null) {
+    override fun shot() {
+        TODO("Not yet implemented")
+    }
+
+    override fun donnerPoint(): Int {
+        TODO("Not yet implemented")
+    }
+
+}
