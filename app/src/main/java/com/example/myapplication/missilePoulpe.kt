@@ -1,15 +1,17 @@
 package com.example.myapplication
 
-class missilePoulpe(private val Jeux: jeux,
+class missilePoulpe(private val jeux: jeux,  // Garder cette référence
+                    alienView: AlienView,
                     alien: Aliens,
-                    joueur: joueur) : missile(Jeux, alien, joueur) {
-    override fun degats(){
+                    joueur: joueur
+) : missile(alienView, alien, joueur) {  // Appel au constructeur parent modifié
 
-        if (collisionJoueur(1.2)){
-            Jeux.vie -= 3
+    override fun degats() {
+        if (collisionJoueur(1.2)) {
+            jeux.vie -= 2
 
-            if (Jeux.vie <= 0) {
-                Jeux.game_over()
+            if (jeux.vie <= 0) {
+                jeux.game_over()
             }
         }
     }
