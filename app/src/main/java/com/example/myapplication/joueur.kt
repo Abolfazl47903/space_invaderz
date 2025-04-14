@@ -10,7 +10,7 @@ class joueur(
     var vaisseauLongueur: Float,
     var vaisseauHauteur: Float,
     var largeur: Float,
-    val vue: jeux,
+    val vue: AlienView,
     var joueurDistance: Float,
     var joueurDebut: Float,
     var joueurFin: Float,
@@ -29,19 +29,19 @@ class joueur(
         joueurFin
     )
 
-    fun finvaisseau(hauteur: Float){ //Méthode servant à initialiser la fin de la fusée
-        finVaisseau.set(vaisseauLongueur, hauteur)
-    }
-    fun alignement(amplitude : Double){ //Sert à placer le rectangle sur l'écran
-        finVaisseau.x = (vaisseauLongueur*Math.sin(amplitude)).toFloat()
-        finVaisseau.y = (-vaisseauLongueur*Math.cos(amplitude) + vue.screenHeight/4).toFloat()
-    }
-    fun collision (missile: missile){
-        if(missile.collisionJoueur(0.016)){  //pour 60 fps jcrois
-            state = missileJoueur(this, vue)
-            state?.update()
-        }
-    }
+//    fun finvaisseau(hauteur: Float){ //Méthode servant à initialiser la fin de la fusée
+//        finVaisseau.set(vaisseauLongueur, hauteur)
+//    }
+//    fun alignement(amplitude : Double){ //Sert à placer le rectangle sur l'écran
+//        finVaisseau.x = (vaisseauLongueur*Math.sin(amplitude)).toFloat()
+//        finVaisseau.y = (-vaisseauLongueur*Math.cos(amplitude) + vue.screenHeight/4).toFloat()
+//    }
+//    fun collision (missile: missile){
+//        if(missile.collisionJoueur(0.016)){  //pour 60 fps jcrois
+//            state = missileJoueur(this, vue)
+//            state?.update()
+//        }
+ //  }
 
 
 }
