@@ -9,7 +9,7 @@ class Poulpe(vitesseX:Int,
              alienFin: Float,
              alienVitesseInitiale: Float,
              width: Float,
-             view: jeux
+             view: AlienView
              ):Aliens(vitesseX,vitesseY,vitesseTir,taille, alienDistance, alienDebut, alienFin, alienVitesseInitiale, width, view) {
     override fun shot() {
 
