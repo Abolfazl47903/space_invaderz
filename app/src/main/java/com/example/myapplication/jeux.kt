@@ -1,142 +1,134 @@
 package com.example.myapplication
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.app.Dialog
 import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
-import org.xmlpull.v1.XmlPullParser
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Bundle
 import android.util.AttributeSet
-import android.view.SurfaceHolder
-import android.view.SurfaceView
-import android.view.View
 import android.widget.Button
 
+class jeux @JvmOverloads constructor (
+    context: Context,
+    attributes: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    private val left: Button,
+    private val right: Button,
+    private val gameListener: GameListener,
+    private val alienView: AlienView
+) {
+    // attributs du jeu
+    private var score: Int = 0
+    private var niveau_actuel: Int = 1
 
-class jeux @JvmOverloads constructor (context: Context,
-                                      attributes: AttributeSet? = null,
-                                      defStyleAttr: Int = 0,
-                                      val left : Button,
-                                      val right : Button,
-                                      val GameListener: GameListener ): SurfaceView(context, attributes,defStyleAttr), SurfaceHolder.Callback, Runnable{
+    // propriétés publiques
+    var vie: Int = 10
+    var record: Int = 0
+    var vie_supp: Int = 1
+    var gameOver = false
+    var timeLeft = 60.0 // exemple: 60 secondes de jeu
 
-    // attributs
-    private var score : Int = 0
-    private var niveau_actuel : Int = 1
-
-    //propriétés publiques
-    var vie : Int = 10
-    var record : Int = 0
-    var vie_supp : Int = 1
-    var interfacee = false
-    var gameover = false
     val activite = context as FragmentActivity
-    lateinit var thread :Thread
-    var screenWidth = 0f
-    var screenHeight = 0f
-    val vaisseau = JoueurView(context)
-    lateinit var AlienView : AlienView
 
+    init {
+        // Initialisation supplémentaire si nécessaire
+    }
 
+    fun start_game() {
+        // Réinitialiser les valeurs du jeu
+        score = 0
+        vie = 10
+        niveau_actuel = 1
+        gameOver = false
+        timeLeft = 60.0
 
-    //méthodes
-    override fun run(){
-        var previousFrameTime = System.currentTimeMillis()
-        while (interfacee){
-            val currentTime = System.currentTimeMillis()
-            var elapsedTimeMS:Double=(currentTime-previousFrameTime).toDouble()
-            verifier_fin_niveau()
-            val AlienView = AlienView(context)
-            AlienView.startMovement()
-            previousFrameTime = currentTime
-            Thread.sleep(16)
+        // Démarrer le mouvement des aliens via AlienView
+        alienView.startMovement()
+    }
+
+    fun game_over() {
+        if (!gameOver) {
+            gameOver = true
+            prestation(R.string.lose)
         }
     }
-    fun start_game(){
-        
 
-        left.setOnClickListener {
-            vaisseau.deplacement("LEFT")
-        }
-        right.setOnClickListener {
-            vaisseau.deplacement("RIGHT")
-        }
+    fun updatePositions(elapsedTimeMS: Double) {
+        val interval = elapsedTimeMS / 1000.0
 
+        // Mise à jour du temps restant
+        timeLeft -= interval
 
-
-    }
-    fun verifier_fin_niveau(){
-
-        if (score % 90 == 0){
-            GameListener.NoAliens()
+        if (timeLeft <= 0.0) {
+            timeLeft = 0.0
+            game_over()
         }
     }
-    fun game_over(){
-        interfacee = false //Sert à montrer comment est l'écran. Si false alors on le voit pas si true on le voit
 
-        prestation(R.string.win) //Méthode pour savoir si on a gagné ou perdu
-        gameover = true //Si true alors on a perdu
-    }
-    fun prestation(messageId : Int) { //Méthode servant à voir les réultats de la partie
-        left.visibility = GONE
-        right.visibility = GONE
+    fun prestation(messageId: Int) { // Méthode servant à voir les résultats de la partie
+        left.visibility = android.view.View.GONE
+        right.visibility = android.view.View.GONE
 
-        class Resultat : DialogFragment() { //Les fragmetns servent à manier différentes interfaces et donc différents xml, voir l'avant dernier cours
-            override fun onCreateDialog(bundle: Bundle?): Dialog { //Des trucs utilisant des builder
-                val le_builder= AlertDialog.Builder(requireActivity()) //Des trucs d'import
+        class Resultat : DialogFragment() {
+            override fun onCreateDialog(bundle: Bundle?): Dialog {
+                val le_builder = AlertDialog.Builder(requireActivity())
                 le_builder.setTitle(resources.getString(messageId))
-                le_builder.setMessage("Nombre de vies : 0" + "GAME OVER") //C'est la petit truc qui s'affichera
-                le_builder.setPositiveButton("Recommncer le jeu", //C'est le petit truc qui s'affichera et qui nous dira si on veut recommencer
-                    DialogInterface.OnClickListener { _, _->start_game()}) //Appelle la méthode restart_game au touché
+                le_builder.setMessage("Score: $score\nNiveau: $niveau_actuel\nVies restantes: $vie")
+                le_builder.setPositiveButton("Recommencer le jeu",
+                    DialogInterface.OnClickListener { _, _ -> start_game() })
                 return le_builder.create()
             }
         }
-        activite.runOnUiThread( //Des trucs avec le fragment, voir l'avant dernier cours sur l'UV
+
+        activite.runOnUiThread(
             Runnable {
                 val feet = activite.supportFragmentManager.beginTransaction()
-                val precedent =
-                    activite.supportFragmentManager.findFragmentByTag("dialog")
+                val precedent = activite.supportFragmentManager.findFragmentByTag("dialog")
                 if (precedent != null) {
                     feet.remove(precedent)
                 }
                 feet.addToBackStack(null)
                 val resultat = Resultat()
                 resultat.setCancelable(false)
-                resultat.show(feet,"dialog")
+                resultat.show(feet, "dialog")
             }
-        )   
-    }
-    fun pause() { //Si on veut faire une pause en quittant l'appli
-        interfacee = false
-        thread.join() //Les thread servent quand on ouvre plusieurs application (voir cours)
-    }
-    fun resume() { //Si on veut reprendre le jeu
-        interfacee = true
-        thread = Thread(this)
-        thread.start()
+        )
     }
 
-
-
-    override fun onSizeChanged(w:Int, h:Int, oldw: Int, oldh: Int){
-        super.onSizeChanged(w,h,oldw,oldh)
-        screenWidth =w.toFloat()
-        screenHeight = h.toFloat()
+    fun updateScore(points: Int) {
+        score += points
+        // Optionnellement, mettre à jour un affichage du score
     }
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int,
-                                width: Int, height: Int) {}
 
-    override fun surfaceCreated(holder: SurfaceHolder) {}
+    fun alienTouche(typeAlien: Int): Int {
+        // Logique pour déterminer les points en fonction du type d'alien
+        val points = when (typeAlien) {
+            0 -> 30 // Exemple: poulpe
+            1 -> 20 // Exemple: crabe
+            else -> 10 // Exemple: calmar
+        }
 
-    override fun surfaceDestroyed(holder: SurfaceHolder) {}
+        updateScore(points)
+        return points
+    }
 
-    fun ajouterScore(alien: Aliens) {
-        score += alien.donnerPoint() // Ajoute les points donnés par l'alien détruit
+    fun verifierNiveauTermine() {
+        // Vérifier si tous les aliens sont détruits
+        // Si oui, passer au niveau suivant
+        niveau_actuel++
+
+        // Augmenter la difficulté ici
+
+        // Réinitialiser les aliens avec la nouvelle difficulté
+        alienView.resetAliens(niveau_actuel)
+    }
+
+    fun perdreVie() {
+        vie--
+        if (vie <= 0) {
+            game_over()
+        }
     }
 }
