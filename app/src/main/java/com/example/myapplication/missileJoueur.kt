@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-
 class missileJoueur (
     val joueur: joueur,
     private val jeux: jeux) : UpdateState {
