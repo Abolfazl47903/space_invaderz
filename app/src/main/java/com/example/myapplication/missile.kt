@@ -1,5 +1,4 @@
 package com.example.myapplication
-
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Paint
@@ -120,3 +119,4 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
 
     }
 }
+
