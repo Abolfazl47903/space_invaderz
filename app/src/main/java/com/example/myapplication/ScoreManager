@@ -1,0 +1,36 @@
+package com.example.myapplication
+
+import android.widget.TextView
+
+// Singleton pour la gestion du score
+object ScoreManager {
+    // Références aux vues pour afficher le score, niveau et vies
+    internal var scoreTextView: TextView? = null
+    private var niveauTextView: TextView? = null
+    private var viesTextView: TextView? = null
+
+    // Référence au jeu pour obtenir les valeurs actuelles
+    private var jeuxInstance: jeux? = null
+
+    // Initialiser avec les références nécessaires
+    fun initialize(score: TextView, niveau: TextView, vies: TextView, jeux: jeux) {
+        this.scoreTextView = score
+        this.niveauTextView = niveau
+        this.viesTextView = vies
+        this.jeuxInstance = jeux
+    }
+
+    // Mettre à jour l'affichage du score
+    fun updateScoreDisplay() {
+        jeuxInstance?.let { game ->
+            scoreTextView?.text = "Score: ${game.score}"
+            niveauTextView?.text = "Niveau: ${game.niveau_actuel}"
+            viesTextView?.text = "Vies: ${game.vie}"
+        }
+    }
+
+    // Méthode pour rafraîchir le score après un changement
+    fun refreshScore() {
+        updateScoreDisplay()
+    }
+}
