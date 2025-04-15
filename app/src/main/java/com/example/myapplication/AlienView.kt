@@ -308,8 +308,8 @@ class AlienView @JvmOverloads constructor(
         val scoreManager = ScoreManager
         if (scoreManager.scoreTextView == null) {
             canvas.drawText("Score: ${jeux.score}", 20f, 60f, scorePaint)
-            canvas.drawText("Niveau: ${jeux.niveau_actuel}", 20f, 120f, scorePaint)
-            canvas.drawText("Vies: ${jeux.vie}", 20f, 180f, scorePaint)
+            canvas.drawText("Niveau: ${jeux.niveau_actuel}", 265f, 60f, scorePaint)
+            canvas.drawText("Vies: ${jeux.vie}", 500f, 60f, scorePaint)
         } else {
             // Assurer que le score est à jour
             ScoreManager.refreshScore()
