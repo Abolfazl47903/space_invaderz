@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity(), GameListener {
         // Garder les boutons invisibles au début
         left.visibility = View.INVISIBLE
         right.visibility = View.INVISIBLE
-// Initialisation de la classe jeux
+
+        // Initialisation de la classe jeux
         jeux = jeux(
             context = this,
             left = left,
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity(), GameListener {
             gameListener = this,
             alienView = alienView
         )
+
         // Initialisation des classes de jeu
         aliensimple = Aliensimple(
             view = alienView,
@@ -67,9 +69,7 @@ class MainActivity : AppCompatActivity(), GameListener {
         Joueur = joueur(10f, 10f, 10f, alienView, 10f, 10f, 10f, 10f, null)
 
         // Configuration de AlienView pour le jeu
-        alienView.setupGame(Joueur, aliensimple, joueurImageView)
-
-
+        alienView.setupGame(Joueur, aliensimple, joueurImageView, jeux)
 
         // Appliquer éventuellement des insets pour la vue alienView
         ViewCompat.setOnApplyWindowInsetsListener(alienView) { v, insets ->
