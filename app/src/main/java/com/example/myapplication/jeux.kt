@@ -20,8 +20,8 @@ class jeux @JvmOverloads constructor (
     private val alienView: AlienView
 ) {
     // attributs du jeu
-    private var score: Int = 0
-    private var niveau_actuel: Int = 1
+    var score: Int = 0
+    var niveau_actuel: Int = 1
 
     // propriétés publiques
     var vie: Int = 10
