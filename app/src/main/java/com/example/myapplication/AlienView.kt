@@ -1,4 +1,5 @@
 package com.example.myapplication
+
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -22,7 +23,7 @@ class AlienView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    private val crabeBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.calmar)
+    private val crabeBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.crabe)
     private val poulpeBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.poulpe)
     private val calmarBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.calmar)
     private val collisionImage: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.explosion)
