@@ -210,7 +210,7 @@ class AlienView @JvmOverloads constructor(
         // Ajustement pour avoir un angle entre -π/2 et π/2 (limité à ±90°)
         angle = angle.coerceIn(-Math.PI/2, Math.PI/2)
 
-        return -angle
+        return angle
     }
 
     // Mise à jour de la position du missile
