@@ -29,16 +29,21 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
         explosionBitmap = BitmapFactory.decodeResource(alienView.resources, R.drawable.explosion)
     }
 
-    fun Missile(amplitude: Double, imageView: ImageView) { //Lancement du missile
-        val imageLocation = IntArray(2)
-        imageView.getLocationOnScreen(imageLocation)
+    fun Missile(angle: Double, joueurImageView: ImageView) {
+        val location = IntArray(2)
+        joueurImageView.getLocationOnScreen(location)
 
-        missile.x = imageLocation[0] + imageView.width / 2f
-        missile.y = imageLocation[1] - 160f
+        // Position du centre horizontal et en haut du joueur
+        val joueurX = location[0] + joueurImageView.width / 2f
+        val joueurY = location[1].toFloat()
 
-        missileVitesseX = (-missileVitesse * Math.sin(amplitude)).toFloat()
-        missileVitesseY = (-missileVitesse * Math.cos(amplitude)).toFloat()
+        missile.x = joueurX
+        missile.y = joueurY
 
+        // Vitesse selon l’angle
+        val vitesse = 20f
+        missileVitesseX = (Math.sin(angle) * vitesse).toFloat()
+        missileVitesseY = -(Math.cos(angle) * vitesse).toFloat() // vers le haut
         missileOnScreen = true
     }
 
