@@ -41,7 +41,7 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
         missile.y = joueurY
 
         // Vitesse selon l’angle
-        val vitesse = 20f
+        val vitesse = 500f
         missileVitesseX = (Math.sin(angle) * vitesse).toFloat()
         missileVitesseY = -(Math.cos(angle) * vitesse).toFloat() // vers le haut
         missileOnScreen = true
