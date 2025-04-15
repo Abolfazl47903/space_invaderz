@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+
 class missileCalmar (private val jeux: jeux,  // Garder cette référence
                      alienView: AlienView,
                      alien: Aliens,
