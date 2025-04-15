@@ -1,10 +1,10 @@
 package com.example.myapplication
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.PointF
+import android.graphics.RectF
 import android.os.Handler
 import android.os.Looper
 import android.widget.FrameLayout
@@ -21,13 +21,21 @@ class AlienView @JvmOverloads constructor(
     private val crabeBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.calmar)
     private val poulpeBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.poulpe)
     private val calmarBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.calmar)
-
+    private val collisionImage: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.explosion)
+    private val aliensVivants = Array(5) { Array(10) { true } }
     val aliens = mutableListOf<Bitmap>()
     private var offsetX = 0f
     private var offsetY = 0f
     private var direction = 1 // 1 pour aller à droite, -1 pour aller à gauche
     private val descente = 30f // Décalage vertical à chaque changement de direction
     private val handler = Handler(Looper.getMainLooper())
+    private val collisionEffects = mutableListOf<AlienMort>()
+
+    // Variables pour l'effet de collision
+    private var showCollision = false
+    private var collisionX = 0f
+    private var collisionY = 0f
+    private var collisionTimer = 0
 
     // Attributs pour le missile
     var missileOnScreen = false
@@ -99,6 +107,9 @@ class AlienView @JvmOverloads constructor(
                     updateMissile()
                 }
 
+                // Mise à jour des effets de collision
+                updateCollisionEffects()
+
                 invalidate() // Redessiner avec les nouvelles positions
                 safeHandler.postDelayed(this, 50) // Utiliser le handler sécurisé
             }
@@ -106,7 +117,13 @@ class AlienView @JvmOverloads constructor(
 
         safeHandler.post(runnable) // Utiliser le handler sécurisé
     }
+    private fun updateCollisionEffects() {
+        // Mettre à jour tous les effets de collision
+        collisionEffects.forEach { it.update() }
 
+        // Supprimer les effets terminés
+        collisionEffects.removeAll { !it.isVisible() }
+    }
     // Dessiner les aliens et le missile
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -123,9 +140,27 @@ class AlienView @JvmOverloads constructor(
         for (ligne in 0 until lignesAliens) {
             val alienBitmap = aliens[ligne % aliens.size] // Choisir l'image en fonction de la ligne
             for (colonne in 0 until colonnesAliens) {
-                val x = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX
-                val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY
-                canvas.drawBitmap(alienBitmap, x, y, null)
+                // Ne dessiner que les aliens vivants
+                if (aliensVivants[ligne][colonne]) {
+                    val x = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX
+                    val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY
+                    canvas.drawBitmap(alienBitmap, x, y, null)
+                }
+            }
+        }
+
+        // Dessiner les effets de collision actifs
+        collisionEffects.forEach { effect ->
+            if (effect.isVisible()) {
+                val (x, y) = effect.getPosition()
+                if (collisionImage != null) {
+                    canvas.drawBitmap(
+                        collisionImage,
+                        x - collisionImage.width / 2,
+                        y - collisionImage.height / 2,
+                        null
+                    )
+                }
             }
         }
 
@@ -133,6 +168,10 @@ class AlienView @JvmOverloads constructor(
         if (missileOnScreen) {
             dessinMissile(canvas)
         }
+    }
+
+    fun setCollisionEffect(effect: AlienMort) {
+        // Méthode pour définir l'effet de collision depuis l'extérieur
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -189,19 +228,18 @@ class AlienView @JvmOverloads constructor(
             resetMissile()
         }
 
-        // Vérifier les collisions avec les aliens (à implémenter)
+        // Vérifier les collisions avec les aliens
         checkCollisions()
     }
 
     // Dessin du missile
     private fun dessinMissile(canvas: Canvas) {
-        // Créer un rectangle pour représenter le missile
         val left = missileX - missileTaille / 2
         val top = missileY - missileTaille
         val right = missileX + missileTaille / 2
         val bottom = missileY
 
-        // Dessiner un rectangle comme missile (vous pouvez remplacer par une image si vous préférez)
+        // Dessiner un rectangle comme missile
         canvas.drawRect(left, top, right, bottom, android.graphics.Paint().apply {
             color = android.graphics.Color.RED
         })
@@ -212,10 +250,66 @@ class AlienView @JvmOverloads constructor(
         missileOnScreen = false
     }
 
+    // Méthode pour créer un effet de collision à une position donnée
+    private fun createCollisionEffect(x: Float, y: Float, ligne: Int, colonne: Int) {
+        val effect = AlienMort(x, y, ligne, colonne)
+        collisionEffects.add(effect)
+    }
+
     // Vérifier les collisions
     private fun checkCollisions() {
-        // À implémenter: vérification des collisions entre le missile et les aliens
-        // Cette méthode devrait parcourir vos aliens et vérifier si le missile les touche
+        if (!missileOnScreen) return
+
+        val lignesAliens = 5
+        val colonnesAliens = 10
+        val largeurEcran = width.toFloat()
+        val espaceEntreAliens = largeurEcran * 0.02f
+        val tailleAlien = aliens[0].width.toFloat()
+
+        // Rectangle du missile
+        val missileRect = RectF(
+            missileX - missileTaille / 2,
+            missileY - missileTaille,
+            missileX + missileTaille / 2,
+            missileY
+        )
+
+        // Vérifier chaque alien
+        for (ligne in 0 until lignesAliens) {
+            for (colonne in 0 until colonnesAliens) {
+                // Ne vérifier que les aliens vivants
+                if (aliensVivants[ligne][colonne]) {
+                    val x = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX
+                    val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY
+
+                    // Rectangle de l'alien
+                    val alienRect = RectF(
+                        x,
+                        y,
+                        x + tailleAlien,
+                        y + tailleAlien
+                    )
+
+                    // Vérifier s'il y a collision
+                    if (RectF.intersects(missileRect, alienRect)) {
+                        // Marquer l'alien comme mort
+                        aliensVivants[ligne][colonne] = false
+
+                        // Créer un effet de collision à la position de l'alien
+                        createCollisionEffect(x + tailleAlien / 2, y + tailleAlien / 2, ligne, colonne)
+
+                        // Réinitialiser le missile
+                        resetMissile()
+
+                        // Log pour débuguer
+                        Log.d("AlienView", "Collision détectée! Alien détruit à la position $ligne, $colonne")
+
+                        // Ne vérifier qu'une seule collision à la fois
+                        return
+                    }
+                }
+            }
+        }
     }
 
     // Gestion des événements tactiles
