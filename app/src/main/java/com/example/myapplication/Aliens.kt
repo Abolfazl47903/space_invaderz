@@ -1,5 +1,4 @@
 package com.example.myapplication
-
 import android.annotation.SuppressLint
 import android.graphics.RectF
 
@@ -41,12 +40,14 @@ abstract class Aliens(
     }
     abstract  fun donnerPoint(): Int
 
-    fun detectchoc(missile : missile){
+    /*fun detectchoc(missile : missile){
         if (missile.collision(1.2)) {
             state = AlienMort(this)
             state?.update()
         }
     }
+
+     */
 
 
 }
