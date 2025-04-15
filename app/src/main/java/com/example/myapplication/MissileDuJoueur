@@ -1,9 +1,35 @@
 package com.example.myapplication
 
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.PointF
+import android.widget.ImageView
+
 class MissileDuJoueur(
     alienView: AlienView,
     alien: Aliens,
     joueur: joueur
 ) : missile(alienView, alien, joueur) {
-    // Contenu spécifique à MissileAlien
+
+    init {
+        missilePaint.color = Color.RED
+        missileVitesse = 20f  // Vitesse augmentée pour le missile du joueur
+    }
+
+    override fun dessin(canvas: Canvas) {
+        // Dessin du missile du joueur (en rouge)
+        canvas.drawCircle(missile.x, missile.y, 10f, missilePaint)
+        drawExplosion(canvas)
+    }
+
+    override fun degats() {
+        // Logique spécifique aux dégâts causés par le missile du joueur
+        // Cette méthode est appelée à chaque mise à jour du missile
+
+        // Mettre à jour la position du missile
+        update(0.05)
+
+        // Vérifier les collisions avec les aliens
+        // La gestion des collisions est maintenant centralisée dans AlienView.checkCollisions()
+    }
 }
