@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.RectF
+import android.graphics.Paint
+import android.graphics.Color
 import android.os.Handler
 import android.os.Looper
 import android.widget.FrameLayout
@@ -12,6 +14,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.ImageView
+import android.widget.TextView
+import java.util.Random
 
 class AlienView @JvmOverloads constructor(
     context: Context,
@@ -31,29 +35,38 @@ class AlienView @JvmOverloads constructor(
     private val handler = Handler(Looper.getMainLooper())
     private val collisionEffects = mutableListOf<AlienMort>()
 
-    // Variables pour l'effet de collision
-    private var showCollision = false
-    private var collisionX = 0f
-    private var collisionY = 0f
-    private var collisionTimer = 0
+    // Variables pour l'affichage du score
+    private var scoreTextView: TextView? = null
+    private var niveauTextView: TextView? = null
+    private var viesTextView: TextView? = null
+    private var scorePaint = Paint()
 
-    // Attributs pour le missile
-    var missileOnScreen = false
-    var missileX = 0f
-    var missileY = 0f
-    var missileVitesse = 0f
-    var missileTaille = 0f
-    var missileAngle = 0.0
-
+    // Attributs pour les missiles
     lateinit var Joueur: joueur
     lateinit var aliensList: Aliens
     var screenWidth = 0f
     var screenHeight = 0f
     lateinit var joueurImageView: ImageView
+    lateinit var jeux: jeux
+
+    // Gestion des missiles - liste de missiles pour permettre multiples tirs
+    private val playerMissiles = mutableListOf<MissileDuJoueur>()
+    private val alienMissiles = mutableListOf<missile>()
+    private val random = Random()
+    private var lastAlienShotTime = 0L
+    private val alienShotInterval = 2000L // 2 secondes entre les tirs
+
+    // Maximum de missiles player à l'écran simultanément
+    private val MAX_PLAYER_MISSILES = 3
 
     init {
         setWillNotDraw(false)  // Force le dessin
         isClickable = true  // Rend la vue cliquable pour les événements tactiles
+
+        // Configuration de la peinture pour le score
+        scorePaint.color = Color.WHITE
+        scorePaint.textSize = 40f
+        scorePaint.textAlign = Paint.Align.LEFT
 
         post {
             if (crabeBitmap == null || poulpeBitmap == null || calmarBitmap == null) {
@@ -72,22 +85,31 @@ class AlienView @JvmOverloads constructor(
         }
     }
 
-    fun setupGame(joueur: joueur, alien: Aliens, joueurView: ImageView) {
+    fun setupGame(joueur: joueur, alien: Aliens, joueurView: ImageView, gameInstance: jeux) {
         this.Joueur = joueur
         this.aliensList = alien
         this.joueurImageView = joueurView
-
-        // Initialisation des paramètres du missile
-        missileTaille = width / 36f
-        missileVitesse = width * 3 / 2f
+        this.jeux = gameInstance
     }
 
-    // Ajout du mouvement horizontal et vertical des aliens
+    // Méthode pour définir les TextViews pour le score, le niveau et les vies
+    fun setScoreViews(score: TextView, niveau: TextView, vies: TextView) {
+        this.scoreTextView = score
+        this.niveauTextView = niveau
+        this.viesTextView = vies
+        updateScoreDisplay()
+    }
+
+    // Mise à jour de l'affichage du score
+    fun updateScoreDisplay() {
+        scoreTextView?.text = "Score: ${jeux.score}"
+        niveauTextView?.text = "Niveau: ${jeux.niveau_actuel}"
+        viesTextView?.text = "Vies: ${jeux.vie}"
+    }
+
+    // Démarrer le mouvement et les tirs des aliens
     fun startMovement(vitesse: Int = 10) {
-        // Ensure handler is initialized with main looper if null
         val safeHandler = handler ?: Handler(Looper.getMainLooper()).also {
-            // If we needed to create a new handler, we'd need a way to assign it back to the property
-            // Since handler is a val, we can't reassign it, which suggests there's a deeper issue
             Log.w("AlienView", "Handler was null when starting movement")
         }
 
@@ -102,21 +124,128 @@ class AlienView @JvmOverloads constructor(
                     offsetY += descente // Descendre les aliens verticalement
                 }
 
-                // Mise à jour du missile s'il est à l'écran
-                if (missileOnScreen) {
-                    updateMissile()
-                }
+                // Faire tirer les aliens aléatoirement
+                maybeShootAlienMissile()
+
+                // Mise à jour de tous les missiles
+                updateAllMissiles()
+
+                // Vérifier les collisions
+                checkCollisions()
 
                 // Mise à jour des effets de collision
                 updateCollisionEffects()
+
+                // Mise à jour de l'affichage du score
+                updateScoreDisplay()
 
                 invalidate() // Redessiner avec les nouvelles positions
                 safeHandler.postDelayed(this, 50) // Utiliser le handler sécurisé
             }
         }
 
-        safeHandler.post(runnable) // Utiliser le handler sécurisé
+        safeHandler.post(runnable)
     }
+
+    // Fonction pour faire tirer les aliens aléatoirement
+    private fun maybeShootAlienMissile() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastAlienShotTime > alienShotInterval) {
+            val lignesAliens = 5
+            val colonnesAliens = 10
+
+            // Trouver un alien vivant aléatoire pour tirer
+            val candidateAliens = mutableListOf<Triple<Int, Int, Float>>()
+
+            for (ligne in 0 until lignesAliens) {
+                for (colonne in 0 until colonnesAliens) {
+                    if (aliensVivants[ligne][colonne]) {
+                        // Donner la priorité aux aliens du bas (plus proches du joueur)
+                        candidateAliens.add(Triple(ligne, colonne, (lignesAliens - ligne).toFloat()))
+                    }
+                }
+            }
+
+            if (candidateAliens.isNotEmpty()) {
+                // Sélectionner un alien avec une probabilité plus élevée pour ceux du bas
+                val totalWeight = candidateAliens.sumOf { it.third.toDouble() }
+                var randomValue = random.nextDouble() * totalWeight
+                var selectedAlien: Triple<Int, Int, Float>? = null
+
+                for (alien in candidateAliens) {
+                    randomValue -= alien.third
+                    if (0 >= randomValue) {
+                        selectedAlien = alien
+                        break
+                    }
+                }
+
+                selectedAlien = selectedAlien ?: candidateAliens.last()
+
+                // Créer un missile selon le type d'alien
+                val ligne = selectedAlien.first
+                val colonne = selectedAlien.second
+
+                val largeurEcran = width.toFloat()
+                val espaceEntreAliens = largeurEcran * 0.02f
+                val tailleAlien = aliens[0].width.toFloat()
+
+                val alienX = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX + tailleAlien / 2
+                val alienY = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY + tailleAlien
+
+                // Créer le missile selon le type d'alien
+                val newMissile = when (ligne % 3) {
+                    0 -> missilePoulpe(jeux, this, aliensList, Joueur)
+                    1 -> missileCrabe(jeux, this, aliensList, Joueur)
+                    else -> missileCalmar(jeux, this, aliensList, Joueur)
+
+                }
+
+                // Positionner le missile
+                newMissile.missile.x = alienX
+                newMissile.missile.y = alienY
+                newMissile.missileVitesseX = 0f  // Pas de déplacement horizontal
+                newMissile.missileVitesseY = 10f  // Direction vers le bas
+                newMissile.missileOnScreen = true
+
+                // Ajouter le missile à la liste
+                alienMissiles.add(newMissile)
+
+                lastAlienShotTime = currentTime
+            }
+        }
+    }
+
+    // Mise à jour de tous les missiles (joueur et aliens)
+    private fun updateAllMissiles() {
+        // Mise à jour des missiles du joueur
+        val playerIterator = playerMissiles.iterator()
+        while (playerIterator.hasNext()) {
+            val missile = playerIterator.next()
+            if (missile.missileOnScreen) {
+                missile.update(0.05)  // Paramètre d'intervalle de temps
+                missile.degats()
+            } else {
+                playerIterator.remove()
+            }
+        }
+
+        // Mise à jour des missiles des aliens
+        val alienIterator = alienMissiles.iterator()
+        while (alienIterator.hasNext()) {
+            val missile = alienIterator.next()
+            if (missile.missileOnScreen) {
+                missile.update(0.05)  // Paramètre d'intervalle de temps
+                if (missile.collisionJoueur(0.05)) {
+                    jeux.perdreVie()
+                    alienIterator.remove()
+                }
+            } else {
+                alienIterator.remove()
+            }
+        }
+    }
+
     private fun updateCollisionEffects() {
         // Mettre à jour tous les effets de collision
         collisionEffects.forEach { it.update() }
@@ -124,7 +253,8 @@ class AlienView @JvmOverloads constructor(
         // Supprimer les effets terminés
         collisionEffects.removeAll { !it.isVisible() }
     }
-    // Dessiner les aliens et le missile
+
+    // Dessiner les aliens, les missiles et les explosions
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -164,152 +294,65 @@ class AlienView @JvmOverloads constructor(
             }
         }
 
-        // Dessiner le missile s'il est à l'écran
-        if (missileOnScreen) {
-            dessinMissile(canvas)
+        // Dessiner tous les missiles du joueur
+        playerMissiles.forEach { missile ->
+            if (missile.missileOnScreen) {
+                missile.dessin(canvas)
+            }
         }
-    }
 
-    fun setCollisionEffect(effect: AlienMort) {
-        // Méthode pour définir l'effet de collision depuis l'extérieur
+        // Dessiner les missiles des aliens
+        alienMissiles.forEach { missile ->
+            if (missile.missileOnScreen) {
+                missile.dessin(canvas)
+            }
+        }
+
+        // Dessiner le score, le niveau et les vies sur l'écran si les TextViews ne sont pas disponibles
+        if (scoreTextView == null) {
+            canvas.drawText("Score: ${jeux.score}", 20f, 60f, scorePaint)
+            canvas.drawText("Niveau: ${jeux.niveau_actuel}", 20f, 120f, scorePaint)
+            canvas.drawText("Vies: ${jeux.vie}", 20f, 180f, scorePaint)
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         screenWidth = w.toFloat()
         screenHeight = h.toFloat()
-
-        // Mise à jour des paramètres du missile en fonction de la taille de l'écran
-        missileTaille = (w / 36f)
-        missileVitesse = (w * 3 / 2f)
     }
 
-    // Lancer un missile
+    // Lancer un missile du joueur
     fun lancerMissile(event: MotionEvent) {
-        if (!missileOnScreen) {
-            // Calcul de l'angle du tir
+        // Vérifier si on peut lancer un nouveau missile (max 3 à l'écran)
+        if (playerMissiles.size < MAX_PLAYER_MISSILES) {
+            // Créer un nouveau missile
+            val newMissile = MissileDuJoueur(this, aliensList, Joueur)
+
+            // Calculer l'angle
             val angle = calculateAngle(event)
 
-            // Position initiale du missile (au centre bas de l'écran)
-            missileX = screenWidth / 2
-            missileY = screenHeight - 100 // Ajustez selon la position de votre vaisseau
-            missileAngle = angle
-            missileOnScreen = true
+            // Lancer le missile depuis le joueur
+            newMissile.Missile(angle, joueurImageView)
+
+            // Ajouter le missile à la liste
+            playerMissiles.add(newMissile)
         }
     }
 
     // Calculer l'angle de tir
     private fun calculateAngle(event: MotionEvent): Double {
         val touchPoint = PointF(event.x, event.y)
-        val deltaX = touchPoint.x - (screenWidth / 2)
-        val deltaY = (screenHeight - touchPoint.y)  // Inversé car l'origine est en haut
+        val joueurLocation = IntArray(2)
+        joueurImageView.getLocationOnScreen(joueurLocation)
 
-        // Calcul de l'angle avec atan2 (gère tous les quadrants)
-        var angle = Math.atan2(deltaX.toDouble(), deltaY.toDouble())
+        val joueurX = joueurLocation[0] + joueurImageView.width / 2f
+        val joueurY = joueurLocation[1] + joueurImageView.height / 2f
 
-        // Ajustement pour avoir un angle entre -π/2 et π/2 (limité à ±90°)
-        angle = angle.coerceIn(-Math.PI/2, Math.PI/2)
+        val deltaX = touchPoint.x - joueurX
+        val deltaY = joueurY - touchPoint.y
 
-        return angle
-    }
-
-    // Mise à jour de la position du missile
-    private fun updateMissile() {
-        // Calcul des composantes X et Y de la vitesse
-        val missileVelocityX = (missileVitesse * Math.sin(missileAngle)).toFloat()
-        val missileVelocityY = (missileVitesse * Math.cos(missileAngle)).toFloat()
-
-        // Mise à jour des positions
-        missileX += missileVelocityX * 0.05f  // Multiplié par l'intervalle (50ms = 0.05s)
-        missileY -= missileVelocityY * 0.05f  // Note: on soustrait car Y est inversé à l'écran
-
-        // Vérifier si le missile est sorti de l'écran
-        if (missileY < 0 || missileY > screenHeight || missileX < 0 || missileX > screenWidth) {
-            resetMissile()
-        }
-
-        // Vérifier les collisions avec les aliens
-        checkCollisions()
-    }
-
-    // Dessin du missile
-    private fun dessinMissile(canvas: Canvas) {
-        val left = missileX - missileTaille / 2
-        val top = missileY - missileTaille
-        val right = missileX + missileTaille / 2
-        val bottom = missileY
-
-        // Dessiner un rectangle comme missile
-        canvas.drawRect(left, top, right, bottom, android.graphics.Paint().apply {
-            color = android.graphics.Color.RED
-        })
-    }
-
-    // Réinitialiser le missile
-    fun resetMissile() {
-        missileOnScreen = false
-    }
-
-    // Méthode pour créer un effet de collision à une position donnée
-    private fun createCollisionEffect(x: Float, y: Float, ligne: Int, colonne: Int) {
-        val effect = AlienMort(x, y, ligne, colonne)
-        collisionEffects.add(effect)
-    }
-
-    // Vérifier les collisions
-    private fun checkCollisions() {
-        if (!missileOnScreen) return
-
-        val lignesAliens = 5
-        val colonnesAliens = 10
-        val largeurEcran = width.toFloat()
-        val espaceEntreAliens = largeurEcran * 0.02f
-        val tailleAlien = aliens[0].width.toFloat()
-
-        // Rectangle du missile
-        val missileRect = RectF(
-            missileX - missileTaille / 2,
-            missileY - missileTaille,
-            missileX + missileTaille / 2,
-            missileY
-        )
-
-        // Vérifier chaque alien
-        for (ligne in 0 until lignesAliens) {
-            for (colonne in 0 until colonnesAliens) {
-                // Ne vérifier que les aliens vivants
-                if (aliensVivants[ligne][colonne]) {
-                    val x = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX
-                    val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY
-
-                    // Rectangle de l'alien
-                    val alienRect = RectF(
-                        x,
-                        y,
-                        x + tailleAlien,
-                        y + tailleAlien
-                    )
-
-                    // Vérifier s'il y a collision
-                    if (RectF.intersects(missileRect, alienRect)) {
-                        // Marquer l'alien comme mort
-                        aliensVivants[ligne][colonne] = false
-
-                        // Créer un effet de collision à la position de l'alien
-                        createCollisionEffect(x + tailleAlien / 2, y + tailleAlien / 2, ligne, colonne)
-
-                        // Réinitialiser le missile
-                        resetMissile()
-
-                        // Log pour débuguer
-                        Log.d("AlienView", "Collision détectée! Alien détruit à la position $ligne, $colonne")
-
-                        // Ne vérifier qu'une seule collision à la fois
-                        return
-                    }
-                }
-            }
-        }
+        return Math.atan2(deltaX.toDouble(), deltaY.toDouble())
     }
 
     // Gestion des événements tactiles
@@ -322,10 +365,130 @@ class AlienView @JvmOverloads constructor(
         return super.onTouchEvent(e)
     }
 
+    // Vérifier les collisions des missiles du joueur avec les aliens
+    private fun checkCollisions() {
+        val lignesAliens = 5
+        val colonnesAliens = 10
+        val largeurEcran = width.toFloat()
+        val espaceEntreAliens = largeurEcran * 0.02f
+        val tailleAlien = aliens[0].width.toFloat()
+
+        // Pour chaque missile du joueur
+        val playerMissileIterator = playerMissiles.iterator()
+        while (playerMissileIterator.hasNext()) {
+            val missile = playerMissileIterator.next()
+            if (!missile.missileOnScreen) {
+                playerMissileIterator.remove()
+                continue
+            }
+
+            // Rectangle du missile
+            val missileRect = RectF(
+                missile.missile.x - missile.missileTaille / 2,
+                missile.missile.y - missile.missileTaille,
+                missile.missile.x + missile.missileTaille / 2,
+                missile.missile.y
+            )
+
+            // Vérifier chaque alien
+            var collisionDetected = false
+            outerLoop@ for (ligne in 0 until lignesAliens) {
+                for (colonne in 0 until colonnesAliens) {
+                    // Ne vérifier que les aliens vivants
+                    if (aliensVivants[ligne][colonne]) {
+                        val x = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX
+                        val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY
+
+                        // Rectangle de l'alien
+                        val alienRect = RectF(
+                            x,
+                            y,
+                            x + tailleAlien,
+                            y + tailleAlien
+                        )
+
+                        // Vérifier s'il y a collision
+                        if (RectF.intersects(missileRect, alienRect)) {
+                            // Marquer l'alien comme mort
+                            aliensVivants[ligne][colonne] = false
+
+                            // Créer un effet de collision à la position de l'alien
+                            createCollisionEffect(x + tailleAlien / 2, y + tailleAlien / 2, ligne, colonne)
+
+                            // Ajouter des points selon le type d'alien
+                            jeux.alienTouche(ligne % 3)
+
+                            // Créer une explosion au point d'impact
+                            missile.createExplosion(missile.missile.x, missile.missile.y)
+
+                            // Réinitialiser le missile
+                            missile.resetMissile()
+                            collisionDetected = true
+
+                            // Log pour débuguer
+                            Log.d("AlienView", "Collision détectée! Alien détruit à la position $ligne, $colonne")
+
+                            // Vérifier si tous les aliens sont détruits
+                            checkAllAliensDestroyed()
+
+                            break@outerLoop // Sortir des deux boucles
+                        }
+                    }
+                }
+            }
+
+            if (collisionDetected) {
+                playerMissileIterator.remove()
+            }
+        }
+    }
+
+    // Méthode pour créer un effet de collision à une position donnée
+    private fun createCollisionEffect(x: Float, y: Float, ligne: Int, colonne: Int) {
+        val effect = AlienMort(x, y, ligne, colonne)
+        collisionEffects.add(effect)
+    }
+
+    // Vérifier si tous les aliens sont détruits
+    private fun checkAllAliensDestroyed() {
+        val lignesAliens = 5
+        val colonnesAliens = 10
+
+        var allDestroyed = true
+        for (ligne in 0 until lignesAliens) {
+            for (colonne in 0 until colonnesAliens) {
+                if (aliensVivants[ligne][colonne]) {
+                    allDestroyed = false
+                    break
+                }
+            }
+            if (!allDestroyed) break
+        }
+
+        if (allDestroyed) {
+            // Tous les aliens sont détruits, passer au niveau suivant
+            jeux.verifierNiveauTermine()
+        }
+    }
+
     fun resetAliens(niveau: Int) {
         // Réinitialiser la position des aliens
         offsetX = 0f
         offsetY = 0f
+
+        // Réinitialiser le statut des aliens (tous vivants)
+        for (ligne in aliensVivants.indices) {
+            for (colonne in aliensVivants[ligne].indices) {
+                aliensVivants[ligne][colonne] = true
+            }
+        }
+
+        // Effacer tous les missiles
+        playerMissiles.clear()
+        alienMissiles.clear()
+
+        // Effacer tous les effets de collision
+        collisionEffects.clear()
 
         // Augmenter la vitesse en fonction du niveau
         val vitesseBase = 10
