@@ -35,10 +35,7 @@ class AlienView @JvmOverloads constructor(
     private val handler = Handler(Looper.getMainLooper())
     private val collisionEffects = mutableListOf<AlienMort>()
 
-    // Variables pour l'affichage du score
-    private var scoreTextView: TextView? = null
-    private var niveauTextView: TextView? = null
-    private var viesTextView: TextView? = null
+    // Variable pour l'affichage du score de secours
     private var scorePaint = Paint()
 
     // Attributs pour les missiles
@@ -94,17 +91,15 @@ class AlienView @JvmOverloads constructor(
 
     // Méthode pour définir les TextViews pour le score, le niveau et les vies
     fun setScoreViews(score: TextView, niveau: TextView, vies: TextView) {
-        this.scoreTextView = score
-        this.niveauTextView = niveau
-        this.viesTextView = vies
-        updateScoreDisplay()
+        // Initialiser le singleton ScoreManager au lieu de stocker les références localement
+        ScoreManager.initialize(score, niveau, vies, jeux)
+        ScoreManager.refreshScore()
     }
 
     // Mise à jour de l'affichage du score
     fun updateScoreDisplay() {
-        scoreTextView?.text = "Score: ${jeux.score}"
-        niveauTextView?.text = "Niveau: ${jeux.niveau_actuel}"
-        viesTextView?.text = "Vies: ${jeux.vie}"
+        // Utiliser le singleton pour mettre à jour l'affichage
+        ScoreManager.refreshScore()
     }
 
     // Démarrer le mouvement et les tirs des aliens
@@ -198,7 +193,6 @@ class AlienView @JvmOverloads constructor(
                     0 -> missilePoulpe(jeux, this, aliensList, Joueur)
                     1 -> missileCrabe(jeux, this, aliensList, Joueur)
                     else -> missileCalmar(jeux, this, aliensList, Joueur)
-
                 }
 
                 // Positionner le missile
@@ -308,11 +302,16 @@ class AlienView @JvmOverloads constructor(
             }
         }
 
-        // Dessiner le score, le niveau et les vies sur l'écran si les TextViews ne sont pas disponibles
-        if (scoreTextView == null) {
+        // Utiliser le ScoreManager pour l'affichage du score
+        // Si aucun TextView n'est défini, afficher directement sur le canvas
+        val scoreManager = ScoreManager
+        if (scoreManager.scoreTextView == null) {
             canvas.drawText("Score: ${jeux.score}", 20f, 60f, scorePaint)
             canvas.drawText("Niveau: ${jeux.niveau_actuel}", 20f, 120f, scorePaint)
             canvas.drawText("Vies: ${jeux.vie}", 20f, 180f, scorePaint)
+        } else {
+            // Assurer que le score est à jour
+            ScoreManager.refreshScore()
         }
     }
 
