@@ -15,7 +15,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.ImageView
-import android.widget.TextView
 import java.util.Random
 
 class AlienView @JvmOverloads constructor(
@@ -27,6 +26,7 @@ class AlienView @JvmOverloads constructor(
     interface AlienListener {
         fun onAliensReachedPlayer()
         fun updateScore(points: Int)
+        fun onMissileHitPlayer()
     }
 
     private val crabeBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.crabe)
@@ -65,7 +65,7 @@ class AlienView @JvmOverloads constructor(
 
     private data class TemporaryExplosion(val x: Float, val y: Float, var duration: Int = 15)
     private val temporaryExplosions = mutableListOf<TemporaryExplosion>()
-    private var alienListener: AlienListener? = null
+    var alienListener: AlienListener? = null
     var jeuEnPause = false
 
     init {
@@ -94,7 +94,7 @@ class AlienView @JvmOverloads constructor(
         }
     }
 
-    fun setAlienListener(listener: AlienListener) {
+    fun setAlienListener2(listener: AlienListener) {
         alienListener = listener
     }
 
@@ -103,13 +103,6 @@ class AlienView @JvmOverloads constructor(
         this.aliensList = alien
         this.joueurImageView = joueurView
         this.jeux = gameInstance
-    }
-
-    // Méthode pour définir les TextViews pour le score, le niveau et les vies
-    fun setScoreViews(score: TextView, niveau: TextView, vies: TextView) {
-        // Initialiser le singleton ScoreManager au lieu de stocker les références localement
-        ScoreManager.initialize(score, niveau, vies, jeux)
-        ScoreManager.refreshScore()
     }
 
     // Mise à jour de l'affichage du score
@@ -266,10 +259,6 @@ class AlienView @JvmOverloads constructor(
         }
     }
 
-    fun addTemporaryExplosion(x: Float, y: Float) {
-        temporaryExplosions.add(TemporaryExplosion(x, y))
-    }
-
     private fun updateCollisionEffects() {
         // Mettre à jour tous les effets de collision
         collisionEffects.forEach { it.update() }
@@ -353,7 +342,6 @@ class AlienView @JvmOverloads constructor(
         }
 
         // Utiliser le ScoreManager pour l'affichage du score
-        // Si aucun TextView n'est défini, afficher directement sur le canvas
         val scoreManager = ScoreManager
         if (scoreManager.scoreTextView == null) {
             canvas.drawText("Score: ${jeux.score}", 20f, 60f, scorePaint)
