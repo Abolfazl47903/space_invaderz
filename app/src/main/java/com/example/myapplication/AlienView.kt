@@ -200,7 +200,7 @@ class AlienView @JvmOverloads constructor(
                 newMissile.missile.x = alienX
                 newMissile.missile.y = alienY
                 newMissile.missileVitesseX = 0f  // Pas de déplacement horizontal
-                newMissile.missileVitesseY = 10f  // Direction vers le bas
+                newMissile.missileVitesseY = 100f  // Direction vers le bas
                 newMissile.missileOnScreen = true
 
                 // Ajouter le missile à la liste
