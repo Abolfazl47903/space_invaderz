@@ -170,7 +170,6 @@ class jeux @JvmOverloads constructor (
                     }
                 }
 
-
                 return builder.create()
             }
         }
@@ -208,7 +207,6 @@ class jeux @JvmOverloads constructor (
 
     fun verifierNiveauTermine() {
         // Vérifier si tous les aliens sont détruits
-        // Si oui, passer au niveau suivant
         niveau_actuel++
 
         // Augmenter la difficulté ici
