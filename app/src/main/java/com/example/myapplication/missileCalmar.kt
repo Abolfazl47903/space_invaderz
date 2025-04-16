@@ -25,10 +25,10 @@ class missileCalmar(
 
         // Dessin d'un losange
         val path = android.graphics.Path()
-        path.moveTo(missile.x, missile.y + 10f)  // Pointe bas
-        path.lineTo(missile.x - 8f, missile.y)    // Pointe gauche
-        path.lineTo(missile.x, missile.y - 10f)  // Pointe haut
-        path.lineTo(missile.x + 8f, missile.y)    // Pointe droite
+        path.moveTo(missile.x, missile.y + 15f)  // Pointe bas
+        path.lineTo(missile.x - 10f, missile.y)    // Pointe gauche
+        path.lineTo(missile.x, missile.y - 15f)  // Pointe haut
+        path.lineTo(missile.x + 10f, missile.y)    // Pointe droite
         path.close()
 
         canvas.drawPath(path, paint)
