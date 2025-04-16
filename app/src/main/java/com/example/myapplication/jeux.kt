@@ -51,7 +51,7 @@ class jeux @JvmOverloads constructor (
     fun game_over() {
         if (!gameOver) {
             gameOver = true
-            prestation(R.string.lose)
+            showGameOverDialog(R.string.lose)
         }
     }
 
@@ -67,7 +67,7 @@ class jeux @JvmOverloads constructor (
         }
     }
 
-    fun prestation(messageId: Int) { // Méthode servant à voir les résultats de la partie
+    fun showGameOverDialog(messageId: Int) { // Méthode servant à voir les résultats de la partie
         left.visibility = android.view.View.GONE
         right.visibility = android.view.View.GONE
 
