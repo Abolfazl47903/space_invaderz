@@ -31,9 +31,25 @@ class jeux @JvmOverloads constructor (
     var timeLeft = 60.0 // exemple: 60 secondes de jeu
 
     val activite = context as FragmentActivity
+    var jeuEnPause = false
+
 
     init {
-        // Initialisation supplémentaire si nécessaire
+        alienView.setAlienListener(object : AlienView.AlienListener {
+            override fun onAliensReachedPlayer() {
+                if (jeuEnPause || gameOver) return
+
+                perdreVie()
+                jeuEnPause = true
+                alienView.jeuEnPause = true
+                showAlienCollisionDialog()
+            }
+
+            override fun updateScore(points: Int) {
+                // Cette méthode existe déjà dans votre classe
+                updateScore(points)
+            }
+        })
     }
 
     fun start_game() {
@@ -95,6 +111,48 @@ class jeux @JvmOverloads constructor (
                 resultat.show(feet, "dialog")
             }
         )
+    }
+
+    private fun showAlienCollisionDialog() {
+        if (gameOver) return // Ne pas afficher si le jeu est déjà terminé
+
+        left.visibility = android.view.View.GONE
+        right.visibility = android.view.View.GONE
+
+        class CollisionDialog : DialogFragment() {
+            override fun onCreateDialog(bundle: Bundle?): Dialog {
+                alienView.jeuEnPause = true // quand tu ouvres un dialog, le jeu se met en pause
+                val builder = AlertDialog.Builder(requireActivity())
+                builder.setTitle(R.string.alien_collision_title) // Ajouter cette ressource string
+                builder.setMessage("Les aliens vous ont atteint! Vous perdez une vie.\nVies restantes: $vie")
+
+                builder.setPositiveButton("Continuer") { _, _ ->
+                    if (vie > 0) {
+                        alienView.resetAliens(niveau_actuel)
+                        jeuEnPause = false
+                        alienView.jeuEnPause = false
+                        left.visibility = android.view.View.VISIBLE
+                        right.visibility = android.view.View.VISIBLE
+                    }
+                }
+
+
+                return builder.create()
+            }
+        }
+
+        activite.runOnUiThread {
+            val ft = activite.supportFragmentManager.beginTransaction()
+            val prev = activite.supportFragmentManager.findFragmentByTag("collision_dialog")
+            if (prev != null) {
+                ft.remove(prev)
+            }
+            ft.addToBackStack(null)
+
+            val dialog = CollisionDialog()
+            dialog.setCancelable(false)
+            dialog.show(ft, "collision_dialog")
+        }
     }
 
     fun updateScore(points: Int) {
