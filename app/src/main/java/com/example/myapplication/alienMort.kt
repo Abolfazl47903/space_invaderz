@@ -24,8 +24,4 @@ class AlienMort(
     fun isVisible(): Boolean {
         return timer > 0 && isActive
     }
-
-    fun getAlienPosition(): Pair<Int, Int> {
-        return Pair(ligne, colonne)
-    }
 }
