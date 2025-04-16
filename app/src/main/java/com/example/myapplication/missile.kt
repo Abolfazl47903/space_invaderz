@@ -87,27 +87,25 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
 
     fun collisionJoueur(interval: Double): Boolean {
         if (missileOnScreen) {
-            // Déplacer le missile
             missile.x += (interval * missileVitesseX).toFloat()
             missile.y += (interval * missileVitesseY).toFloat()
 
-            // Vérifier la collision avec le joueur
-            if (missile.x + missileTaille > joueur.joueur.left
+            // Utiliser les propriétés de l'AlienView pour les limites d'écran
+            if (missile.x + missileTaille > alienView.screenWidth
+                || missile.x - missileTaille < 0
+                || missile.y + missileTaille > alienView.screenHeight
+                || missile.y - missileTaille < 0
+            ) {
+                missileOnScreen = false
+                return false
+            } else if (missile.x + missileTaille > joueur.joueur.left
                 && missile.x - missileTaille < joueur.joueur.right
                 && missile.y + missileTaille > joueur.joueur.top
                 && missile.y - missileTaille < joueur.joueur.bottom
             ) {
-                // ARRÊTER COMPLÈTEMENT LE MISSILE
-                missileVitesseX = 0f
-                missileVitesseY = 0f
-                missileOnScreen = false
-
-                // Créer l'explosion à la position actuelle du missile
-                createExplosion(missile.x, missile.y)
-
-                // MARQUER LE MISSILE COMME ÉTANT EN EXPLOSION
-                explosionTimer = 10
-
+                // Si collision détectée
+                state = MissileCollision(this)
+                state?.update()
                 return true
             }
         }
@@ -124,24 +122,12 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
     fun drawExplosion(canvas: Canvas) {
         explosionPosition?.let { pos ->
             explosionBitmap?.let { bmp ->
-                // Dessiner l'explosion avec un facteur d'échelle pour la rendre plus visible
-                val scale = 1.5f
-                val matrix = android.graphics.Matrix()
-                matrix.postScale(scale, scale)
-                matrix.postTranslate(
-                    pos.x - bmp.width * scale / 2,
-                    pos.y - bmp.height * scale / 2
+                canvas.drawBitmap(
+                    bmp,
+                    pos.x - bmp.width / 2,
+                    pos.y - bmp.height / 2,
+                    null
                 )
-
-                // Utiliser une peinture avec une opacité basée sur explosionTimer
-                val paint = Paint().apply {
-                    alpha = 255  // Complètement opaque au début
-                }
-
-                canvas.drawBitmap(bmp, matrix, paint)
-            } ?: run {
-                // Log d'erreur si l'image d'explosion est null
-                android.util.Log.e("Missile", "Explosion bitmap is null")
             }
         }
     }
