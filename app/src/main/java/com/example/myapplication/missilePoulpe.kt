@@ -26,8 +26,8 @@ class missilePoulpe(
         // Dessin d'un triangle dirigé vers le bas
         val path = android.graphics.Path()
         path.moveTo(missile.x, missile.y + 15f)  // Pointe vers le bas
-        path.lineTo(missile.x - 8f, missile.y - 5f)  // Coin gauche
-        path.lineTo(missile.x + 8f, missile.y - 5f)  // Coin droit
+        path.lineTo(missile.x - 13f, missile.y - 7f)  // Coin gauche
+        path.lineTo(missile.x + 13f, missile.y - 7f)  // Coin droit
         path.close()  // Fermer le chemin pour former un triangle
 
         canvas.drawPath(path, paint)
