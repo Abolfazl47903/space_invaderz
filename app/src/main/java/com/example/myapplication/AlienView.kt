@@ -23,6 +23,12 @@ class AlienView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+
+    interface AlienListener {
+        fun onAliensReachedPlayer()
+        fun updateScore(points: Int)
+    }
+
     private val crabeBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.crabe)
     private val poulpeBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.poulpe)
     private val calmarBitmap: Bitmap? = BitmapFactory.decodeResource(resources, R.drawable.calmar)
@@ -57,6 +63,11 @@ class AlienView @JvmOverloads constructor(
     // Maximum de missiles player à l'écran simultanément
     private val MAX_PLAYER_MISSILES = 3
 
+    private data class TemporaryExplosion(val x: Float, val y: Float, var duration: Int = 15)
+    private val temporaryExplosions = mutableListOf<TemporaryExplosion>()
+    private var alienListener: AlienListener? = null
+    var jeuEnPause = false
+
     init {
         setWillNotDraw(false)  // Force le dessin
         isClickable = true  // Rend la vue cliquable pour les événements tactiles
@@ -81,6 +92,10 @@ class AlienView @JvmOverloads constructor(
             aliens.add(Bitmap.createScaledBitmap(poulpeBitmap, tailleAlien, tailleAlien, false))
             aliens.add(Bitmap.createScaledBitmap(calmarBitmap, tailleAlien, tailleAlien, false))
         }
+    }
+
+    fun setAlienListener(listener: AlienListener) {
+        alienListener = listener
     }
 
     fun setupGame(joueur: joueur, alien: Aliens, joueurView: ImageView, gameInstance: jeux) {
@@ -139,8 +154,9 @@ class AlienView @JvmOverloads constructor(
                 safeHandler.postDelayed(this, 50) // Utiliser le handler sécurisé
             }
         }
-
         safeHandler.post(runnable)
+        if ((context as? jeux)?.jeuEnPause == true) return
+
     }
 
     // Fonction pour faire tirer les aliens aléatoirement
@@ -230,15 +246,28 @@ class AlienView @JvmOverloads constructor(
         while (alienIterator.hasNext()) {
             val missile = alienIterator.next()
             if (missile.missileOnScreen) {
-                missile.update(0.05)  // Paramètre d'intervalle de temps
+                missile.update(0.05)
                 if (missile.collisionJoueur(0.05)) {
                     jeux.perdreVie()
-                    alienIterator.remove()
+                    // Ne pas supprimer le missile ici,
+                    // l'animation d'explosion s'en chargera
                 }
             } else {
                 alienIterator.remove()
             }
         }
+        val explosionIterator = temporaryExplosions.iterator()
+        while (explosionIterator.hasNext()) {
+            val explosion = explosionIterator.next()
+            explosion.duration--
+            if (explosion.duration <= 0) {
+                explosionIterator.remove()
+            }
+        }
+    }
+
+    fun addTemporaryExplosion(x: Float, y: Float) {
+        temporaryExplosions.add(TemporaryExplosion(x, y))
     }
 
     private fun updateCollisionEffects() {
@@ -300,6 +329,26 @@ class AlienView @JvmOverloads constructor(
         alienMissiles.forEach { missile ->
             if (missile.missileOnScreen) {
                 missile.dessin(canvas)
+            }
+        }
+
+        temporaryExplosions.forEach { explosion ->
+            collisionImage?.let { bitmap ->
+                // Faire grossir légèrement l'explosion pour la rendre plus visible
+                val scale = 1.5f
+                val matrix = android.graphics.Matrix()
+                matrix.postScale(scale, scale)
+                matrix.postTranslate(
+                    explosion.x - bitmap.width * scale / 2,
+                    explosion.y - bitmap.height * scale / 2
+                )
+
+                // Dessiner l'explosion avec une opacité qui diminue avec le temps
+                val paint = Paint().apply {
+                    alpha = (explosion.duration * 255 / 15) // Diminuer graduellement l'opacité
+                }
+
+                canvas.drawBitmap(bitmap, matrix, paint)
             }
         }
 
@@ -440,6 +489,40 @@ class AlienView @JvmOverloads constructor(
             if (collisionDetected) {
                 playerMissileIterator.remove()
             }
+        }
+
+        var lowestAlienY = 0f
+
+        // Trouver l'alien vivant le plus bas
+        for (ligne in 0 until lignesAliens) {
+            for (colonne in 0 until colonnesAliens) {
+                if (aliensVivants[ligne][colonne]) {
+                    val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY
+                    val bottomY = y + tailleAlien
+
+                    if (bottomY > lowestAlienY) {
+                        lowestAlienY = bottomY
+                    }
+                }
+            }
+        }
+
+        // Position Y du joueur (obtenue à partir de la vue du joueur)
+        val joueurY = if (::joueurImageView.isInitialized) {
+            val location = IntArray(2)
+            joueurImageView.getLocationOnScreen(location)
+            location[1].toFloat()
+        } else {
+            height - 100f // Position par défaut si la vue du joueur n'est pas initialisée
+        }
+
+        // Vérifier si les aliens ont atteint la position Y du joueur
+        if (lowestAlienY >= joueurY - tailleAlien) {
+            // Les aliens ont atteint le joueur!
+            alienListener?.onAliensReachedPlayer()
+
+            // Optionnel: arrêter temporairement le mouvement
+            handler.removeCallbacksAndMessages(null)
         }
     }
 
