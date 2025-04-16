@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity(), GameListener {
         // Initialisation des classes de jeu
         aliensimple = Aliensimple(
             view = alienView,
-            vitesseX = 50,
-            vitesseY = 50,
+            vitesseX = 10f,
+            vitesseY = 10f,
             vitesseTir = 50,
             taille = 50,
             alienDistance = 10f,
