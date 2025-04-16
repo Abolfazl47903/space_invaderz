@@ -18,36 +18,41 @@ class missilePoulpe(
     }
 
     override fun dessin(canvas: Canvas) {
-        // Dessin spécifique pour le missile poulpe (en vert, forme triangulaire)
-        val paint = Paint().apply {
-            color = Color.GREEN
+        // Si le missile est en train d'exploser, ne dessiner QUE l'explosion
+        if (explosionTimer > 0) {
+            drawExplosion(canvas)
+            explosionTimer--
+            if (explosionTimer <= 0) {
+                // L'explosion est terminée, supprimer le missile
+                missileOnScreen = false
+            }
+        } else {
+            // Sinon, dessiner le missile normalement
+            val paint = Paint().apply {
+                color = Color.GREEN
+            }
+
+            val path = android.graphics.Path()
+            path.moveTo(missile.x, missile.y + 13f)
+            path.lineTo(missile.x - 11f, missile.y - 5f)
+            path.lineTo(missile.x + 11f, missile.y - 5f)
+            path.close()
+
+            canvas.drawPath(path, paint)
         }
-
-        // Dessin d'un triangle dirigé vers le bas
-        val path = android.graphics.Path()
-        path.moveTo(missile.x, missile.y + 15f)  // Pointe vers le bas
-        path.lineTo(missile.x - 13f, missile.y - 7f)  // Coin gauche
-        path.lineTo(missile.x + 13f, missile.y - 7f)  // Coin droit
-        path.close()  // Fermer le chemin pour former un triangle
-
-        canvas.drawPath(path, paint)
-        drawExplosion(canvas)
     }
 
     override fun degats() {
         if (collisionJoueur(1.2)) {
-            // Le poulpe inflige 1 point de dégât
             jeux.vie -= 1
 
-            // Créer l'effet d'explosion
-            explosionPosition = missile.copy()
-
-            // Réinitialiser le missile
-            resetMissile()
-
-            // Vérifier si le joueur est mort
             if (jeux.vie <= 0) {
                 jeux.game_over()
+            } else {
+                // Signaler que le missile a touché le joueur
+                jeux.jeuEnPause = true
+                jeux.alienView.jeuEnPause = true
+                jeux.alienView.alienListener?.onMissileHitPlayer()
             }
         }
     }
