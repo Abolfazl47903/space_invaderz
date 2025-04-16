@@ -28,7 +28,6 @@ class jeux @JvmOverloads constructor (
     var record: Int = 0
     var vie_supp: Int = 1
     var gameOver = false
-    var timeLeft = 60.0 // exemple: 60 secondes de jeu
 
     val activite = context as FragmentActivity
     var jeuEnPause = false
@@ -58,7 +57,6 @@ class jeux @JvmOverloads constructor (
         vie = 10
         niveau_actuel = 1
         gameOver = false
-        timeLeft = 60.0
 
         // Démarrer le mouvement des aliens via AlienView
         alienView.startMovement()
@@ -68,18 +66,6 @@ class jeux @JvmOverloads constructor (
         if (!gameOver) {
             gameOver = true
             showGameOverDialog(R.string.lose)
-        }
-    }
-
-    fun updatePositions(elapsedTimeMS: Double) {
-        val interval = elapsedTimeMS / 1000.0
-
-        // Mise à jour du temps restant
-        timeLeft -= interval
-
-        if (timeLeft <= 0.0) {
-            timeLeft = 0.0
-            game_over()
         }
     }
 
