@@ -7,16 +7,14 @@ import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.Color
 import android.widget.ImageView
-import android.os.Handler
-import android.os.Looper
 
 abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur: joueur) {
     var explosionBitmap: Bitmap? = null
     var explosionPosition: PointF? = null
     var missile = PointF()
-    var missileVitesse = 15f  // Augmenté de 5f à 15f pour un déplacement plus rapide
-    var missileVitesseX = 15f // Augmenté également
-    var missileVitesseY = 15f // Augmenté également
+    var missileVitesse = 25f
+    var missileVitesseX = 25f
+    var missileVitesseY = 25f
     var missileOnScreen = true
     var missileTaille = 5f
     var missilePaint = Paint()
@@ -25,8 +23,12 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
 
     init {
         missilePaint.color = Color.CYAN
-        // Utiliser les ressources d'AlienView au lieu de jeux
+        // S'assurer que l'image d'explosion est bien chargée
         explosionBitmap = BitmapFactory.decodeResource(alienView.resources, R.drawable.explosion)
+
+        if (explosionBitmap == null) {
+            android.util.Log.e("Missile", "Failed to load explosion bitmap")
+        }
     }
 
     fun Missile(angle: Double, joueurImageView: ImageView) {
@@ -83,56 +85,29 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
         return missileOnScreen
     }
 
-    fun collision(interval: Double): Boolean {
-        if (missileOnScreen) {
-            missile.x += (interval * missileVitesseX).toFloat()
-            missile.y += (interval * missileVitesseY).toFloat()
-
-            // Utiliser les propriétés de l'AlienView pour les limites d'écran
-            if (missile.x + missileTaille > alienView.screenWidth
-                || missile.x - missileTaille < 0
-                || missile.y + missileTaille > alienView.screenHeight
-                || missile.y - missileTaille < 0
-            ) {
-                missileOnScreen = false
-                return false
-            } else if (missile.x + missileTaille > alien.alien.left
-                && missile.x - missileTaille < alien.alien.right
-                && missile.y + missileTaille > alien.alien.top
-                && missile.y - missileTaille < alien.alien.bottom
-            ) {
-                // Si collision détectée
-                createExplosion(missile.x, missile.y)
-                state = MissileCollision(this)
-                state?.update()
-                return true
-            }
-        }
-        return false
-    }
-
     fun collisionJoueur(interval: Double): Boolean {
         if (missileOnScreen) {
+            // Déplacer le missile
             missile.x += (interval * missileVitesseX).toFloat()
             missile.y += (interval * missileVitesseY).toFloat()
 
-            // Utiliser les propriétés de l'AlienView pour les limites d'écran
-            if (missile.x + missileTaille > alienView.screenWidth
-                || missile.x - missileTaille < 0
-                || missile.y + missileTaille > alienView.screenHeight
-                || missile.y - missileTaille < 0
-            ) {
-                missileOnScreen = false
-                return false
-            } else if (missile.x + missileTaille > joueur.joueur.left
+            // Vérifier la collision avec le joueur
+            if (missile.x + missileTaille > joueur.joueur.left
                 && missile.x - missileTaille < joueur.joueur.right
                 && missile.y + missileTaille > joueur.joueur.top
                 && missile.y - missileTaille < joueur.joueur.bottom
             ) {
-                // Si collision détectée avec le joueur
+                // ARRÊTER COMPLÈTEMENT LE MISSILE
+                missileVitesseX = 0f
+                missileVitesseY = 0f
+                missileOnScreen = false
+
+                // Créer l'explosion à la position actuelle du missile
                 createExplosion(missile.x, missile.y)
-                state = MissileCollision(this)
-                state?.update()
+
+                // MARQUER LE MISSILE COMME ÉTANT EN EXPLOSION
+                explosionTimer = 10
+
                 return true
             }
         }
@@ -149,12 +124,24 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
     fun drawExplosion(canvas: Canvas) {
         explosionPosition?.let { pos ->
             explosionBitmap?.let { bmp ->
-                canvas.drawBitmap(
-                    bmp,
-                    pos.x - bmp.width / 2,
-                    pos.y - bmp.height / 2,
-                    null
+                // Dessiner l'explosion avec un facteur d'échelle pour la rendre plus visible
+                val scale = 1.5f
+                val matrix = android.graphics.Matrix()
+                matrix.postScale(scale, scale)
+                matrix.postTranslate(
+                    pos.x - bmp.width * scale / 2,
+                    pos.y - bmp.height * scale / 2
                 )
+
+                // Utiliser une peinture avec une opacité basée sur explosionTimer
+                val paint = Paint().apply {
+                    alpha = 255  // Complètement opaque au début
+                }
+
+                canvas.drawBitmap(bmp, matrix, paint)
+            } ?: run {
+                // Log d'erreur si l'image d'explosion est null
+                android.util.Log.e("Missile", "Explosion bitmap is null")
             }
         }
     }
