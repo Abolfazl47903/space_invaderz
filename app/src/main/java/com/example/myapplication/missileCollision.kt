@@ -68,10 +68,6 @@ class MissileCollision(val missile: missile) : UpdateState {
     }
 
     private fun updateGameState() {
-        // Ici, vous pouvez mettre à jour le score, vérifier si tous les aliens sont détruits, etc.
-        // Par exemple:
-        // missile.alien.state = AlienMort(missile.alien)
-        // missile.alien.state?.update()
     }
 
     private fun resetMissile() {
