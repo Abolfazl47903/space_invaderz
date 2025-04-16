@@ -17,7 +17,7 @@ class jeux @JvmOverloads constructor (
     private val left: Button,
     private val right: Button,
     private val gameListener: GameListener,
-    private val alienView: AlienView
+    val alienView: AlienView
 ) {
     // attributs du jeu
     var score: Int = 0
@@ -34,7 +34,7 @@ class jeux @JvmOverloads constructor (
 
 
     init {
-        alienView.setAlienListener(object : AlienView.AlienListener {
+        alienView.setAlienListener2(object : AlienView.AlienListener {
             override fun onAliensReachedPlayer() {
                 if (jeuEnPause || gameOver) return
 
@@ -44,8 +44,16 @@ class jeux @JvmOverloads constructor (
                 showAlienCollisionDialog()
             }
 
+            override fun onMissileHitPlayer() {
+                if (jeuEnPause || gameOver) return
+
+                // Le missile a touché le joueur : on affiche un dialogue et met le jeu en pause
+                jeuEnPause = true
+                alienView.jeuEnPause = true
+                showMissileHitDialog()
+            }
+
             override fun updateScore(points: Int) {
-                // Cette méthode existe déjà dans votre classe
                 updateScore(points)
             }
         })
@@ -60,6 +68,45 @@ class jeux @JvmOverloads constructor (
 
         // Démarrer le mouvement des aliens via AlienView
         alienView.startMovement()
+    }
+
+    private fun showMissileHitDialog() {
+        if (gameOver) return
+
+        left.visibility = android.view.View.GONE
+        right.visibility = android.view.View.GONE
+
+        class MissileDialog : DialogFragment() {
+            override fun onCreateDialog(bundle: Bundle?): android.app.Dialog {
+                alienView.jeuEnPause = true
+                val builder = AlertDialog.Builder(requireActivity())
+                builder.setTitle("Touché !")
+                builder.setMessage("Un missile vous a touché.\nVies restantes : $vie")
+
+                builder.setPositiveButton("Continuer") { _, _ ->
+                    if (vie > 0) {
+                        alienView.resetAliens(niveau_actuel)
+                        jeuEnPause = false
+                        alienView.jeuEnPause = false
+                        left.visibility = android.view.View.VISIBLE
+                        right.visibility = android.view.View.VISIBLE
+                    }
+                }
+
+                return builder.create()
+            }
+        }
+
+        activite.runOnUiThread {
+            val ft = activite.supportFragmentManager.beginTransaction()
+            val prev = activite.supportFragmentManager.findFragmentByTag("missile_dialog")
+            if (prev != null) ft.remove(prev)
+            ft.addToBackStack(null)
+
+            val dialog = MissileDialog()
+            dialog.setCancelable(false)
+            dialog.show(ft, "missile_dialog")
+        }
     }
 
     fun game_over() {
@@ -119,6 +166,7 @@ class jeux @JvmOverloads constructor (
                         alienView.jeuEnPause = false
                         left.visibility = android.view.View.VISIBLE
                         right.visibility = android.view.View.VISIBLE
+                        score = 0
                     }
                 }
 
