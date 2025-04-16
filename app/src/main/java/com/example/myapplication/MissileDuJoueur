@@ -2,8 +2,6 @@ package com.example.myapplication
 
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.PointF
-import android.widget.ImageView
 
 class MissileDuJoueur(
     alienView: AlienView,
@@ -23,13 +21,7 @@ class MissileDuJoueur(
     }
 
     override fun degats() {
-        // Logique spécifique aux dégâts causés par le missile du joueur
-        // Cette méthode est appelée à chaque mise à jour du missile
-
         // Mettre à jour la position du missile
         update(0.05)
-
-        // Vérifier les collisions avec les aliens
-        // La gestion des collisions est maintenant centralisée dans AlienView.checkCollisions()
     }
 }
