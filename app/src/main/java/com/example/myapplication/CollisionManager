@@ -1,0 +1,144 @@
+package com.example.myapplication
+
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.PointF
+import android.graphics.RectF
+import java.util.concurrent.CopyOnWriteArrayList
+
+// Classe pour gérer les collisions
+class CollisionManager(
+    private val alienView: AlienView,
+    private val alienManager: AlienManager,
+    private val jeux: jeux,
+    private val collisionImage: Bitmap?
+) {
+    private val temporaryExplosions = CopyOnWriteArrayList<TemporaryExplosion>()
+    private val collisionEffects = CopyOnWriteArrayList<AlienMort>()
+
+    // Structure de données pour une explosion temporaire
+    data class TemporaryExplosion(val x: Float, val y: Float, var duration: Int = 15)
+
+    // Vérifier les collisions des missiles du joueur avec les aliens
+    fun checkCollisions(playerMissiles: MutableList<MissileDuJoueur>): Boolean {
+        var anyAlienDestroyed = false
+        val missilesToRemove = mutableListOf<MissileDuJoueur>()
+
+        // Pour chaque missile du joueur
+        for (missile in playerMissiles) {
+            if (!missile.missileOnScreen) {
+                missilesToRemove.add(missile)
+                continue
+            }
+
+            // Rectangle du missile
+            val missileRect = RectF(
+                missile.missile.x - missile.missileTaille / 2,
+                missile.missile.y - missile.missileTaille,
+                missile.missile.x + missile.missileTaille / 2,
+                missile.missile.y
+            )
+
+            // Vérifier collision avec chaque alien
+            val collisionResult = alienManager.checkCollisionWithAliens(missileRect)
+
+            if (collisionResult != null) {
+                val (ligne, colonne, x, y) = collisionResult
+
+                // Créer un effet de collision
+                createCollisionEffect(x, y, ligne, colonne)
+
+                // Ajouter des points selon le type d'alien
+                jeux.alienTouche(ligne % 3)
+
+                // Créer une explosion au point d'impact
+                missile.createExplosion(missile.missile.x, missile.missile.y)
+
+                // Réinitialiser le missile
+                missile.resetMissile()
+                missilesToRemove.add(missile)
+
+                anyAlienDestroyed = true
+            }
+        }
+
+        // Supprimer les missiles à la fin
+        playerMissiles.removeAll(missilesToRemove)
+
+        // Vérifier si les aliens ont atteint le joueur
+        if (alienManager.checkAliensReachedPlayer()) {
+            alienView.alienListener?.onAliensReachedPlayer()
+        }
+
+        return anyAlienDestroyed
+    }
+
+    // Méthode pour créer un effet de collision à une position donnée
+    fun createCollisionEffect(x: Float, y: Float, ligne: Int, colonne: Int) {
+        val effect = AlienMort(x, y, ligne, colonne)
+        collisionEffects.add(effect)
+    }
+
+    // Créer une explosion à une position spécifique
+    fun createExplosion(x: Float, y: Float) {
+        temporaryExplosions.add(TemporaryExplosion(x, y))
+    }
+
+    // Mettre à jour les effets de collision
+    fun updateCollisionEffects() {
+        // Mettre à jour tous les effets de collision
+        collisionEffects.forEach { it.update() }
+
+        // Supprimer les effets terminés
+        collisionEffects.removeIf { !it.isVisible() }
+
+        // Mettre à jour les explosions temporaires
+        val explosionIterator = temporaryExplosions.iterator()
+        while (explosionIterator.hasNext()) {
+            val explosion = explosionIterator.next()
+            explosion.duration--
+            if (explosion.duration <= 0) {
+                explosionIterator.remove()
+            }
+        }
+    }
+
+    // Dessiner les effets de collision et explosions
+    fun drawEffects(canvas: Canvas) {
+        // Dessiner les effets de collision actifs
+        collisionEffects.forEach { effect ->
+            if (effect.isVisible()) {
+                val (x, y) = effect.getPosition()
+                collisionImage?.let {
+                    canvas.drawBitmap(
+                        it,
+                        x - it.width / 2,
+                        y - it.height / 2,
+                        null
+                    )
+                }
+            }
+        }
+
+        // Dessiner les explosions temporaires
+        temporaryExplosions.forEach { explosion ->
+            collisionImage?.let { bitmap ->
+                // Faire grossir légèrement l'explosion pour la rendre plus visible
+                val scale = 1.5f
+                val matrix = android.graphics.Matrix()
+                matrix.postScale(scale, scale)
+                matrix.postTranslate(
+                    explosion.x - bitmap.width * scale / 2,
+                    explosion.y - bitmap.height * scale / 2
+                )
+
+                // Dessiner l'explosion avec une opacité qui diminue avec le temps
+                val paint = android.graphics.Paint().apply {
+                    alpha = (explosion.duration * 255 / 15) // Diminuer graduellement l'opacité
+                }
+
+                canvas.drawBitmap(bitmap, matrix, paint)
+            }
+        }
+    }
+}
