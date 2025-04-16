@@ -1,8 +1,9 @@
 package com.example.myapplication
 
 class Aliensimple(
-    view: AlienView, vitesseX: Int,
-    vitesseY: Int,
+    view: AlienView,
+    vitesseX: Float,
+    vitesseY: Float,
     vitesseTir: Int,
     taille: Int,
     alienDistance: Float,
