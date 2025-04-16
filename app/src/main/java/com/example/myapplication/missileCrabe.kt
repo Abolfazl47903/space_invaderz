@@ -25,9 +25,9 @@ class missileCrabe(
 
         // Dessin d'un rectangle
         canvas.drawRect(
-            missile.x - 5f,
+            missile.x - 10f,
             missile.y - 15f,
-            missile.x + 5f,
+            missile.x + 10f,
             missile.y + 5f,
             paint
         )
