@@ -9,29 +9,29 @@ import java.util.concurrent.CopyOnWriteArrayList
 // Classe pour gérer les missiles
 class MissileManager(
     private val alienView: AlienView,
-    private val joueur: joueur,
+    private val joueur: Joueur,
     private val aliensList: Aliens,
     private val joueurImageView: ImageView,
-    private val jeux: jeux
+    private val jeux: Jeux
 ) {
     // Maximum de missiles player à l'écran simultanément
-    private val MAX_PLAYER_MISSILES = 3
+    private val maxPlayerMissiles = 3
 
     // Listes des missiles
     private val playerMissiles = CopyOnWriteArrayList<MissileDuJoueur>()
-    private val alienMissiles = CopyOnWriteArrayList<missile>()
+    private val alienMissiles = CopyOnWriteArrayList<Missile>()
 
     // Accesseurs pour les missiles (encapsulation)
     val allPlayerMissiles: List<MissileDuJoueur>
         get() = playerMissiles
 
-    val allAlienMissiles: List<missile>
+    val allAlienMissiles: List<Missile>
         get() = alienMissiles
 
     // Lancer un missile du joueur
     fun lancerMissile(event: MotionEvent): Boolean {
         // Vérifier si on peut lancer un nouveau missile (max 3 à l'écran)
-        if (playerMissiles.size < MAX_PLAYER_MISSILES) {
+        if (playerMissiles.size < maxPlayerMissiles) {
             // Créer un nouveau missile
             val newMissile = MissileDuJoueur(alienView, aliensList, joueur)
 
@@ -39,7 +39,7 @@ class MissileManager(
             val angle = calculateAngle(event)
 
             // Lancer le missile depuis le joueur
-            newMissile.Missile(angle, joueurImageView)
+            newMissile.missile(angle, joueurImageView)
 
             // Ajouter le missile à la liste
             playerMissiles.add(newMissile)
@@ -71,9 +71,9 @@ class MissileManager(
 
         // Créer le missile selon le type d'alien
         val newMissile = when (alienType) {
-            0 -> missilePoulpe(jeux, alienView, aliensList, joueur)
-            1 -> missileCrabe(jeux, alienView, aliensList, joueur)
-            else -> missileCalmar(jeux, alienView, aliensList, joueur)
+            0 -> MissilePoulpe(jeux, alienView, aliensList, joueur)
+            1 -> MissileCrabe(jeux, alienView, aliensList, joueur)
+            else -> MissileCalmar(jeux, alienView, aliensList, joueur)
         }
 
         // Positionner le missile
