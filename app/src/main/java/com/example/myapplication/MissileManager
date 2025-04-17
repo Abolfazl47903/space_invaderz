@@ -1,0 +1,145 @@
+package com.example.myapplication
+
+import android.graphics.Canvas
+import android.graphics.PointF
+import android.view.MotionEvent
+import android.widget.ImageView
+import java.util.concurrent.CopyOnWriteArrayList
+
+// Classe pour gérer les missiles
+class MissileManager(
+    private val alienView: AlienView,
+    private val joueur: joueur,
+    private val aliensList: Aliens,
+    private val joueurImageView: ImageView,
+    private val jeux: jeux
+) {
+    // Maximum de missiles player à l'écran simultanément
+    private val MAX_PLAYER_MISSILES = 3
+
+    // Listes des missiles
+    private val playerMissiles = CopyOnWriteArrayList<MissileDuJoueur>()
+    private val alienMissiles = CopyOnWriteArrayList<missile>()
+
+    // Accesseurs pour les missiles (encapsulation)
+    val allPlayerMissiles: List<MissileDuJoueur>
+        get() = playerMissiles
+
+    val allAlienMissiles: List<missile>
+        get() = alienMissiles
+
+    // Lancer un missile du joueur
+    fun lancerMissile(event: MotionEvent): Boolean {
+        // Vérifier si on peut lancer un nouveau missile (max 3 à l'écran)
+        if (playerMissiles.size < MAX_PLAYER_MISSILES) {
+            // Créer un nouveau missile
+            val newMissile = MissileDuJoueur(alienView, aliensList, joueur)
+
+            // Calculer l'angle
+            val angle = calculateAngle(event)
+
+            // Lancer le missile depuis le joueur
+            newMissile.Missile(angle, joueurImageView)
+
+            // Ajouter le missile à la liste
+            playerMissiles.add(newMissile)
+            return true
+        }
+        return false
+    }
+
+    // Calculer l'angle de tir
+    private fun calculateAngle(event: MotionEvent): Double {
+        val touchPoint = PointF(event.x, event.y)
+        val joueurLocation = IntArray(2)
+        joueurImageView.getLocationOnScreen(joueurLocation)
+
+        val joueurX = joueurLocation[0] + joueurImageView.width / 2f
+        val joueurY = joueurLocation[1] + joueurImageView.height / 2f
+
+        val deltaX = touchPoint.x - joueurX
+        val deltaY = joueurY - touchPoint.y
+
+        return Math.atan2(deltaX.toDouble(), deltaY.toDouble())
+    }
+
+    // Créer un missile alien
+    fun createAlienMissile(position: Triple<Float, Float, Int>?) {
+        if (position == null) return
+
+        val (alienX, alienY, alienType) = position
+
+        // Créer le missile selon le type d'alien
+        val newMissile = when (alienType) {
+            0 -> missilePoulpe(jeux, alienView, aliensList, joueur)
+            1 -> missileCrabe(jeux, alienView, aliensList, joueur)
+            else -> missileCalmar(jeux, alienView, aliensList, joueur)
+        }
+
+        // Positionner le missile
+        newMissile.missile.x = alienX
+        newMissile.missile.y = alienY
+        newMissile.missileVitesseX = 0f  // Pas de déplacement horizontal
+        newMissile.missileVitesseY = 100f  // Direction vers le bas
+        newMissile.missileOnScreen = true
+
+        // Ajouter le missile à la liste
+        alienMissiles.add(newMissile)
+    }
+
+    // Mise à jour de tous les missiles
+    fun updateAllMissiles(): Boolean {
+        var playerHit = false
+
+        // Mise à jour des missiles du joueur
+        val playerIterator = playerMissiles.iterator()
+        while (playerIterator.hasNext()) {
+            val missile = playerIterator.next()
+            if (missile.missileOnScreen) {
+                missile.update(0.05)  // Paramètre d'intervalle de temps
+                missile.degats()
+            } else {
+                playerIterator.remove()
+            }
+        }
+
+        // Mise à jour des missiles des aliens
+        alienMissiles.removeIf { missile ->
+            if (missile.missileOnScreen) {
+                missile.update(0.05)
+                if (missile.collisionJoueur(0.05)) {
+                    playerHit = true
+                    // L'animation d'explosion s'en chargera
+                }
+                false // ne pas supprimer
+            } else {
+                true // supprimer
+            }
+        }
+
+        return playerHit
+    }
+
+    // Dessiner tous les missiles
+    fun drawMissiles(canvas: Canvas) {
+        // Dessiner tous les missiles du joueur
+        playerMissiles.forEach { missile ->
+            if (missile.missileOnScreen) {
+                missile.dessin(canvas)
+            }
+        }
+
+        // Dessiner les missiles des aliens
+        alienMissiles.forEach { missile ->
+            if (missile.missileOnScreen) {
+                missile.dessin(canvas)
+            }
+        }
+    }
+
+    // Effacer tous les missiles
+    fun clearAllMissiles() {
+        playerMissiles.clear()
+        alienMissiles.clear()
+    }
+}
