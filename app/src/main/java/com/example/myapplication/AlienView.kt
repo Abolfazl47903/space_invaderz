@@ -124,7 +124,7 @@ class AlienView @JvmOverloads constructor(
     }
 
     // Démarrer le mouvement et les tirs des aliens
-    fun startMovement(vitesse: Float = 10f) {
+    fun startMovement(vitesse: Float = 1f) {
         val safeHandler = handler ?: Handler(Looper.getMainLooper()).also {
             Log.w("AlienView", "Handler was null when starting movement")
         }
@@ -221,8 +221,8 @@ class AlienView @JvmOverloads constructor(
         missileManager.clearAllMissiles()
 
         // Redémarrer le mouvement avec la nouvelle vitesse adaptée au niveau
-        val vitesseBase = 8.0f
-        val nouvelleVitesse = vitesseBase + (niveau - 1) * 1.5f
+        val vitesseBase = 1.0f
+        val nouvelleVitesse = vitesseBase + (niveau - 1) * 0.1f
 
         handler.removeCallbacksAndMessages(null)
         startMovement(nouvelleVitesse)
