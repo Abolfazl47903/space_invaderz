@@ -2,7 +2,7 @@ package com.example.myapplication
 
 import android.graphics.RectF
 
-class joueur(
+class Joueur(
     var vaisseauLongueur: Float,
     var vaisseauHauteur: Float,
     var largeur: Float,
