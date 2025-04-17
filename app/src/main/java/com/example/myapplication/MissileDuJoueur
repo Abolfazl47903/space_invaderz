@@ -6,8 +6,8 @@ import android.graphics.Color
 class MissileDuJoueur(
     alienView: AlienView,
     alien: Aliens,
-    joueur: joueur
-) : missile(alienView, alien, joueur) {
+    joueur: Joueur
+) : Missile(alienView, alien, joueur) {
 
     init {
         missilePaint.color = Color.RED
