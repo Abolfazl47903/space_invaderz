@@ -2,7 +2,6 @@ package com.example.myapplication
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.PointF
 import android.graphics.RectF
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -10,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 class CollisionManager(
     private val alienView: AlienView,
     private val alienManager: AlienManager,
-    private val jeux: jeux,
+    private val jeux: Jeux,
     private val collisionImage: Bitmap?
 ) {
     private val temporaryExplosions = CopyOnWriteArrayList<TemporaryExplosion>()
@@ -77,11 +76,6 @@ class CollisionManager(
     fun createCollisionEffect(x: Float, y: Float, ligne: Int, colonne: Int) {
         val effect = AlienMort(x, y, ligne, colonne)
         collisionEffects.add(effect)
-    }
-
-    // Créer une explosion à une position spécifique
-    fun createExplosion(x: Float, y: Float) {
-        temporaryExplosions.add(TemporaryExplosion(x, y))
     }
 
     // Mettre à jour les effets de collision
