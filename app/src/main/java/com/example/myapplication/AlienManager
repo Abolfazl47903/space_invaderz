@@ -32,7 +32,7 @@ class AlienManager(
     companion object {
         private const val ROWS = 5
         private const val COLUMNS = 10
-        private const val DESCENT_STEP = 20f
+        private const val DESCENT_STEP = 15f
     }
 
     private val observers = mutableListOf<AlienObserver>()
@@ -44,7 +44,7 @@ class AlienManager(
 
     // Données pour le tir des aliens
     private var lastAlienShotTime = 0L
-    private val alienShotInterval = 2000L // 2 secondes entre les tirs
+    private val alienShotInterval = 2000L // 2 secondes entre les tirsa
 
     // Structure de données pour un résultat de collision
     data class CollisionResult(val ligne: Int, val colonne: Int, val x: Float, val y: Float)
@@ -69,6 +69,7 @@ class AlienManager(
     // Mettre à jour le mouvement des aliens
     fun updateMovement(vitesse: Float) {
         // Mettre à jour le décalage horizontal
+        var vitesse = 20f
         offsetX += direction * vitesse
 
         // Calculer la largeur totale occupée par les aliens
@@ -77,7 +78,7 @@ class AlienManager(
         val largeurTotaleAliens = COLUMNS * (tailleAlien + espaceEntreAliens)
 
         // Changer de direction si le premier ou le dernier alien atteint les bords de l'écran
-        if (offsetX + largeurTotaleAliens >= screenWidth + 740 || offsetX <= 0) {
+        if (offsetX + largeurTotaleAliens >= screenWidth + 1150 || offsetX <= 0) {
             direction *= -1 // Inverser la direction
             offsetY += DESCENT_STEP // Descendre les aliens verticalement
         }
