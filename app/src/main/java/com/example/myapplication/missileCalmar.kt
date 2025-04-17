@@ -4,12 +4,12 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 
-class missileCalmar(
-    private val jeux: jeux,
+class MissileCalmar(
+    private val jeux: Jeux,
     alienView: AlienView,
     alien: Aliens,
-    joueur: joueur
-) : missile(alienView, alien, joueur) {
+    joueur: Joueur
+) : Missile(alienView, alien, joueur) {
 
     init {
         // Couleur spécifique pour les missiles de calmar
@@ -48,7 +48,7 @@ class missileCalmar(
 
             // Vérifier si le joueur est mort
             if (jeux.vie <= 0) {
-                jeux.game_over()
+                jeux.gameOver()
             }
         }
     }
