@@ -7,7 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 
-class MissileCollision(val missile: missile) : UpdateState {
+class MissileCollision(val missile: Missile) : UpdateState {
     // Cette méthode va maintenant gérer toute la logique de collision
     override fun update() {
         if (!missile.missileOnScreen) return
@@ -39,7 +39,6 @@ class MissileCollision(val missile: missile) : UpdateState {
 
     private fun checkAlienCollisions(): Boolean {
         val aliensList = missile.alien
-        val view = missile.alienView
 
         // Créer le rectangle du missile
         val missileRect = RectF(
