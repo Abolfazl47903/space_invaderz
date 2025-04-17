@@ -4,12 +4,12 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 
-class missilePoulpe(
-    private val jeux: jeux,
+class MissilePoulpe(
+    private val jeux: Jeux,
     alienView: AlienView,
     alien: Aliens,
-    joueur: joueur
-) : missile(alienView, alien, joueur) {
+    joueur: Joueur
+) : Missile(alienView, alien, joueur) {
 
     init {
         // Couleur spécifique pour les missiles de poulpe
@@ -47,7 +47,7 @@ class missilePoulpe(
             jeux.vie -= 1
 
             if (jeux.vie <= 0) {
-                jeux.game_over()
+                jeux.gameOver()
             } else {
                 // Signaler que le missile a touché le joueur
                 jeux.jeuEnPause = true
