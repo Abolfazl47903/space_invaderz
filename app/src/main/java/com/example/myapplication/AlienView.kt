@@ -40,12 +40,12 @@ class AlienView @JvmOverloads constructor(
     private val handler = Handler(Looper.getMainLooper())
 
     // Composants du jeu
-    lateinit var Joueur: joueur
+    lateinit var joueur: Joueur
     lateinit var aliensList: Aliens
     var screenWidth = 0f
     var screenHeight = 0f
     lateinit var joueurImageView: ImageView
-    lateinit var jeux: jeux
+    lateinit var jeux: Jeux
 
     // Gestionnaires
     private lateinit var alienManager: AlienManager
@@ -89,8 +89,8 @@ class AlienView @JvmOverloads constructor(
         alienListener = listener
     }
 
-    fun setupGame(joueur: joueur, alien: Aliens, joueurView: ImageView, gameInstance: jeux) {
-        this.Joueur = joueur
+    fun setupGame(joueur: Joueur, alien: Aliens, joueurView: ImageView, gameInstance: Jeux) {
+        this.joueur = joueur
         this.aliensList = alien
         this.joueurImageView = joueurView
         this.jeux = gameInstance
@@ -185,7 +185,7 @@ class AlienView @JvmOverloads constructor(
         val scoreManager = ScoreManager
         if (scoreManager.scoreTextView == null) {
             canvas.drawText("Score: ${jeux.score}", 20f, 60f, scorePaint)
-            canvas.drawText("Niveau: ${jeux.niveau_actuel}", 265f, 60f, scorePaint)
+            canvas.drawText("Niveau: ${jeux.niveauActuel}", 265f, 60f, scorePaint)
             canvas.drawText("Vies: ${jeux.vie}", 500f, 60f, scorePaint)
         } else {
             // Assurer que le score est à jour
@@ -211,7 +211,6 @@ class AlienView @JvmOverloads constructor(
         return super.onTouchEvent(e)
     }
 
-    // Réinitialiser pour un nouveau niveau
     // Réinitialiser pour un nouveau niveau
     fun resetAliens(niveau: Int) {
         // Réinitialiser les aliens
