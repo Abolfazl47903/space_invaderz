@@ -1,8 +1,10 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.widget.TextView
 
 // Singleton pour la gestion du score
+@SuppressLint("StaticFieldLeak")
 object ScoreManager {
     // Références aux vues pour afficher le score, niveau et vies
     internal var scoreTextView: TextView? = null
@@ -13,12 +15,6 @@ object ScoreManager {
     private var jeuxInstance: jeux? = null
 
     // Initialiser avec les références nécessaires
-    fun initialize(score: TextView, niveau: TextView, vies: TextView, jeux: jeux) {
-        this.scoreTextView = score
-        this.niveauTextView = niveau
-        this.viesTextView = vies
-        this.jeuxInstance = jeux
-    }
 
     // Mettre à jour l'affichage du score
     fun updateScoreDisplay() {
