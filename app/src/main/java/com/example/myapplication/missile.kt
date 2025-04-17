@@ -8,7 +8,7 @@ import android.graphics.PointF
 import android.graphics.Color
 import android.widget.ImageView
 
-abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur: joueur) {
+abstract class Missile (var alienView: AlienView, val alien : Aliens, val joueur: Joueur) {
     var explosionBitmap: Bitmap? = null
     var explosionPosition: PointF? = null
     var missile = PointF()
@@ -25,13 +25,9 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
         missilePaint.color = Color.CYAN
         // S'assurer que l'image d'explosion est bien chargée
         explosionBitmap = BitmapFactory.decodeResource(alienView.resources, R.drawable.explosion)
-
-        if (explosionBitmap == null) {
-            android.util.Log.e("Missile", "Failed to load explosion bitmap")
-        }
     }
 
-    fun Missile(angle: Double, joueurImageView: ImageView) {
+    fun missile(angle: Double, joueurImageView: ImageView) {
         val location = IntArray(2)
         joueurImageView.getLocationOnScreen(location)
 
@@ -133,7 +129,6 @@ abstract class missile (var alienView: AlienView, val alien : Aliens, val joueur
     }
 
     open fun degats() {
-        // Fonction à redéfinir dans les sous-classes
     }
 
     fun PointF.copy(): PointF {
