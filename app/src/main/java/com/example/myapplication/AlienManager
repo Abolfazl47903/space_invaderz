@@ -3,40 +3,24 @@ package com.example.myapplication
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
-import android.util.Log
 import android.widget.ImageView
 import java.util.Random
-
-// Interface Observable pour le pattern Observer
-interface AlienObservable {
-    fun addObserver(observer: AlienObserver)
-    fun notifyAlienDestroyed(ligne: Int, colonne: Int, points: Int)
-    fun notifyLevelCompleted()
-    fun notifyAliensReachedPlayer()
-}
-
-// Interface Observer
-interface AlienObserver {
-    fun onAlienDestroyed(ligne: Int, colonne: Int, points: Int)
-    fun onLevelCompleted()
-    fun onAliensReachedPlayer()
-}
 
 // Classe de gestion des aliens
 class AlienManager(
     private var screenWidth :Float,
-    private val screenHeight: Float,
+    private var screenHeight : Float,
     private val alienBitmaps: List<Bitmap>,
     private val joueurImageView: ImageView
 ) : AlienObservable {
     companion object {
-        private const val ROWS = 5
-        private const val COLUMNS = 10
-        private const val DESCENT_STEP = 15f
+        private const val rows = 5
+        private const val columns = 10
+        private const val descentStep = 15f
     }
 
     private val observers = mutableListOf<AlienObserver>()
-    private val aliensVivants = Array(ROWS) { Array(COLUMNS) { true } }
+    private val aliensVivants = Array(rows) { Array(columns) { true } }
     private var offsetX = 0f
     private var offsetY = 20f
     private var direction = 1 // 1 pour aller à droite, -1 pour aller à gauche
@@ -75,12 +59,12 @@ class AlienManager(
         // Calculer la largeur totale occupée par les aliens
         val espaceEntreAliens = screenWidth * 0.02f
         val tailleAlien = alienBitmaps[0].width.toFloat()
-        val largeurTotaleAliens = COLUMNS * (tailleAlien + espaceEntreAliens)
+        val largeurTotaleAliens = columns * (tailleAlien + espaceEntreAliens)
 
         // Changer de direction si le premier ou le dernier alien atteint les bords de l'écran
         if (offsetX + largeurTotaleAliens >= screenWidth + 1150 || offsetX <= 0) {
             direction *= -1 // Inverser la direction
-            offsetY += DESCENT_STEP // Descendre les aliens verticalement
+            offsetY += descentStep // Descendre les aliens verticalement
         }
     }
 
@@ -94,11 +78,11 @@ class AlienManager(
 
         val candidateAliens = mutableListOf<Triple<Int, Int, Float>>()
 
-        for (ligne in 0 until ROWS) {
-            for (colonne in 0 until COLUMNS) {
+        for (ligne in 0 until rows) {
+            for (colonne in 0 until columns) {
                 if (aliensVivants[ligne][colonne]) {
                     // Donner la priorité aux aliens du bas (plus proches du joueur)
-                    candidateAliens.add(Triple(ligne, colonne, (ROWS - ligne).toFloat()))
+                    candidateAliens.add(Triple(ligne, colonne, (rows - ligne).toFloat()))
                 }
             }
         }
@@ -144,9 +128,9 @@ class AlienManager(
         val tailleAlien = alienBitmaps[0].width.toFloat() // Taille déjà redimensionnée
 
         // Dessiner les aliens
-        for (ligne in 0 until ROWS) {
+        for (ligne in 0 until rows) {
             val alienBitmap = alienBitmaps[ligne % alienBitmaps.size] // Choisir l'image en fonction de la ligne
-            for (colonne in 0 until COLUMNS) {
+            for (colonne in 0 until columns) {
                 // Ne dessiner que les aliens vivants
                 if (aliensVivants[ligne][colonne]) {
                     val x = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX
@@ -162,8 +146,8 @@ class AlienManager(
         val espaceEntreAliens = screenWidth * 0.02f
         val tailleAlien = alienBitmaps[0].width.toFloat()
 
-        for (ligne in 0 until ROWS) {
-            for (colonne in 0 until COLUMNS) {
+        for (ligne in 0 until rows) {
+            for (colonne in 0 until columns) {
                 if (aliensVivants[ligne][colonne]) {
                     val x = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX
                     val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY
@@ -196,8 +180,8 @@ class AlienManager(
         val tailleAlien = alienBitmaps[0].width.toFloat()
 
         // Trouver l'alien vivant le plus bas
-        for (ligne in 0 until ROWS) {
-            for (colonne in 0 until COLUMNS) {
+        for (ligne in 0 until rows) {
+            for (colonne in 0 until columns) {
                 if (aliensVivants[ligne][colonne]) {
                     val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY
                     val bottomY = y + tailleAlien
@@ -222,8 +206,8 @@ class AlienManager(
     private fun checkAllAliensDestroyed() {
         var allDestroyed = true
 
-        for (ligne in 0 until ROWS) {
-            for (colonne in 0 until COLUMNS) {
+        for (ligne in 0 until rows) {
+            for (colonne in 0 until columns) {
                 if (aliensVivants[ligne][colonne]) {
                     allDestroyed = false
                     break
@@ -238,13 +222,11 @@ class AlienManager(
     }
 
     // Réinitialiser les aliens pour un nouveau niveau
-    // Réinitialiser les aliens pour un nouveau niveau
     fun resetAliens() {
         // Réinitialiser la position des aliens
         offsetX = 0f
         offsetY = 0f
         // Ne pas réinitialiser la direction - garder la direction actuelle
-        // direction = 1 // Commenter ou supprimer cette ligne
 
         // Réinitialiser le statut des aliens (tous vivants)
         for (ligne in aliensVivants.indices) {
