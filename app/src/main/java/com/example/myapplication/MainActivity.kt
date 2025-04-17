@@ -12,16 +12,16 @@ import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity(), GameListener {
     lateinit var alienView: AlienView
-    lateinit var jeux: jeux
+    lateinit var jeux: Jeux
     lateinit var start: Button
     lateinit var left: Button
     lateinit var right: Button
     lateinit var joueurImageView: ImageView
-    lateinit var aliensimple: Aliensimple
-    lateinit var Joueur: joueur
+    lateinit var alienSimple: AlienSimple
+    lateinit var joueur: Joueur
 
-    val maxTranslationX = 500f
-    val minTranslationX = -500f
+    val maxTranslationX = 200f
+    val minTranslationX = -200f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), GameListener {
         right.visibility = View.INVISIBLE
 
         // Initialisation de la classe jeux
-        jeux = jeux(
+        jeux = Jeux(
             context = this,
             left = left,
             right = right,
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), GameListener {
         )
 
         // Initialisation des classes de jeu
-        aliensimple = Aliensimple(
+        alienSimple = AlienSimple(
             view = alienView,
             vitesseX = 10f,
             vitesseY = 10f,
@@ -66,12 +66,11 @@ class MainActivity : AppCompatActivity(), GameListener {
             vue = jeux
         )
 
-        Joueur = joueur(10f, 10f, 10f, alienView, 10f, 10f, 10f, 10f, null)
+        joueur = Joueur(10f, 10f, 10f, alienView, 10f, 10f, 10f, 10f, null)
 
         // Configuration de AlienView pour le jeu
-        alienView.setupGame(Joueur, aliensimple, joueurImageView, jeux)
+        alienView.setupGame(joueur, alienSimple, joueurImageView, jeux)
 
-        // Appliquer éventuellement des insets pour la vue alienView
         ViewCompat.setOnApplyWindowInsetsListener(alienView) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -83,9 +82,6 @@ class MainActivity : AppCompatActivity(), GameListener {
             val newTranslationX = joueurImageView.translationX + 10f
             if (newTranslationX <= maxTranslationX) {
                 joueurImageView.translationX = newTranslationX
-                Log.d("MainActivity", "Déplacement à droite : ${joueurImageView.translationX}")
-            } else {
-                Log.d("MainActivity", "Limite droite atteinte")
             }
         }
 
@@ -94,16 +90,13 @@ class MainActivity : AppCompatActivity(), GameListener {
             val newTranslationX = joueurImageView.translationX - 10f
             if (newTranslationX >= minTranslationX) {
                 joueurImageView.translationX = newTranslationX
-                Log.d("MainActivity", "Déplacement à gauche : ${joueurImageView.translationX}")
-            } else {
-                Log.d("MainActivity", "Limite gauche atteinte")
             }
         }
 
         // Configure le bouton Start
         start.setOnClickListener {
             // Quand le bouton Start est cliqué, démarrer le jeu
-            jeux.start_game()  // Démarre le jeu (qui lance aussi le mouvement des aliens)
+            jeux.startGame()  // Démarre le jeu (qui lance aussi le mouvement des aliens)
 
             // Rendre les boutons de déplacement visibles après Start
             left.visibility = View.VISIBLE
@@ -112,7 +105,7 @@ class MainActivity : AppCompatActivity(), GameListener {
         }
     }
 
-    override fun NoAliens() {
+    override fun noAliens() {
         // Cette méthode est appelée quand tous les aliens sont détruits
         jeux.verifierNiveauTermine()
     }
