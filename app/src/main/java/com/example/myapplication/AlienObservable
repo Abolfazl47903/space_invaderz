@@ -1,0 +1,8 @@
+package com.example.myapplication
+
+interface AlienObservable {
+    fun addObserver(observer: AlienObserver)
+    fun notifyAlienDestroyed(ligne: Int, colonne: Int, points: Int)
+    fun notifyLevelCompleted()
+    fun notifyAliensReachedPlayer()
+}
