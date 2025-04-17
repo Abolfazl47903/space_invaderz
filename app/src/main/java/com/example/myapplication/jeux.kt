@@ -10,7 +10,7 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.widget.Button
 
-class jeux @JvmOverloads constructor (
+class Jeux @JvmOverloads constructor (
     context: Context,
     attributes: AttributeSet? = null,
     defStyleAttr: Int = 0,
@@ -21,12 +21,12 @@ class jeux @JvmOverloads constructor (
 ) {
     // attributs du jeu
     var score: Int = 0
-    var niveau_actuel: Int = 1
+    var niveauActuel: Int = 1
 
     // propriétés publiques
-    var vie: Int = 10
+    var vie: Int = 30
     var record: Int = 0
-    var vie_supp: Int = 1
+    var vieSupp: Int = 1
     var gameOver = false
 
     val activite = context as FragmentActivity
@@ -59,11 +59,11 @@ class jeux @JvmOverloads constructor (
         })
     }
 
-    fun start_game() {
+    fun startGame() {
         // Réinitialiser les valeurs du jeu
         score = 0
         vie = 10
-        niveau_actuel = 1
+        niveauActuel = 1
         gameOver = false
 
         // Démarrer le mouvement des aliens via AlienView
@@ -85,7 +85,7 @@ class jeux @JvmOverloads constructor (
 
                 builder.setPositiveButton("Continuer") { _, _ ->
                     if (vie > 0) {
-                        alienView.resetAliens(niveau_actuel)
+                        alienView.resetAliens(niveauActuel)
                         jeuEnPause = false
                         alienView.jeuEnPause = false
                         left.visibility = android.view.View.VISIBLE
@@ -109,7 +109,7 @@ class jeux @JvmOverloads constructor (
         }
     }
 
-    fun game_over() {
+    fun gameOver() {
         if (!gameOver) {
             gameOver = true
             showGameOverDialog(R.string.lose)
@@ -122,12 +122,12 @@ class jeux @JvmOverloads constructor (
 
         class Resultat : DialogFragment() {
             override fun onCreateDialog(bundle: Bundle?): Dialog {
-                val le_builder = AlertDialog.Builder(requireActivity())
-                le_builder.setTitle(resources.getString(messageId))
-                le_builder.setMessage("Score: $score\nNiveau: $niveau_actuel\nVies restantes: $vie")
-                le_builder.setPositiveButton("Recommencer le jeu",
-                    DialogInterface.OnClickListener { _, _ -> start_game() })
-                return le_builder.create()
+                val builder = AlertDialog.Builder(requireActivity())
+                builder.setTitle(resources.getString(messageId))
+                builder.setMessage("Score: $score\nNiveau: $niveauActuel\nVies restantes: $vie")
+                builder.setPositiveButton("Recommencer le jeu",
+                    DialogInterface.OnClickListener { _, _ -> startGame() })
+                return builder.create()
             }
         }
 
@@ -161,12 +161,11 @@ class jeux @JvmOverloads constructor (
 
                 builder.setPositiveButton("Continuer") { _, _ ->
                     if (vie > 0) {
-                        alienView.resetAliens(niveau_actuel)
+                        alienView.resetAliens(niveauActuel)
                         jeuEnPause = false
                         alienView.jeuEnPause = false
                         left.visibility = android.view.View.VISIBLE
                         right.visibility = android.view.View.VISIBLE
-                        score = 0
                     }
                 }
 
@@ -190,7 +189,6 @@ class jeux @JvmOverloads constructor (
 
     fun updateScore(points: Int) {
         score += points
-        // Optionnellement, mettre à jour un affichage du score
     }
 
     fun alienTouche(typeAlien: Int): Int {
@@ -207,18 +205,16 @@ class jeux @JvmOverloads constructor (
 
     fun verifierNiveauTermine() {
         // Vérifier si tous les aliens sont détruits
-        niveau_actuel++
-
-        // Augmenter la difficulté ici
+        niveauActuel++
 
         // Réinitialiser les aliens avec la nouvelle difficulté
-        alienView.resetAliens(niveau_actuel)
+        alienView.resetAliens(niveauActuel)
     }
 
     fun perdreVie() {
         vie--
         if (vie <= 0) {
-            game_over()
+            gameOver()
         }
     }
 }
