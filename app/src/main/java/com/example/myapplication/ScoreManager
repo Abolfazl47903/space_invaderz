@@ -12,7 +12,7 @@ object ScoreManager {
     private var viesTextView: TextView? = null
 
     // Référence au jeu pour obtenir les valeurs actuelles
-    private var jeuxInstance: jeux? = null
+    private var jeuxInstance: Jeux? = null
 
     // Initialiser avec les références nécessaires
 
@@ -20,7 +20,7 @@ object ScoreManager {
     fun updateScoreDisplay() {
         jeuxInstance?.let { game ->
             scoreTextView?.text = "Score: ${game.score}"
-            niveauTextView?.text = "Niveau: ${game.niveau_actuel}"
+            niveauTextView?.text = "Niveau: ${game.niveauActuel}"
             viesTextView?.text = "Vies: ${game.vie}"
         }
     }
