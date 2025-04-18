@@ -18,7 +18,7 @@ class AlienManager(
         private const val columns = 10
         private const val descentStep = 15f
     }
-
+    // Données pour les positions des aliens
     private val observers = mutableListOf<AlienObserver>()
     private val aliensVivants = Array(rows) { Array(columns) { true } }
     private var offsetX = 0f
@@ -141,14 +141,14 @@ class AlienManager(
         }
     }
 
-    // Vérifier les collisions avec les aliens
+    // vérification collision entre missile et aliens
     fun checkCollisionWithAliens(missileRect: RectF): CollisionResult? {
         val espaceEntreAliens = screenWidth * 0.02f
         val tailleAlien = alienBitmaps[0].width.toFloat()
 
         for (ligne in 0 until rows) {
             for (colonne in 0 until columns) {
-                if (aliensVivants[ligne][colonne]) {
+                if (aliensVivants[ligne][colonne]) { // Que pour les aliens vivants
                     val x = colonne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetX
                     val y = ligne * (tailleAlien + espaceEntreAliens) + espaceEntreAliens + offsetY
 
