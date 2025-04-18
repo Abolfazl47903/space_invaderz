@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), GameListener {
     }
 
     override fun noAliens() {
-        // Cette méthode est appelée quand tous les aliens sont détruits
+        // Cette méthode est appelée quand tous les aliens sont morts
         jeux.verifierNiveauTermine()
     }
 }
