@@ -14,7 +14,7 @@ object ScoreManager {
     // Référence au jeu pour obtenir les valeurs actuelles
     private var jeuxInstance: Jeux? = null
 
-    // Initialiser avec les références nécessaires
+    
 
     // Mettre à jour l'affichage du score
     fun updateScoreDisplay() {
