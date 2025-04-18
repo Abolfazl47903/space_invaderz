@@ -1,5 +1,5 @@
 package com.example.myapplication
-
+// update des aliens après élimination
 class AlienMort(
     private val x: Float,
     private val y: Float,
