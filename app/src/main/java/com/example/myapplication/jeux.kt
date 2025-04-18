@@ -108,7 +108,7 @@ class Jeux @JvmOverloads constructor (
             dialog.show(ft, "missile_dialog")
         }
     }
-
+    //Fin du jeu quand tu perds
     fun gameOver() {
         if (!gameOver) {
             gameOver = true
@@ -145,7 +145,7 @@ class Jeux @JvmOverloads constructor (
             }
         )
     }
-
+    // Lorsque les aliens envahissent le vaisseau
     private fun showAlienCollisionDialog() {
         if (gameOver) return // Ne pas afficher si le jeu est déjà terminé
 
@@ -186,11 +186,11 @@ class Jeux @JvmOverloads constructor (
             dialog.show(ft, "collision_dialog")
         }
     }
-
+    // ca update le score
     fun updateScore(points: Int) {
         score += points
     }
-
+    
     fun alienTouche(typeAlien: Int): Int {
         // Logique pour déterminer les points en fonction du type d'alien
         val points = when (typeAlien) {
@@ -202,7 +202,7 @@ class Jeux @JvmOverloads constructor (
         updateScore(points)
         return points
     }
-
+    
     fun verifierNiveauTermine() {
         // Vérifier si tous les aliens sont détruits
         niveauActuel++
@@ -210,7 +210,7 @@ class Jeux @JvmOverloads constructor (
         // Réinitialiser les aliens avec la nouvelle difficulté
         alienView.resetAliens(niveauActuel)
     }
-
+    // enlève une vie
     fun perdreVie() {
         vie--
         if (vie <= 0) {
