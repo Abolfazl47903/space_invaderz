@@ -40,7 +40,7 @@ class CollisionManager(
 
             // Vérifier collision avec chaque alien
             val collisionResult = alienManager.checkCollisionWithAliens(missileRect)
-
+            // si collision
             if (collisionResult != null) {
                 val (ligne, colonne, x, y) = collisionResult
 
