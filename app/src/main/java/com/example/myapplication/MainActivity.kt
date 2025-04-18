@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), GameListener {
             start.visibility = View.GONE
         }
     }
-
+    // appel à la fonction du GameListener
     override fun noAliens() {
         // Cette méthode est appelée quand tous les aliens sont morts
         jeux.verifierNiveauTermine()
