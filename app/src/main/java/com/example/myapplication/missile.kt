@@ -80,7 +80,7 @@ abstract class Missile (var alienView: AlienView, val alien : Aliens, val joueur
         }
         return missileOnScreen
     }
-
+    // vérifie collision entre missile et joueur
     fun collisionJoueur(interval: Double): Boolean {
         if (missileOnScreen) {
             missile.x += (interval * missileVitesseX).toFloat()
