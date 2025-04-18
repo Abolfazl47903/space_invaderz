@@ -159,7 +159,7 @@ class AlienView @JvmOverloads constructor(
                 // Mise à jour de l'affichage du score
                 updateScoreDisplay()
 
-                invalidate() // Redessiner avec les nouvelles positions
+                invalidate() // Mises à jour des positions
                 safeHandler.postDelayed(this, 50)
             }
         }
@@ -170,8 +170,7 @@ class AlienView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        if (aliens.isEmpty()) return // Attendre que les bitmaps soient prêts
-
+        if (aliens.isEmpty()) return 
         // Dessiner les aliens
         alienManager.drawAliens(canvas)
 
@@ -199,7 +198,7 @@ class AlienView @JvmOverloads constructor(
         screenHeight = h.toFloat()
     }
 
-    // Gestion des événements tactiles
+    // tir de missiles lors du click
     override fun onTouchEvent(e: MotionEvent): Boolean {
         if (jeuEnPause) return false
 
@@ -211,7 +210,7 @@ class AlienView @JvmOverloads constructor(
         return super.onTouchEvent(e)
     }
 
-    // Réinitialiser pour un nouveau niveau
+    // Réinitialisation des aliens
     fun resetAliens(niveau: Int) {
         // Réinitialiser les aliens
         alienManager.resetAliens()
