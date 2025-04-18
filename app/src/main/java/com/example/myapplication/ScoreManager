@@ -3,7 +3,7 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import android.widget.TextView
 
-// Singleton pour la gestion du score
+//Utilisation du pattern Singleton pour la gestion du score
 @SuppressLint("StaticFieldLeak")
 object ScoreManager {
     // Références aux vues pour afficher le score, niveau et vies
