@@ -63,7 +63,7 @@ class AlienView @JvmOverloads constructor(
         setWillNotDraw(false)  // Force le dessin
         isClickable = true  // Rend la vue cliquable pour les événements tactiles
 
-        // Configuration de la peinture pour le score
+        
         scorePaint.color = Color.WHITE
         scorePaint.textSize = 40f
         scorePaint.textAlign = Paint.Align.LEFT
@@ -88,7 +88,7 @@ class AlienView @JvmOverloads constructor(
     fun setAlienListener2(listener: AlienListener) {
         alienListener = listener
     }
-
+    // intialise les donées
     fun setupGame(joueur: Joueur, alien: Aliens, joueurView: ImageView, gameInstance: Jeux) {
         this.joueur = joueur
         this.aliensList = alien
