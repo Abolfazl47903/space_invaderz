@@ -115,7 +115,7 @@ abstract class Missile (var alienView: AlienView, val alien : Aliens, val joueur
     }
 
     // Dessin de l'explosion
-    fun drawExplosion(canvas: Canvas) {
+    protected fun drawExplosion(canvas: Canvas) {
         explosionPosition?.let { pos ->
             explosionBitmap?.let { bmp ->
                 canvas.drawBitmap(
