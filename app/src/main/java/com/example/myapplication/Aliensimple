@@ -1,5 +1,5 @@
 package com.example.myapplication
-
+// pour initialiser aliens car c'est une classe abstraite
 class AlienSimple(
     view: AlienView,
     vitesseX: Float,
