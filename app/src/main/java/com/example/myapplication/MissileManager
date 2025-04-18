@@ -76,7 +76,7 @@ class MissileManager(
             else -> MissileCalmar(jeux, alienView, aliensList, joueur)
         }
 
-        // Positionner le missile
+        // Position des missiles
         newMissile.missile.x = alienX
         newMissile.missile.y = alienY
         newMissile.missileVitesseX = 0f  // Pas de déplacement horizontal
