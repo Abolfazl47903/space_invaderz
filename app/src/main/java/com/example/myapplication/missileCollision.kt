@@ -28,7 +28,7 @@ class MissileCollision(val missile: Missile) : UpdateState {
             resetMissile()
         }
     }
-
+    // missile qui sort de l'écran
     private fun isOutOfBounds(): Boolean {
         val view = missile.alienView
         return missile.missile.x + missile.missileTaille > view.screenWidth
