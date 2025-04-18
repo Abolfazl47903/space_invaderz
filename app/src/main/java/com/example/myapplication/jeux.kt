@@ -47,7 +47,7 @@ class Jeux @JvmOverloads constructor (
             override fun onMissileHitPlayer() {
                 if (jeuEnPause || gameOver) return
 
-                // Le missile a touché le joueur : on affiche un dialogue et met le jeu en pause
+                
                 jeuEnPause = true
                 alienView.jeuEnPause = true
                 showMissileHitDialog()
