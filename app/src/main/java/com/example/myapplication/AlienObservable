@@ -1,5 +1,5 @@
 package com.example.myapplication
-//fonctions pour AlienManager
+//gère les méthodes
 interface AlienObservable {
     fun addObserver(observer: AlienObserver)
     fun notifyAlienDestroyed(ligne: Int, colonne: Int, points: Int)
