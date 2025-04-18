@@ -1,5 +1,5 @@
 package com.example.myapplication
-
+// Fait disparaitre le joueur quand il n'a plus de vie
 class MissileJoueur (
     val joueur: Joueur,
     private val jeux: Jeux) : UpdateState {
